@@ -1,0 +1,51 @@
+/* タイトルの色 */
+.bg-orange {
+    color: #fff;
+    background-color: #F25C05;
+    border-color: #F25C05;
+}
+
+.text-bg-orange {
+    color: #fff;
+    background-color: #F25C05;
+    border-color: #F25C05;
+}
+
+/* 太め文字の色 */
+.fs-orange {
+    color: #F25C05;
+}
+
+/* 通常のボタン色 */
+.btn-orange,
+.btn-orange.disabled,
+.btn-orange:disabled {
+    color: #fff;
+    background-color: #F25C05;
+    border-color: #F25C05;
+}
+
+/* focusされた時の枠線の色 */
+.btn-orange:focus,
+.btn-orange.focus,
+.btn-orange:not(:disabled):not(.disabled):active:focus,
+.btn-orange:not(:disabled):not(.disabled).active:focus,
+.show>.btn-orange.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0rem #d65c16;
+}
+
+/* hover時（マウスカーソルを重ねた時）の色（通常より濃いor暗めの色を指定） */
+.btn-orange:hover {
+    color: #fff;
+    background-color: #d65c16;
+    border-color: #d65c16;
+}
+
+/* active時の色（hover時と同等かさらに濃いor暗めの色を指定） */
+.btn-orange:not(:disabled):not(.disabled):active,
+.btn-orange:not(:disabled):not(.disabled).active,
+.show>.btn-orange.dropdown-toggle {
+    color: #fff;
+    background-color: #d65c16;
+    border-color: #d65c16;
+}
