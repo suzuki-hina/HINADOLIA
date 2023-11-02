@@ -49,3 +49,37 @@
     background-color: #d65c16;
     border-color: #d65c16;
 }
+
+/* 戻るボタンの色 */
+.btn-return,
+.btn-return.disabled,
+.btn-return:disabled {
+    color: #F25C05;
+    background-color: #fff;
+    border-color: #fff;
+}
+
+/* focusされた時の枠線の色 */
+.btn-return:focus,
+.btn-return.focus,
+.btn-return:not(:disabled):not(.disabled):active:focus,
+.btn-return:not(:disabled):not(.disabled).active:focus,
+.show>.btn-return.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0rem #fff;
+}
+
+/* hover時（マウスカーソルを重ねた時）の色（通常より濃いor暗めの色を指定） */
+.btn-return:hover {
+    color: #F25C05;
+    background-color: #fff;
+    border-color: #fff;
+}
+
+/* active時の色（hover時と同等かさらに濃いor暗めの色を指定） */
+.btn-return:not(:disabled):not(.disabled):active,
+.btn-return:not(:disabled):not(.disabled).active,
+.show>.btn-return.dropdown-toggle {
+    color: #F25C05;
+    background-color: #fff;
+    border-color: #fff;
+}
