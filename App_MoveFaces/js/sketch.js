@@ -9,6 +9,7 @@ const STATE_RECORDING = 5;
 // シーンの状態
 let state = STATE_SERECT;
 let stateMessage = "使用する写真を選んでください";
+let stateMessageEn = "Please select the photo you would like to use.";
 let fileName;
 
 //テクスチャ
@@ -91,7 +92,12 @@ function setup() {
     let video_width = document.querySelector('#webcam').videoWidth;
     let video_height = document.querySelector('#webcam').videoHeight;
     adjustCanvas();
+
+    document.getElementById("mainMessage").innerHTML = stateMessage;
+    document.getElementById("mainMessageEn").innerHTML = stateMessageEn;
   }
+
+
 }
 
 function draw() {
@@ -180,29 +186,36 @@ function previewFile(file) {
 //ボタンの処理
 function stateButton() {
   if (state === STATE_SERECT) {
-    element_main.textContent = "SERECT IMAGE";
-    stateMessage = "使用する写真を選んでください";
+    element_main.textContent = "選ぶ";
+    stateMessage = "写真を選択して下さい";
+    stateMessageEn = "Please select the photo you would like to use.";
   } else if (state === STATE_UPLOAD) {
     element_webcam.style.display = 'inline';
     element_canvas.style.position = 'absolute';
-    element_main.textContent = "UPLOAD IMAGE";
-    stateMessage = fileName;
+    element_main.textContent = "次へ";
+    stateMessage = fileName + " をアップロードしました";
+    stateMessageEn = fileName + " is uploaded.";
   } else if (state === STATE_CHECK) {
     element_webcam.style.display = 'none';
     element_canvas.style.position = 'relative';
-    element_main.textContent = "YES";
+    element_main.textContent = "次へ";
     stateMessage = "この「顔」を動かしますか？";
+    stateMessageEn = "Do you want to move this face?";
   } else if (state === STATE_LINE) {
-    element_main.textContent = "OK";
+    element_main.textContent = "次へ";
     stateMessage = "目と口に合わせて白枠を動かしてください";
+    stateMessageEn = "Move the white frame to match the eyes and mouth.";
   } else if (state === STATE_START) {
-    element_main.textContent = "START";
+    element_main.textContent = "次へ";
     stateMessage = "顔を動かしてみましょう😄";
+    stateMessageEn = "Let's move your face😄";
   } else if (state === STATE_RECORDING) {
-    element_main.textContent = "RECORDING";
-    stateMessage = "録画を開始します";
+    element_main.textContent = "録画";
+    stateMessage = "録画できます";
+    stateMessageEn = "You can record.";
   }
   document.getElementById("mainMessage").innerHTML = stateMessage;
+  document.getElementById("mainMessageEn").innerHTML = stateMessageEn;
 }
 
 //メインボタンの処理

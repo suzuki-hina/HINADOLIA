@@ -68,10 +68,15 @@
   </header>
 
   <main>
-    <section class="container-fluid my-3">
+    <section class="container-fluid">
+      <section class="container py-3">
+        <h1 class="fs-orange">Move Faces</h1>
+        <p class="text-secondary m-0" id="mainMessage"></p>
+        <p class="text-secondary small m-0" id="mainMessageEn"></p>
+      </section>
 
-      <div class="row row-cols-3 g-0">
-        <div class="col-1 text-start">
+      <div class="row pb-3">
+        <div class="col text-start">
           <button id="returnButton" class="btn btn-return" onclick="returnButtonPressed();"><svg
               xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chevron-left"
               viewBox="0 0 16 16">
@@ -79,10 +84,7 @@
                 d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
             </svg></button>
         </div>
-        <div class="col-md text-center">
-          <p class="text-body-secondary" id="mainMessage"></p>
-        </div>
-        <div class="col-2 text-end">
+        <div class="col text-end">
           <button id="mainButton" class="btn btn-orange" onclick="mainButtonPressed();">Next<svg
               xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right"
               viewBox="-4 2 16 16">
