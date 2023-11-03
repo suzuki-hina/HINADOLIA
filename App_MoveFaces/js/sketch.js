@@ -84,7 +84,6 @@ function setup() {
     is_pc = true;
   }
 
-
   // 顔が見つかると以下の関数が呼び出される．resultsに検出結果が入っている．
   gotFaces = function (_results) {
     face_results = _results;
@@ -96,8 +95,6 @@ function setup() {
     document.getElementById("mainMessage").innerHTML = stateMessage;
     document.getElementById("mainMessageEn").innerHTML = stateMessageEn;
   }
-
-
 }
 
 function draw() {
