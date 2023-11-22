@@ -27,8 +27,6 @@ function setup() {
         adjustCanvas();
 
     }
-
-    document.querySelector('#version').innerHTML = version;
 }
 
 function draw() {
