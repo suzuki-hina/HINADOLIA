@@ -40,37 +40,68 @@
 </head>
 
 <body>
-  <div class="container-fluid">
+  <header data-bs-theme="dark">
+    <div class="text-bg-orange collapse" id="navbarHeader">
+      <div class="container">
+        <nav class="nav nav-underline justify-content-between p-3">
+          <a class="nav-item nav-link link-body-emphasis" href="../index.html">Home</a>
+          <a class="nav-item nav-link link-body-emphasis" href="#">Try Faces</a>
+          <a class="nav-item nav-link link-body-emphasis active" href="../App_MoveFaces/index.html">Move Faces</a>
+          <a class="nav-item nav-link link-body-emphasis" href="../App_MakeFaces/index.html">Make Faces</a>
+          <a class="nav-item nav-link link-body-emphasis" href="../App_FindFaces/index.html">Find Faces</a>
+          <a class="nav-item nav-link link-body-emphasis" href="../AboutMe/index.html">About Me</a>
+        </nav>
+      </div>
+    </div>
+    <div class="navbar navbar-dark bg-orange shadow-sm">
+      <div class="container">
+        <a href="../index.html" class="navbar-brand d-flex align-items-center">
+          <img src="../images/original.png" width="30" height="30" fill="none" aria-hidden="true" class="me-2">
+          <strong>HINADOLIA</strong>
+        </a>
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
+          aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-    <div class="row">
-      <nav class="navbar navbar-dark bg-orange">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">
-            <strong>HINADOLIA</strong>
-          </a>
+  <main>
+    <section class="container-fluid">
+      <section class="container py-3">
+        <h1 class="fs-orange">Move Faces</h1>
+        <p class="text-secondary m-0" id="mainMessage">使用する写真を選んでください</p>
+        <p class="text-secondary small m-0" id="mainMessageEn">Please select the photo you would like to use.</p>
+        <input id="inputButton" class="form-control mt-2" type="file" aria-describedby="inputGroupFileAddon04"
+          aria-label="Upload" accept=".png, .jpeg, .jpg" onclick="inputButtonPressed();">
+        <div id="liveAlertPlaceholder"></div>
+      </section>
+
+      <div class="row pb-3">
+        <div class="col text-start">
+          <button id="returnButton" class="btn btn-return" onclick="returnButtonPressed();">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+              class="bi bi-chevron-left" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
+            </svg>
+          </button>
         </div>
-      </nav>
-    </div>
+        <div class="col text-end">
+          <button id="mainButton" class="btn btn-orange" onclick="mainButtonPressed();">Next<svg
+              xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right"
+              viewBox="-4 2 16 16">
+              <path fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <input id="uploadImg" type="file" accept=".png, .jpeg, .jpg" hidden></input>
 
-    <div class="row mt-3 mb-3">
-      <div class="d-grid mx-auto">
-        <p id="message"></p>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="row mt-3 mb-3">
-      <div class="d-grid gap-2 d-md-block">
-        <button id="returnButton" class="btn btn-orange" onclick="returnButtonPressed();">RETURN</button>
-      </div>
-    </div>
-
-    <div class="row mt-3 mb-3 text-center">
-      <div class="d-grid col-12 mx-auto">
-        <p id="mainMessage"></p>
-        <button id="mainButton" class="btn btn-orange" onclick="mainButtonPressed();">SERECT IMAGE</button>
-        <input id="uploadImg" type="file" accept=".png, .jpeg, .jpg" hidden></input>
-      </div>
-    </div>
 
     <div class="row">
       <div style="position:relative;" class="p-0 m-0">
@@ -88,9 +119,8 @@
           <ul class="blend-shapes-list" id="video-blend-shapes"></ul>
         </div> -->
       </div>
-    </div>
 
-
+  </main>
 
   </div>
 
