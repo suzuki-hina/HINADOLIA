@@ -71,18 +71,22 @@
     <section class="container-fluid">
       <section class="container py-3">
         <h1 class="fs-orange">Move Faces</h1>
-        <p class="text-secondary m-0" id="mainMessage"></p>
-        <p class="text-secondary small m-0" id="mainMessageEn"></p>
+        <p class="text-secondary m-0" id="mainMessage">使用する写真を選んでください</p>
+        <p class="text-secondary small m-0" id="mainMessageEn">Please select the photo you would like to use.</p>
+        <input id="inputButton" class="form-control mt-2" type="file" aria-describedby="inputGroupFileAddon04"
+          aria-label="Upload" accept=".png, .jpeg, .jpg" onclick="inputButtonPressed();">
+        <div id="liveAlertPlaceholder"></div>
       </section>
 
       <div class="row pb-3">
         <div class="col text-start">
-          <button id="returnButton" class="btn btn-return" onclick="returnButtonPressed();"><svg
-              xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chevron-left"
-              viewBox="0 0 16 16">
+          <button id="returnButton" class="btn btn-return" onclick="returnButtonPressed();">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+              class="bi bi-chevron-left" viewBox="0 0 16 16">
               <path fill-rule="evenodd"
                 d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
-            </svg></button>
+            </svg>
+          </button>
         </div>
         <div class="col text-end">
           <button id="mainButton" class="btn btn-orange" onclick="mainButtonPressed();">Next<svg
@@ -90,8 +94,10 @@
               viewBox="-4 2 16 16">
               <path fill-rule="evenodd"
                 d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-            </svg></button>
+            </svg>
+          </button>
           <input id="uploadImg" type="file" accept=".png, .jpeg, .jpg" hidden></input>
+
         </div>
       </div>
     </section>

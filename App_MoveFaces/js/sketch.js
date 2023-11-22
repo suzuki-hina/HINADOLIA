@@ -1,15 +1,12 @@
 // シーンの状態を表す定数
 const STATE_SERECT = 0;
-const STATE_UPLOAD = 1;
-const STATE_CHECK = 2;
-const STATE_LINE = 3;
-const STATE_START = 4;
-const STATE_RECORDING = 5;
+const STATE_LINE = 1;
+const STATE_RECORDING = 2;
 
 // シーンの状態
 let state = STATE_SERECT;
-let stateMessage = "使用する写真を選んでください";
-let stateMessageEn = "Please select the photo you would like to use.";
+let stateMessage;
+let stateMessageEn;
 let fileName;
 
 //テクスチャ
@@ -49,11 +46,11 @@ let box_mouth_y3;
 let face_results;
 let is_pc;
 
-
 function setup() {
   let p5canvas = createCanvas(400, 400, WEBGL);
   p5canvas.parent('#canvas');
 
+  //機種による処理
   if (navigator.userAgent.indexOf('iPhone') > 0 ||
     navigator.userAgent.indexOf('iPod') > 0 ||
     (navigator.userAgent.indexOf('Android') > 0 &&
@@ -91,9 +88,6 @@ function setup() {
     let video_width = document.querySelector('#webcam').videoWidth;
     let video_height = document.querySelector('#webcam').videoHeight;
     adjustCanvas();
-
-    document.getElementById("mainMessage").innerHTML = stateMessage;
-    document.getElementById("mainMessageEn").innerHTML = stateMessageEn;
   }
 }
 
@@ -115,21 +109,12 @@ function draw() {
 
     if (state === STATE_SERECT) {
       adjustCanvas();
-    } else if (state === STATE_UPLOAD) {
-      adjustCanvas();
-    } else if (state === STATE_CHECK) {
-      windowResized();
-      textureSetting();
-      drawTexture();
-    } else if (state === STATE_LINE) {
+    }
+    else if (state === STATE_LINE) {
       windowResized();
       textureSetting();
       drawTexture();
       markingTexture();
-    } else if (state === STATE_START) {
-      windowResized();
-      markSetPos();
-      drawTexture();
     } else if (state === STATE_RECORDING) {
       windowResized();
       animationTexture();
@@ -148,6 +133,7 @@ function draw() {
 
 var element_webcam = document.getElementById('webcam');
 var element_canvas = document.getElementById('canvas');
+var fileInput = document.getElementById('inputButton');
 var element_return = document.getElementById('returnButton');
 var element_main = document.getElementById('mainButton');
 
@@ -180,36 +166,38 @@ function previewFile(file) {
   reader.readAsDataURL(file);
 }
 
+//画像のインプットボタン
+function inputButtonPressed() {
+  // <input>でファイルが選択されたときの処理
+  const handleFileSelect = () => {
+    const files = fileInput.files;
+    // previewFile(files);
+    for (let i = 0; i < files.length; i++) {
+      previewFile(files[i]);
+      fileName = files[i].name;
+      console.log(fileName);
+    }
+  }
+  fileInput.addEventListener('change', handleFileSelect);
+}
+
 //ボタンの処理
 function stateButton() {
   if (state === STATE_SERECT) {
-    element_main.textContent = "選ぶ";
+    element_webcam.style.display = 'inline';
+    element_canvas.style.display = 'none';
+    fileInput.style.display = 'inline';
     stateMessage = "写真を選択して下さい";
     stateMessageEn = "Please select the photo you would like to use.";
-  } else if (state === STATE_UPLOAD) {
-    element_webcam.style.display = 'inline';
-    element_canvas.style.position = 'absolute';
-    element_main.textContent = "次へ";
-    stateMessage = fileName + " をアップロードしました";
-    stateMessageEn = fileName + " is uploaded.";
-  } else if (state === STATE_CHECK) {
-    element_webcam.style.display = 'none';
-    element_canvas.style.position = 'relative';
-    element_main.textContent = "次へ";
-    stateMessage = "この「顔」を動かしますか？";
-    stateMessageEn = "Do you want to move this face?";
   } else if (state === STATE_LINE) {
-    element_main.textContent = "次へ";
+    element_webcam.style.display = 'none';
+    element_canvas.style.display = 'inline';
+    fileInput.style.display = 'none';
     stateMessage = "目と口に合わせて白枠を動かしてください";
     stateMessageEn = "Move the white frame to match the eyes and mouth.";
-  } else if (state === STATE_START) {
-    element_main.textContent = "次へ";
+  } else if (state === STATE_RECORDING) {
     stateMessage = "顔を動かしてみましょう😄";
     stateMessageEn = "Let's move your face😄";
-  } else if (state === STATE_RECORDING) {
-    element_main.textContent = "録画";
-    stateMessage = "録画できます";
-    stateMessageEn = "You can record.";
   }
   document.getElementById("mainMessage").innerHTML = stateMessage;
   document.getElementById("mainMessageEn").innerHTML = stateMessageEn;
@@ -217,50 +205,82 @@ function stateButton() {
 
 //メインボタンの処理
 function mainButtonPressed() {
-  if (state === STATE_SERECT) {
-    document.getElementById("uploadImg").click();
-    // const fileInput = document.getElementById('uploadImg');
+  if (state == 0) {
+    if (fileInput.files.length > 0) {
 
-    // <input>でファイルが選択されたときの処理
-    const fileInput = document.getElementById('uploadImg');
-    const handleFileSelect = () => {
-      const files = fileInput.files;
-      // previewFile(files);
-      for (let i = 0; i < files.length; i++) {
-        previewFile(files[i]);
-        fileName = files[i].name;
-        document.getElementById("mainMessage").innerHTML = fileName;
+      w = width / (rows - 1);
+      //左目のマークの初期位置
+      box_eyeL_x1 = w * 2;
+      box_eyeL_y1 = w * 2;
+      box_eyeL_x2 = w * 4;
+      box_eyeL_y2 = w * 4;
+
+      //右目のマークの初期位置
+      box_eyeR_x1 = w * 5;
+      box_eyeR_y1 = w * 2;
+      box_eyeR_x2 = w * 7;
+      box_eyeR_y2 = w * 4;
+
+      //口のマークの初期位置
+      box_mouth_x1 = w * 2;
+      box_mouth_y1 = w * 5;
+      box_mouth_x2 = w * 7;
+      box_mouth_y2 = w * 7;
+
+      state++;
+      stateButton();
+      // 既存のアラートメッセージがあれば削除
+      const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+      const existingAlerts = alertPlaceholder.getElementsByClassName('alert');
+      for (const alert of existingAlerts) {
+        alert.remove();
       }
+
+    } else if (fileInput.files.length == 0) {
+      displayFileNotSelectedAlert();
     }
-    fileInput.addEventListener('change', handleFileSelect);
-  } else if (state === STATE_CHECK) {
-    //左目のマークの初期位置
-    box_eyeL_x1 = w * 2;
-    box_eyeL_y1 = w * 2;
-    box_eyeL_x2 = w * 4;
-    box_eyeL_y2 = w * 4;
-
-    //右目のマークの初期位置
-    box_eyeR_x1 = w * 5;
-    box_eyeR_y1 = w * 2;
-    box_eyeR_x2 = w * 7;
-    box_eyeR_y2 = w * 4;
-
-    //口のマークの初期位置
-    box_mouth_x1 = w * 2;
-    box_mouth_y1 = w * 5;
-    box_mouth_x2 = w * 7;
-    box_mouth_y2 = w * 7;
-  }
-  if (0 <= state && state < 5) {
+  } else if (state == 1) {
+    windowResized();
+    markSetPos();
+    drawTexture();
     state++;
+    stateButton();
+  } else if (state == 3) {
     stateButton();
   }
 }
 
+function displayFileNotSelectedAlert() {
+  const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+  const appendAlert = (message, type) => {
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = [
+      `<div class="alert alert-${type} alert-dismissible mt-2" role="alert">`,
+      ` <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill me-2" viewBox="0 0 16 16" aria-label="Warning:">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+          </svg>
+          ${message}
+        </div>`,
+      ' <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+      '</div>'
+    ].join('')
+
+    alertPlaceholder.append(wrapper)
+  }
+
+  // 既存のアラートメッセージがあれば削除
+  const existingAlerts = alertPlaceholder.getElementsByClassName('alert');
+  for (const alert of existingAlerts) {
+    alert.remove();
+  }
+  // アラートメッセージを表示する関数を呼び出し
+  appendAlert('ファイルを選択して下さい。 Please select a file.', 'warning');
+}
+
 //リターンボタンの処理
 function returnButtonPressed() {
-  if (0 < state && state <= 5) {
+  if (0 < state && state <= 2) {
     state--;
     stateButton();
   }
