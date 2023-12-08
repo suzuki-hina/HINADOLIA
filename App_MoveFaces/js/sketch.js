@@ -77,6 +77,9 @@ function draw() {
   // 描画処理
   clear();  // これを入れないと下レイヤーにあるビデオが見えなくなる
 
+  //元々180度回転していた座標系がもとに戻る
+  scale(-1, 1);
+
   // 各頂点座標を表示する
   // 各頂点座標の位置と番号の対応は以下のURLを確認
   // https://developers.google.com/mediapipe/solutions/vision/pose_landmarker
@@ -131,8 +134,9 @@ function adjustCanvas() {
 //キャンパスのサイズ(カメラなし)
 function windowResized() {
   w = windowWidth;
+  h = w * image.height / image.width;
   // let w = element_canvas.clientWidth;
-  resizeCanvas(w, w, WEBGL);
+  resizeCanvas(w, h, WEBGL);
   translate(-width / 2, -height / 2);
 }
 
@@ -204,9 +208,8 @@ function mainButtonPressed() {
     } else if (fileInput.files.length == 0) {
       displayFileNotSelectedAlert();
     }
+
   } else if (state == 1) {
-    windowResized();
-    markSetPos();
     state++;
     stateButton();
   } else if (state == 3) {
@@ -289,6 +292,7 @@ function textureSetting() {
     pT[i] = [];
     middlePointSide[i] = [];
 
+    //ここのおかげでテクスチャの座標が変わらない、多分
     pP[i] = new pointPosition(pB[i].x, pB[i].y);
     pT[i] = new pointTexture(pB[i].x, pB[i].y);
   }
@@ -313,8 +317,8 @@ function drawTexture() {
   beginShape();
   vertex(0, 0, 0, 0);
   vertex(w, 0, 1, 0);
-  vertex(w, w, 1, 1);
-  vertex(0, w, 0, 1);
+  vertex(w, h, 1, 1);
+  vertex(0, h, 0, 1);
   endShape(CLOSE);
 
   //テクスチャの描画(伸びるところ)
@@ -378,6 +382,7 @@ function drawTexture() {
 //ボックスの描画
 function markingTexture() {
   for (let i = 0; i < boxPoint; i++) {
+    pB[i] = new pointBox(pB[i].x, pB[i].y);
     if (i == 0 || i == 4 || i == 8) {
       //ボックスの線の描画の設定
       strokeWeight(4);
@@ -413,14 +418,14 @@ function cmousePressed() {
   }
 }
 
+//ボックスの移動
 function cmouseDragged() {
   if (!is_pc) {
     disable_scroll();
   }
 
   if (mouseIsPressed) {
-    let mouseRange = w / 10;
-
+    let mouseRange = w / 50;
     for (let i = 0; i < boxPoint; i++) {
       if (i == 0 || i == 4 || i == 8) {
 
@@ -428,11 +433,16 @@ function cmouseDragged() {
         let boxPosDist = dist(boxMiddlePos[i].x, boxMiddlePos[i].y, mouseX, mouseY);
         let boxSizeDist = dist(pB[i + 2].x, pB[i + 2].y, mouseX, mouseY);
 
+        let box_x1;
+        let box_x2;
+        let box_y1;
+        let box_y2;
+
         if (boxPosDist < mouseRange) {
-          let box_x1 = mouseX - (boxMiddlePos[i].x - pB[i].x);
-          let box_x2 = mouseX + (pB[i + 2].x - boxMiddlePos[i].x);
-          let box_y1 = mouseY - (boxMiddlePos[i].y - pB[i].y);
-          let box_y2 = mouseY + (pB[i + 2].y - boxMiddlePos[i].y);
+          box_x1 = mouseX - (boxMiddlePos[i].x - pB[i].x);
+          box_x2 = mouseX + (pB[i + 2].x - boxMiddlePos[i].x);
+          box_y1 = mouseY - (boxMiddlePos[i].y - pB[i].y);
+          box_y2 = mouseY + (pB[i + 2].y - boxMiddlePos[i].y);
 
           pB[i] = new pointBox(box_x1, box_y1);
           pB[i + 1] = new pointBox(box_x2, box_y1);
@@ -450,63 +460,7 @@ function cmouseDragged() {
   }
 }
 
-//Boxに合わせる
-function markSetPos() {
-  for (let i = 0; i < boxPoint; i++) {
-    u[i] = map(pT[i].x, 0, width, 0, 1);
-  }
-  for (let i = 0; i < boxPoint; i++) {
-    v[i] = map(pT[i].y, 0, height, 0, 1);
-  }
-
-  for (let i = 0; i < boxPoint; i++) {
-    if (i < 3 || (3 < i && i < 7) || (7 < i && i < 11)) {
-      middlePointSide[i] = new pointMiddle(i, i + 1);
-      beginShape(TRIANGLE_STRIP);
-      vertex(pT[i].x, pT[i].y, u[i], v[i]);
-      vertex(pP[i].x, pP[i].y, u[i], v[i]);
-      vertex(middlePointSide[i].x, middlePointSide[i].y, middlePointSide[i].u, middlePointSide[i].v);
-      vertex(pP[i + 1].x, pP[i + 1].y, u[i + 1], v[i + 1]);
-      vertex(pT[i + 1].x, pT[i + 1].y, u[i + 1], v[i + 1]);
-      endShape(CLOSE);
-    } else if (i == 3 || i == 7 || i == 11) {
-      middlePointSide[i] = new pointMiddle(i, i - 3);
-      beginShape(TRIANGLE_STRIP);
-      vertex(pT[i].x, pT[i].y, u[i], v[i]);
-      vertex(pP[i].x, pP[i].y, u[i], v[i]);
-      vertex(middlePointSide[i].x, middlePointSide[i].y, middlePointSide[i].u, middlePointSide[i].v);
-      vertex(pP[i - 3].x, pP[i - 3].y, u[i - 3], v[i - 3]);
-      vertex(pT[i - 3].x, pT[i - 3].y, u[i - 3], v[i - 3]);
-      endShape(CLOSE);
-    }
-  }
-
-  for (let i = 0; i < boxPoint; i++) {
-    if (i < 2 || (3 < i && i < 6) || (7 < i && i < 10)) {
-      middlePointParts = new pointMiddle(i, i + 2);
-      beginShape(TRIANGLE_STRIP);
-      vertex(pP[i].x, pP[i].y, u[i], v[i]);
-      vertex(middlePointParts.x, middlePointParts.y, middlePointParts.u, middlePointParts.v);
-      vertex(pP[i + 1].x, pP[i + 1].y, u[i + 1], v[i + 1]);
-      endShape(CLOSE);
-    } else if (i == 2 || i == 6 || i == 10) {
-      middlePointParts = new pointMiddle(i, i - 2);
-      beginShape(TRIANGLE_STRIP);
-      vertex(pP[i].x, pP[i].y, u[i], v[i]);
-      vertex(middlePointParts.x, middlePointParts.y, middlePointParts.u, middlePointParts.v);
-      vertex(pP[i + 1].x, pP[i + 1].y, u[i + 1], v[i + 1]);
-      endShape(CLOSE);
-    } else if (i == 3 || i == 7 || i == 11) {
-      middlePointParts = new pointMiddle(i, i - 2);
-      beginShape(TRIANGLE_STRIP);
-      vertex(pP[i].x, pP[i].y, u[i], v[i]);
-      vertex(middlePointParts.x, middlePointParts.y, middlePointParts.u, middlePointParts.v);
-      vertex(pP[i - 3].x, pP[i - 3].y, u[i - 3], v[i - 3]);
-      endShape(CLOSE);
-    }
-  }
-}
-
+//顔を動かす
 function animationTexture() {
   // eyeBlinkLeftとeyeBlinkRightの値を取得してコンソールログに表示
   if (face_results.faceBlendshapes && face_results.faceBlendshapes.length > 0) {
