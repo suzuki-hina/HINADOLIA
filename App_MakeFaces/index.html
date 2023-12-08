@@ -69,7 +69,7 @@
 
   <main>
     <section class="container-fluid">
-      <section class="container py-3">
+      <section class="container mt-3 mb-3">
         <h1 class="fs-orange">Make Faces</h1>
         <p class="text-secondary m-0" id="mainMessage">使用する写真を選んでください</p>
         <p class="text-secondary small m-0" id="mainMessageEn">Please select the photo you would like to use.</p>
@@ -78,7 +78,7 @@
         <div id="liveAlertPlaceholder"></div>
       </section>
 
-      <div class="row pb-3">
+      <div class="row mt-3 mb-3">
         <div class="col text-start">
           <button id="returnButton" class="btn btn-return" onclick="returnButtonPressed();">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
@@ -88,6 +88,7 @@
             </svg>
           </button>
         </div>
+
         <div class="col text-end">
           <button id="mainButton" class="btn btn-orange" onclick="mainButtonPressed();">Next<svg
               xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right"
@@ -97,32 +98,28 @@
             </svg>
           </button>
           <input id="uploadImg" type="file" accept=".png, .jpeg, .jpg" hidden></input>
-
         </div>
       </div>
+
+      <div class="row">
+        <div style="position:relative;" class="p-0 m-0">
+          <div id="loading" class="text-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            Loading..
+          </div>
+
+          <video id="webcam" style="position:relative;left:0px;top:0px;width:100%;height:auto" autoplay
+            playsinline></video>
+          <div id="canvas" style="position:absolute;left:0px;top:0px;width:100%;height:auto"></div>
+          <!-- <div class="blend-shapes"><ul class="blend-shapes-list" id="video-blend-shapes"></ul> </div> -->
+        </div>
+      </div>
+
     </section>
 
-
-    <div class="row">
-      <div style="position:relative;" class="p-0 m-0">
-        <div id="loading" class="text-center">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          Loading..
-        </div>
-
-        <video id="webcam" style="position:relative;left:0px;top:0px;width:100%;height:auto" autoplay
-          playsinline></video>
-        <div id="canvas" style="position:absolute;left:0px;top:0px;width:100%;height:auto"></div>
-        <!-- <div class="blend-shapes">
-          <ul class="blend-shapes-list" id="video-blend-shapes"></ul>
-        </div> -->
-      </div>
-
   </main>
-
-  </div>
 
   <!-- include js libraries -->
   <script src="./js/p5.js"></script>
