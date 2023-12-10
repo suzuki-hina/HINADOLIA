@@ -462,6 +462,11 @@ function cmouseDragged() {
 
 //顔を動かす
 function animationTexture() {
+  let eyeMax = 0.8;
+  let AmouthMax = 0.8;
+  let UmouthMax = 0.8;
+  let ImouthMax = 0.8;
+
   // eyeBlinkLeftとeyeBlinkRightの値を取得してコンソールログに表示
   if (face_results.faceBlendshapes && face_results.faceBlendshapes.length > 0) {
     const blendShapes = face_results.faceBlendshapes[0].categories;
@@ -469,28 +474,161 @@ function animationTexture() {
       // console.log(blendShapes[i].categoryName, blendShapes[i].score.toFixed(4));
 
       //左目のアニメーション
-      pP[0].y = map(blendShapes[10].score.toFixed(4), 0, 0.8, pT[0].y, (pT[0].y + pT[3].y) / 2);
-      pP[1].y = map(blendShapes[10].score.toFixed(4), 0, 0.8, pT[1].y, (pT[1].y + pT[2].y) / 2);
-      pP[2].y = map(blendShapes[10].score.toFixed(4), 0, 0.8, pT[2].y, (pT[1].y + pT[2].y) / 2);
-      pP[3].y = map(blendShapes[10].score.toFixed(4), 0, 0.8, pT[3].y, (pT[0].y + pT[3].y) / 2);
+      pP[0].y = map(blendShapes[9].score.toFixed(3), 0, eyeMax, pT[0].y, (pT[0].y + pT[3].y) / 2);
+      pP[1].y = map(blendShapes[9].score.toFixed(3), 0, eyeMax, pT[1].y, (pT[1].y + pT[2].y) / 2);
+      pP[2].y = map(blendShapes[9].score.toFixed(3), 0, eyeMax, pT[2].y, (pT[1].y + pT[2].y) / 2);
+      pP[3].y = map(blendShapes[9].score.toFixed(3), 0, eyeMax, pT[3].y, (pT[0].y + pT[3].y) / 2);
 
       //右目のアニメーション
-      pP[4].y = map(blendShapes[9].score.toFixed(4), 0, 0.8, pT[4].y, (pT[4].y + pT[7].y) / 2);
-      pP[5].y = map(blendShapes[9].score.toFixed(4), 0, 0.8, pT[5].y, (pT[5].y + pT[6].y) / 2);
-      pP[6].y = map(blendShapes[9].score.toFixed(4), 0, 0.8, pT[6].y, (pT[5].y + pT[6].y) / 2);
-      pP[7].y = map(blendShapes[9].score.toFixed(4), 0, 0.8, pT[7].y, (pT[4].y + pT[7].y) / 2);
+      pP[4].y = map(blendShapes[10].score.toFixed(3), 0, eyeMax, pT[4].y, (pT[4].y + pT[7].y) / 2);
+      pP[5].y = map(blendShapes[10].score.toFixed(3), 0, eyeMax, pT[5].y, (pT[5].y + pT[6].y) / 2);
+      pP[6].y = map(blendShapes[10].score.toFixed(3), 0, eyeMax, pT[6].y, (pT[5].y + pT[6].y) / 2);
+      pP[7].y = map(blendShapes[10].score.toFixed(3), 0, eyeMax, pT[7].y, (pT[4].y + pT[7].y) / 2);
 
       //口のアニメーション
-      pP[8].y = map(blendShapes[25].score.toFixed(4), 1, 0, pT[8].y, (pT[8].y + pT[11].y) / 2);
-      pP[9].y = map(blendShapes[25].score.toFixed(4), 1, 0, pT[9].y, (pT[9].y + pT[10].y) / 2);
-      pP[10].y = map(blendShapes[25].score.toFixed(4), 1, 0, pT[10].y, (pT[9].y + pT[10].y) / 2);
-      pP[11].y = map(blendShapes[25].score.toFixed(4), 1, 0, pT[11].y, (pT[8].y + pT[11].y) / 2);
+      let mouthU_Trisect = (pT[9].x - pT[8].x) / 5;
+      let mouthL_Trisect = (pT[10].x - pT[11].x) / 5;
+      let mouthL_Middle = (pT[8].y + pT[11].y) / 2;
+      let mouthR_Middle = (pT[9].y + pT[10].y) / 2;
 
-      //口のアニメーション
-      pP[8].x = map(blendShapes[38].score.toFixed(4), 0, 1, pT[8].x, (pT[8].x + pT[9].x) / 2);
-      pP[9].x = map(blendShapes[38].score.toFixed(4), 0, 1, pT[9].x, (pT[8].x + pT[9].x) / 2);
-      pP[10].x = map(blendShapes[38].score.toFixed(4), 0, 1, pT[10].x, (pT[10].x + pT[11].x) / 2);
-      pP[11].x = map(blendShapes[38].score.toFixed(4), 0, 1, pT[11].x, (pT[10].x + pT[11].x) / 2);
+
+      if (blendShapes[25].score.toFixed(3) > 0) {
+        if (blendShapes[38].score.toFixed(3) > 0.1) {
+          pP[8] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pT[8].x + mouthU_Trisect, pT[8].x + mouthU_Trisect * 2),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pT[8].y)
+          );
+          pP[9] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pT[9].x - mouthU_Trisect, pT[9].x - mouthU_Trisect * 2),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pT[9].y)
+          );
+          pP[10] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pT[10].x - mouthL_Trisect, pT[10].x - mouthL_Trisect * 2),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pT[10].y)
+          );
+          pP[11] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pT[11].x + mouthL_Trisect, pT[11].x + mouthL_Trisect * 2),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pT[11].y)
+          );
+        }
+        else if (blendShapes[44].score.toFixed(4) > 0.1 || blendShapes[45].score.toFixed(4) > 0.1) {
+          pP[8] = new pointPosition(
+            map(blendShapes[44].score.toFixed(3), 0, ImouthMax, pT[8].x + mouthU_Trisect, pT[8].x),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pT[8].y)
+          );
+          pP[9] = new pointPosition(
+            map(blendShapes[45].score.toFixed(3), 0, ImouthMax, pT[9].x - mouthU_Trisect, pT[9].x),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pT[9].y)
+          );
+          pP[10] = new pointPosition(
+            map(blendShapes[45].score.toFixed(3), 0, ImouthMax, pT[10].x - mouthL_Trisect, pT[10].x),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pT[10].y)
+          );
+          pP[11] = new pointPosition(
+            map(blendShapes[44].score.toFixed(3), 0, ImouthMax, pT[11].x + mouthL_Trisect, pT[11].x),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pT[11].y)
+          );
+        }
+        else {
+          pP[8] = new pointPosition(
+            pT[8].x + mouthU_Trisect,
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pT[8].y)
+          );
+          pP[9] = new pointPosition(
+            pT[9].x - mouthU_Trisect,
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pT[9].y)
+          );
+          pP[10] = new pointPosition(
+            pT[10].x - mouthL_Trisect,
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pT[10].y)
+          );
+          pP[11] = new pointPosition(
+            pT[11].x + mouthL_Trisect,
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pT[11].y)
+          );
+        }
+      }
+      else {
+        if (blendShapes[38].score.toFixed(4) > 0.1) {
+          pP[8] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pT[8].x + mouthU_Trisect, pT[8].x + mouthU_Trisect * 2),
+            mouthL_Middle
+          );
+          pP[9] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pT[9].x - mouthU_Trisect, pT[9].x - mouthU_Trisect * 2),
+            mouthR_Middle
+          );
+          pP[10] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pT[10].x - mouthL_Trisect, pT[10].x - mouthL_Trisect * 2),
+            mouthR_Middle
+          );
+          pP[11] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pT[11].x + mouthL_Trisect, pT[11].x + mouthL_Trisect * 2),
+            mouthL_Middle
+          );
+        } else if (blendShapes[44].score.toFixed(4) > 0.1 || blendShapes[45].score.toFixed(4) > 0.1) {
+          pP[8] = new pointPosition(
+            map(blendShapes[44].score.toFixed(3), 0, ImouthMax, pT[8].x + mouthU_Trisect, pT[8].x),
+            mouthL_Middle
+          );
+          pP[9] = new pointPosition(
+            map(blendShapes[45].score.toFixed(3), 0, ImouthMax, pT[9].x - mouthU_Trisect, pT[9].x),
+            mouthR_Middle
+          );
+          pP[10] = new pointPosition(
+            map(blendShapes[45].score.toFixed(3), 0, ImouthMax, pT[10].x - mouthL_Trisect, pT[10].x),
+            mouthR_Middle
+          );
+          pP[11] = new pointPosition(
+            map(blendShapes[44].score.toFixed(3), 0, ImouthMax, pT[11].x + mouthL_Trisect, pT[11].x),
+            mouthL_Middle
+          );
+        } else {
+          pP[8] = new pointPosition(
+            pT[8].x + mouthU_Trisect,
+            mouthL_Middle
+          );
+          pP[9] = new pointPosition(
+            pT[9].x - mouthU_Trisect,
+            mouthR_Middle
+          );
+          pP[10] = new pointPosition(
+            pT[10].x - mouthL_Trisect,
+            mouthR_Middle
+          );
+          pP[11] = new pointPosition(
+            pT[11].x + mouthL_Trisect,
+            mouthL_Middle
+          );
+        }
+      }
+
+      // //口のアニメーション
+      // pP[8].y = map(blendShapes[25].score.toFixed(4), 0, AmouthMax, (pT[8].y + pT[11].y) / 2, pT[8].y);
+      // pP[9].y = map(blendShapes[25].score.toFixed(4), 0, AmouthMax, (pT[9].y + pT[10].y) / 2, pT[9].y);
+      // pP[10].y = map(blendShapes[25].score.toFixed(4), 0, AmouthMax, (pT[9].y + pT[10].y) / 2, pT[10].y);
+      // pP[11].y = map(blendShapes[25].score.toFixed(4), 0, AmouthMax, (pT[8].y + pT[11].y) / 2, pT[11].y);
+
+
+      // if (blendShapes[38].score.toFixed(4) > 0.1) {
+      //   //口のアニメーション(う)
+      //   pP[8].x = map(blendShapes[38].score.toFixed(4), 0, UmouthMax, pT[8].x + (pT[9].x - pT[8].x) / 5, pT[8].x + ((pT[9].x - pT[8].x) / 5) * 2);
+      //   pP[9].x = map(blendShapes[38].score.toFixed(4), 0, UmouthMax, pT[9].x - (pT[9].x - pT[8].x) / 5, pT[9].x - ((pT[9].x - pT[8].x) / 5) * 2);
+      //   pP[10].x = map(blendShapes[38].score.toFixed(4), 0, UmouthMax, pT[10].x - (pT[10].x - pT[11].x) / 5, pT[10].x - ((pT[10].x - pT[11].x) / 5) * 2);
+      //   pP[11].x = map(blendShapes[38].score.toFixed(4), 0, UmouthMax, pT[11].x + (pT[10].x - pT[11].x) / 5, pT[11].x + ((pT[10].x - pT[11].x) / 5) * 2);
+      // } else if (blendShapes[44].score.toFixed(4) > 0.1 || blendShapes[45].score.toFixed(4) > 0.1) {
+      //   //口のアニメーション(い左)
+      //   pP[8].x = map(blendShapes[44].score.toFixed(4), 0, ImouthMax, pT[8].x + (pT[9].x - pT[8].x) / 5, pT[8].x);
+      //   pP[11].x = map(blendShapes[44].score.toFixed(4), 0, ImouthMax, pT[11].x + (pT[10].x - pT[11].x) / 5, pT[11].x);
+      //   //口のアニメーション(い右)
+      //   pP[9].x = map(blendShapes[45].score.toFixed(4), 0, ImouthMax, pT[9].x - (pT[9].x - pT[8].x) / 5, pT[9].x);
+      //   pP[10].x = map(blendShapes[45].score.toFixed(4), 0, ImouthMax, pT[10].x - (pT[10].x - pT[11].x) / 5, pT[10].x);
+      // } else {
+      //   pP[8].x = pT[8].x + (pT[9].x - pT[8].x) / 5;
+      //   pP[9].x = pT[9].x - (pT[9].x - pT[8].x) / 5;
+      //   pP[10].x = pT[10].x - (pT[10].x - pT[11].x) / 5;
+      //   pP[11].x = pT[11].x + (pT[10].x - pT[11].x) / 5;
+      // }
     }
   }
 }
