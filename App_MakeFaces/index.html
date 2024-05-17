@@ -37,6 +37,16 @@
   <link rel="manifest" href="../manifest.json">
   <link rel="icon" sizes="192x192" href="../images/favicon-192.png">
 
+  <style>
+    video {
+      clear: both;
+      display: block;
+      transform: rotateY(180deg);
+      -webkit-transform: rotateY(180deg);
+      -moz-transform: rotateY(180deg);
+    }
+  </style>
+
 </head>
 
 <body>
@@ -46,8 +56,8 @@
         <nav class="nav nav-underline justify-content-between p-3">
           <a class="nav-item nav-link link-body-emphasis" href="../index.html">Home</a>
           <a class="nav-item nav-link link-body-emphasis" href="../App_TryFaces/index.html">Try Faces</a>
-          <a class="nav-item nav-link link-body-emphasis active" href="../App_MoveFaces/index.html">Move Faces</a>
-          <a class="nav-item nav-link link-body-emphasis" href="#">Make Faces</a>
+          <a class="nav-item nav-link link-body-emphasis" href="../App_MoveFaces/index.html">Move Faces</a>
+          <a class="nav-item nav-link link-body-emphasis active" href="#">Make Faces</a>
           <a class="nav-item nav-link link-body-emphasis" href="../App_FindFaces/index.html">Find Faces</a>
           <a class="nav-item nav-link link-body-emphasis" href="../AboutMe/index.html">About Me</a>
         </nav>
@@ -77,6 +87,8 @@
           aria-label="Upload" accept=".png, .jpeg, .jpg" onclick="inputButtonPressed();">
         <div id="liveAlertPlaceholder"></div>
       </section>
+
+
 
       <div class="row mt-3 mb-3">
         <div class="col text-start">

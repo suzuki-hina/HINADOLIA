@@ -195,7 +195,6 @@ function stateButton() {
 function mainButtonPressed() {
   if (state == 0) {
     boxSetting();
-
     if (fileInput.files.length > 0) {
       state++;
       stateButton();
@@ -208,11 +207,10 @@ function mainButtonPressed() {
     } else if (fileInput.files.length == 0) {
       displayFileNotSelectedAlert();
     }
-
   } else if (state == 1) {
     state++;
     stateButton();
-  } else if (state == 3) {
+  } else if (state == 2) {
     stateButton();
   }
 }
@@ -370,12 +368,10 @@ function drawTexture() {
     }
   }
 
-  // for (let j = 0; j < rows - 1; j++) {
-  //   for (let i = 0; i < cols; i++) {
-  //     stroke(255);
-  //     strokeWeight(10);
-  //     point(pP[i][j].x, pP[i][j].y);
-  //   }
+  // for (let i = 0; i < boxPoint; i++) {
+  //   stroke(255);
+  //   strokeWeight(10);
+  //   point(pP[i].x, pP[i].y);
   // }
 }
 
@@ -602,33 +598,6 @@ function animationTexture() {
           );
         }
       }
-
-      // //口のアニメーション
-      // pP[8].y = map(blendShapes[25].score.toFixed(4), 0, AmouthMax, (pT[8].y + pT[11].y) / 2, pT[8].y);
-      // pP[9].y = map(blendShapes[25].score.toFixed(4), 0, AmouthMax, (pT[9].y + pT[10].y) / 2, pT[9].y);
-      // pP[10].y = map(blendShapes[25].score.toFixed(4), 0, AmouthMax, (pT[9].y + pT[10].y) / 2, pT[10].y);
-      // pP[11].y = map(blendShapes[25].score.toFixed(4), 0, AmouthMax, (pT[8].y + pT[11].y) / 2, pT[11].y);
-
-
-      // if (blendShapes[38].score.toFixed(4) > 0.1) {
-      //   //口のアニメーション(う)
-      //   pP[8].x = map(blendShapes[38].score.toFixed(4), 0, UmouthMax, pT[8].x + (pT[9].x - pT[8].x) / 5, pT[8].x + ((pT[9].x - pT[8].x) / 5) * 2);
-      //   pP[9].x = map(blendShapes[38].score.toFixed(4), 0, UmouthMax, pT[9].x - (pT[9].x - pT[8].x) / 5, pT[9].x - ((pT[9].x - pT[8].x) / 5) * 2);
-      //   pP[10].x = map(blendShapes[38].score.toFixed(4), 0, UmouthMax, pT[10].x - (pT[10].x - pT[11].x) / 5, pT[10].x - ((pT[10].x - pT[11].x) / 5) * 2);
-      //   pP[11].x = map(blendShapes[38].score.toFixed(4), 0, UmouthMax, pT[11].x + (pT[10].x - pT[11].x) / 5, pT[11].x + ((pT[10].x - pT[11].x) / 5) * 2);
-      // } else if (blendShapes[44].score.toFixed(4) > 0.1 || blendShapes[45].score.toFixed(4) > 0.1) {
-      //   //口のアニメーション(い左)
-      //   pP[8].x = map(blendShapes[44].score.toFixed(4), 0, ImouthMax, pT[8].x + (pT[9].x - pT[8].x) / 5, pT[8].x);
-      //   pP[11].x = map(blendShapes[44].score.toFixed(4), 0, ImouthMax, pT[11].x + (pT[10].x - pT[11].x) / 5, pT[11].x);
-      //   //口のアニメーション(い右)
-      //   pP[9].x = map(blendShapes[45].score.toFixed(4), 0, ImouthMax, pT[9].x - (pT[9].x - pT[8].x) / 5, pT[9].x);
-      //   pP[10].x = map(blendShapes[45].score.toFixed(4), 0, ImouthMax, pT[10].x - (pT[10].x - pT[11].x) / 5, pT[10].x);
-      // } else {
-      //   pP[8].x = pT[8].x + (pT[9].x - pT[8].x) / 5;
-      //   pP[9].x = pT[9].x - (pT[9].x - pT[8].x) / 5;
-      //   pP[10].x = pT[10].x - (pT[10].x - pT[11].x) / 5;
-      //   pP[11].x = pT[11].x + (pT[10].x - pT[11].x) / 5;
-      // }
     }
   }
 }

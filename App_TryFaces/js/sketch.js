@@ -121,13 +121,13 @@ function draw() {
       drawTexture();
     }
 
-    // for (let landmarks of face_results.faceLandmarks) {
-    //   for (let i = 0; i < landmarks.length; i++) {
-    //     fill(255);
-    //     noStroke();
-    //     circle(landmarks[i].x * width, landmarks[i].y * height, w / 15);
-    //   }
-    // }
+    for (let landmarks of face_results.faceLandmarks) {
+      for (let i = 0; i < landmarks.length; i++) {
+        fill(255);
+        noStroke();
+        circle(landmarks[i].x * width, landmarks[i].y * height, w / 15);
+      }
+    }
   }
 }
 

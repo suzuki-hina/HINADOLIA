@@ -10,40 +10,29 @@ let stateMessageEn;
 let fileName;
 
 //テクスチャ
-let img;
-let res = 2;
-let cols = 20 / res;
-let rows = 20 / res;
 let w;
+let boxPoint = 12;
 let pP = [];
 let pT = [];
+let pF = [];
 
-//左目のマークの初期位置
-let box_eyeL_x1;
-let box_eyeL_y1;
-let box_eyeL_x2;
-let box_eyeL_y2;
-let box_eyeL_x3;
-let box_eyeL_y3;
+let pB = [];
+let pS = [];
 
-//右目のマークの初期位置
-let box_eyeR_x1;
-let box_eyeR_y1;
-let box_eyeR_x2;
-let box_eyeR_y2;
-let box_eyeR_x3;
-let box_eyeR_y3;
+let uT = [];
+let vT = [];
+let uF = [];
+let vF = [];
 
-//口のマークの初期位置
-let box_mouth_x1;
-let box_mouth_y1;
-let box_mouth_x2;
-let box_mouth_y2;
-let box_mouth_x3;
-let box_mouth_y3;
+let boxMiddlePos = [];
+let middlePointSide = [];
+let middlePointParts = [];
 
 
+//顔の判定
 let face_results;
+
+//デバイス判定
 let is_pc;
 
 function setup() {
@@ -95,6 +84,9 @@ function draw() {
   // 描画処理
   clear();  // これを入れないと下レイヤーにあるビデオが見えなくなる
 
+  //元々180度回転していた座標系がもとに戻る
+  scale(-1, 1);
+
   // 各頂点座標を表示する
   // 各頂点座標の位置と番号の対応は以下のURLを確認
   // https://developers.google.com/mediapipe/solutions/vision/pose_landmarker
@@ -141,14 +133,17 @@ var element_main = document.getElementById('mainButton');
 function adjustCanvas() {
   // Get an element by its ID
   resizeCanvas(element_webcam.clientWidth, element_webcam.clientHeight);
-  //console.log(element_webcam.clientWidth);
+  w = width;
+  // console.log(element_webcam.clientWidth);
+  // console.log(windowWidth);
 }
 
 //キャンパスのサイズ(カメラなし)
 function windowResized() {
-  let w = windowWidth;
+  w = windowWidth;
+  h = w * image.height / image.width;
   // let w = element_canvas.clientWidth;
-  resizeCanvas(w, w, WEBGL);
+  resizeCanvas(w, h, WEBGL);
   translate(-width / 2, -height / 2);
 }
 
@@ -206,27 +201,8 @@ function stateButton() {
 //メインボタンの処理
 function mainButtonPressed() {
   if (state == 0) {
+    boxSetting();
     if (fileInput.files.length > 0) {
-
-      w = width / (rows - 1);
-      //左目のマークの初期位置
-      box_eyeL_x1 = w * 2;
-      box_eyeL_y1 = w * 2;
-      box_eyeL_x2 = w * 4;
-      box_eyeL_y2 = w * 4;
-
-      //右目のマークの初期位置
-      box_eyeR_x1 = w * 5;
-      box_eyeR_y1 = w * 2;
-      box_eyeR_x2 = w * 7;
-      box_eyeR_y2 = w * 4;
-
-      //口のマークの初期位置
-      box_mouth_x1 = w * 2;
-      box_mouth_y1 = w * 5;
-      box_mouth_x2 = w * 7;
-      box_mouth_y2 = w * 7;
-
       state++;
       stateButton();
       // 既存のアラートメッセージがあれば削除
@@ -235,21 +211,18 @@ function mainButtonPressed() {
       for (const alert of existingAlerts) {
         alert.remove();
       }
-
     } else if (fileInput.files.length == 0) {
       displayFileNotSelectedAlert();
     }
   } else if (state == 1) {
-    windowResized();
-    markSetPos();
-    drawTexture();
     state++;
     stateButton();
-  } else if (state == 3) {
+  } else if (state == 2) {
     stateButton();
   }
 }
 
+//ファイルが選択されていないときのアラートメッセージ
 function displayFileNotSelectedAlert() {
   const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
   const appendAlert = (message, type) => {
@@ -286,106 +259,196 @@ function returnButtonPressed() {
   }
 }
 
+//ボックスの初期設定
+function boxSetting() {
+  let boxSize = w / 5;
+  let boxRange = w / 20;
+  for (let i = 0; i < boxPoint; i++) {
+
+    //ボックスの初期設定
+    pB[i] = [];
+    pB[i] = new pointBox(pB[i].x, pB[i].y);
+
+    pS[i] = [];
+    pS[i] = new pointStrech(pS[i].x, pS[i].y);
+
+    if (i == 0 || i == 3 || i == 8 || i == 11) {
+      pB[i].x = boxSize;
+    } else if (i == 1 || i == 2) {
+      pB[i].x = boxSize * 2;
+    } else if (i == 4 || i == 7) {
+      pB[i].x = boxSize * 3;
+    } else if (i == 5 || i == 6 || i == 9 || i == 10) {
+      pB[i].x = boxSize * 4;
+    }
+
+    if (i == 0 || i == 1 || i == 4 || i == 5) {
+      pB[i].y = boxSize;
+    } else if (i == 2 || i == 3 || i == 6 || i == 7) {
+      pB[i].y = boxSize * 2;
+    } else if (i == 8 || i == 9) {
+      pB[i].y = boxSize * 3;
+    } else if (i == 10 || i == 11) {
+      pB[i].y = boxSize * 4;
+    }
+
+    if (i == 0 || i == 3 || i == 4 || i == 7 || i == 8 || i == 11) {
+      pS[i].x = pB[i].x - boxRange;
+    } else if (i == 1 || i == 2 || i == 5 || i == 6 || i == 9 || i == 10) {
+      pS[i].x = pB[i].x + boxRange;
+    }
+
+    if (i == 0 || i == 1 || i == 4 || i == 5 || i == 8 || i == 9) {
+      pS[i].y = pB[i].y - boxRange;
+    } else if (i == 2 || i == 3 || i == 6 || i == 7 || i == 10 || i == 11) {
+      pS[i].y = pB[i].y + boxRange;
+    }
+
+  }
+}
+
 //テクスチャの座標初期設定
 function textureSetting() {
-  w = width / (rows - 1);
-  let pPx = 0;
-  let pTx = 0;
-
-  for (let i = 0; i < cols; i++) {
+  for (let i = 0; i < boxPoint; i++) {
     pP[i] = [];
     pT[i] = [];
+    pF[i] = [];
+    middlePointSide[i] = [];
 
-    let pPy = 0;
-    let pTy = 0;
-
-    for (let j = 0; j < rows; j++) {
-      pP[i][j] = new pointPosition(pPx, pPy);
-      pPy = pPy + w;
-      pT[i][j] = new pointTexture(pTx, pTy);
-      pTy = pTy + w;
-    }
-    pPx = pPx + w;
-    pTx = pTx + w;
+    //ここのおかげでテクスチャの座標が変わらない、多分
+    pP[i] = new pointPosition(pB[i].x, pB[i].y);
+    pT[i] = new pointTexture(pS[i].x, pS[i].y);
+    pF[i] = new pointFix(pB[i].x, pB[i].y);
   }
 }
 
 //テクスチャ平面の描画
 function drawTexture() {
-  w = width / (rows - 1);
   noFill();
   noStroke();
   textureMode(NORMAL);
+  texture(image);
 
-  for (let j = 0; j < rows - 1; j++) {
-    beginShape(TRIANGLE_STRIP);
-    texture(image);
-    for (let i = 0; i < cols; i++) {
-      let x1 = pP[i][j].x;
-      let y1 = pP[i][j].y;
-      let u = map(pT[i][j].x, 0, w * (cols - 1), 0, 1);
-      let v1 = map(pT[i][j].y, 0, w * (rows - 1), 0, 1);
-      vertex(x1, y1, u, v1);
-
-      let x2 = pP[i][j + 1].x;
-      let y2 = pP[i][j + 1].y;
-      let u2 = map(pT[i][j + 1].x, 0, w * (cols - 1), 0, 1);
-      let v2 = map(pT[i][j + 1].y, 0, w * (rows - 1), 0, 1);
-      vertex(x2, y2, u2, v2);
-    }
-    endShape();
+  //uv座標の設定
+  for (let i = 0; i < boxPoint; i++) {
+    uT[i] = map(pT[i].x, 0, width, 0, 1);
+    uF[i] = map(pF[i].x, 0, width, 0, 1);
+  }
+  for (let i = 0; i < boxPoint; i++) {
+    vT[i] = map(pT[i].y, 0, height, 0, 1);
+    vF[i] = map(pF[i].y, 0, height, 0, 1);
   }
 
-  // for (let j = 0; j < rows - 1; j++) {
-  //   for (let i = 0; i < cols; i++) {
-  //     stroke(255);
-  //     strokeWeight(10);
-  //     point(pP[i][j].x, pP[i][j].y);
-  //   }
+  //テクスチャの描画(全面)
+  beginShape();
+  vertex(0, 0, 0, 0);
+  vertex(w, 0, 1, 0);
+  vertex(w, h, 1, 1);
+  vertex(0, h, 0, 1);
+  endShape(CLOSE);
+
+  //テクスチャの描画(伸びるところ)
+  for (let i = 0; i < boxPoint; i++) {
+    if (i < 3 || (3 < i && i < 7) || (7 < i && i < 11)) {
+      middlePointSide[i] = new pointMiddle(i, i + 1);
+      beginShape(TRIANGLE_STRIP);
+      vertex(pT[i].x, pT[i].y, uT[i], vT[i]);
+      vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
+      vertex(middlePointSide[i].xT, middlePointSide[i].yT, middlePointSide[i].uT, middlePointSide[i].vT);
+      vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
+      vertex(pT[i + 1].x, pT[i + 1].y, uT[i + 1], vT[i + 1]);
+      endShape(CLOSE);
+    } else if (i == 3 || i == 7 || i == 11) {
+      middlePointSide[i] = new pointMiddle(i, i - 3);
+      beginShape(TRIANGLE_STRIP);
+      vertex(pT[i].x, pT[i].y, uT[i], vT[i]);
+      vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
+      vertex(middlePointSide[i].xT, middlePointSide[i].yT, middlePointSide[i].uT, middlePointSide[i].vT);
+      vertex(pP[i - 3].x, pP[i - 3].y, uF[i - 3], vF[i - 3]);
+      vertex(pT[i - 3].x, pT[i - 3].y, uT[i - 3], vT[i - 3]);
+      endShape(CLOSE);
+    }
+  }
+
+  //テクスチャの描画(伸びないところ)
+  for (let i = 0; i < boxPoint; i++) {
+    if (i < 2 || (3 < i && i < 6) || (7 < i && i < 10)) {
+      middlePointParts = new pointMiddle(i, i + 2);
+      beginShape(TRIANGLE_STRIP);
+      vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
+      vertex(middlePointParts.xP, middlePointParts.yP, middlePointParts.uF, middlePointParts.vF);
+      vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
+      endShape(CLOSE);
+    } else if (i == 2 || i == 6 || i == 10) {
+      middlePointParts = new pointMiddle(i, i - 2);
+      beginShape(TRIANGLE_STRIP);
+      vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
+      vertex(middlePointParts.xP, middlePointParts.yP, middlePointParts.uF, middlePointParts.vF);
+      vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
+      endShape(CLOSE);
+    } else if (i == 3 || i == 7 || i == 11) {
+      middlePointParts = new pointMiddle(i, i - 2);
+      beginShape(TRIANGLE_STRIP);
+      vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
+      vertex(middlePointParts.xP, middlePointParts.yP, middlePointParts.uF, middlePointParts.vF);
+      vertex(pP[i - 3].x, pP[i - 3].y, uF[i - 3], vF[i - 3]);
+      endShape(CLOSE);
+    }
+  }
+
+  // for (let i = 0; i < boxPoint; i++) {
+  //   stroke(255);
+  //   strokeWeight(10);
+  //   point(pP[i].x, pP[i].y);
+  //   point(pT[i].x, pT[i].y);
   // }
 }
 
+//ボックスの描画
 function markingTexture() {
-  noFill();
-  strokeWeight(4);
+  for (let i = 0; i < boxPoint; i++) {
+    pB[i] = new pointBox(pB[i].x, pB[i].y);
+    pS[i] = new pointStrech(pS[i].x, pS[i].y);
+    if (i == 0 || i == 4 || i == 8) {
+      //ボックスの線の描画の設定
+      strokeWeight(4);
+      stroke(255);
+      noFill();
 
-  box_eyeL_x3 = (box_eyeL_x1 + box_eyeL_x2) / 2;
-  box_eyeL_y3 = (box_eyeL_y1 + box_eyeL_y2) / 2;
-  box_eyeR_x3 = (box_eyeR_x1 + box_eyeR_x2) / 2;
-  box_eyeR_y3 = (box_eyeR_y1 + box_eyeR_y2) / 2;
-  box_mouth_x3 = (box_mouth_x1 + box_mouth_x2) / 2;
-  box_mouth_y3 = (box_mouth_y1 + box_mouth_y2) / 2;
+      //ボックスの線の描画
+      beginShape();
+      vertex(pB[i].x, pB[i].y);
+      vertex(pB[i + 1].x, pB[i + 1].y);
+      vertex(pB[i + 2].x, pB[i + 2].y);
+      vertex(pB[i + 3].x, pB[i + 3].y);
+      endShape(CLOSE);
 
-  stroke(255);
-  beginShape();
-  vertex(box_eyeL_x1, box_eyeL_y1);
-  vertex(box_eyeL_x2, box_eyeL_y1);
-  vertex(box_eyeL_x2, box_eyeL_y2);
-  vertex(box_eyeL_x1, box_eyeL_y2);
-  endShape(CLOSE);
+      //ボックスの点の描画の設定
+      noStroke();
+      fill(255);
+      let boxPointSize = w / 50;
 
-  beginShape();
-  vertex(box_eyeR_x1, box_eyeR_y1);
-  vertex(box_eyeR_x2, box_eyeR_y1);
-  vertex(box_eyeR_x2, box_eyeR_y2);
-  vertex(box_eyeR_x1, box_eyeR_y2);
-  endShape(CLOSE);
+      //ボックスの移動用の点の描画
+      ellipse(pB[i + 2].x, pB[i + 2].y, boxPointSize, boxPointSize);
 
-  beginShape();
-  vertex(box_mouth_x1, box_mouth_y1);
-  vertex(box_mouth_x2, box_mouth_y1);
-  vertex(box_mouth_x2, box_mouth_y2);
-  vertex(box_mouth_x1, box_mouth_y2);
-  endShape(CLOSE);
+      //ボックスの中心点の描画
+      let leftEyeBoxMiddlePos = new pointBoxMiddle(i, i + 2);
+      ellipse(leftEyeBoxMiddlePos.x, leftEyeBoxMiddlePos.y, boxPointSize, boxPointSize);
 
-  noStroke();
-  fill(255);
-  ellipse(box_eyeL_x2, box_eyeL_y2, w / 4, w / 4);
-  ellipse(box_eyeL_x3, box_eyeL_y3, w / 4, w / 4);
-  ellipse(box_eyeR_x2, box_eyeR_y2, w / 4, w / 4);
-  ellipse(box_eyeR_x3, box_eyeR_y3, w / 4, w / 4);
-  ellipse(box_mouth_x2, box_mouth_y2, w / 4, w / 4);
-  ellipse(box_mouth_x3, box_mouth_y3, w / 4, w / 4);
+      //伸びの線の描画の設定
+      strokeWeight(2);
+      stroke(255);
+      noFill();
+
+      //伸びの線の描画
+      beginShape();
+      vertex(pS[i].x, pS[i].y);
+      vertex(pS[i + 1].x, pS[i + 1].y);
+      vertex(pS[i + 2].x, pS[i + 2].y);
+      vertex(pS[i + 3].x, pS[i + 3].y);
+      endShape(CLOSE);
+    }
+  }
 }
 
 function cmousePressed() {
@@ -394,145 +457,252 @@ function cmousePressed() {
   }
 }
 
+//ボックスの移動
 function cmouseDragged() {
   if (!is_pc) {
     disable_scroll();
   }
 
   if (mouseIsPressed) {
+    let mouseRange = w / 50;
+    for (let i = 0; i < boxPoint; i++) {
+      if (i == 0 || i == 4 || i == 8) {
 
-    let d_eyeL_size = dist(box_eyeL_x2, box_eyeL_y2, mouseX, mouseY);
-    let d_eyeL_pos = dist(box_eyeL_x3, box_eyeL_y3, mouseX, mouseY);
+        boxMiddlePos[i] = new pointBoxMiddle(i, i + 2);
+        let boxPosDist = dist(boxMiddlePos[i].x, boxMiddlePos[i].y, mouseX, mouseY);
+        let boxSizeDist = dist(pB[i + 2].x, pB[i + 2].y, mouseX, mouseY);
+        let strechSizeDist = dist(pS[i + 2].x, pS[i + 2].y, mouseX, mouseY);
 
-    if (d_eyeL_size < w / 4) {
-      box_eyeL_x2 = constrain(mouseX, box_eyeL_x1 + w / 4, box_eyeR_x1);
-      box_eyeL_y2 = constrain(mouseY, box_eyeL_y1 + w / 4, box_mouth_y1);
-    }
-    else if (d_eyeL_pos < w / 4) {
-      box_eyeL_x1 = mouseX - (box_eyeL_x3 - box_eyeL_x1);
-      box_eyeL_x2 = mouseX + (box_eyeL_x2 - box_eyeL_x3);
-      box_eyeL_y1 = mouseY - (box_eyeL_y3 - box_eyeL_y1);
-      box_eyeL_y2 = mouseY + (box_eyeL_y2 - box_eyeL_y3);
-    }
+        let box_x1;
+        let box_x2;
+        let box_y1;
+        let box_y2;
 
-    let d_eyeR_size = dist(box_eyeR_x2, box_eyeR_y2, mouseX, mouseY);
-    let d_eyeR_pos = dist(box_eyeR_x3, box_eyeR_y3, mouseX, mouseY);
+        let strech_x1;
+        let strech_x2;
+        let strech_y1;
+        let strech_y2;
 
-    if (d_eyeR_size < w / 4) {
-      box_eyeR_x2 = constrain(mouseX, box_eyeR_x1, width);
-      box_eyeR_y2 = constrain(mouseY, box_eyeR_y1, box_mouth_y1);
-    }
-    else if (d_eyeR_pos < w / 4) {
-      box_eyeR_x1 = mouseX - (box_eyeR_x3 - box_eyeR_x1);
-      box_eyeR_x2 = mouseX + (box_eyeR_x2 - box_eyeR_x3);
-      box_eyeR_y1 = mouseY - (box_eyeR_y3 - box_eyeR_y1);
-      box_eyeR_y2 = mouseY + (box_eyeR_y2 - box_eyeR_y3);
-    }
+        if (boxPosDist < mouseRange) {
+          box_x1 = mouseX - (boxMiddlePos[i].x - pB[i].x);
+          box_x2 = mouseX + (pB[i + 2].x - boxMiddlePos[i].x);
+          box_y1 = mouseY - (boxMiddlePos[i].y - pB[i].y);
+          box_y2 = mouseY + (pB[i + 2].y - boxMiddlePos[i].y);
 
-    let d_mouth_size = dist(box_mouth_x2, box_mouth_y2, mouseX, mouseY);
-    let d_mouth_pos = dist(box_mouth_x3, box_mouth_y3, mouseX, mouseY);
+          pB[i] = new pointBox(box_x1, box_y1);
+          pB[i + 1] = new pointBox(box_x2, box_y1);
+          pB[i + 2] = new pointBox(box_x2, box_y2);
+          pB[i + 3] = new pointBox(box_x1, box_y2);
 
-    if (d_mouth_size < w / 4) {
-      box_mouth_x2 = constrain(mouseX, box_mouth_x1, width);
-      box_mouth_y2 = constrain(mouseY, box_mouth_y1, height);
-    }
-    else if (d_mouth_pos < w / 4) {
-      box_mouth_x1 = mouseX - (box_mouth_x3 - box_mouth_x1);
-      box_mouth_x2 = mouseX + (box_mouth_x2 - box_mouth_x3);
-      box_mouth_y1 = mouseY - (box_mouth_y3 - box_mouth_y1);
-      box_mouth_y2 = mouseY + (box_mouth_y2 - box_mouth_y3);
+          strech_x1 = mouseX - (boxMiddlePos[i].x - pS[i].x);
+          strech_x2 = mouseX + (pS[i + 2].x - boxMiddlePos[i].x);
+          strech_y1 = mouseY - (boxMiddlePos[i].y - pS[i].y);
+          strech_y2 = mouseY + (pS[i + 2].y - boxMiddlePos[i].y);
+
+          pS[i] = new pointBox(strech_x1, strech_y1);
+          pS[i + 1] = new pointBox(strech_x2, strech_y1);
+          pS[i + 2] = new pointBox(strech_x2, strech_y2);
+          pS[i + 3] = new pointBox(strech_x1, strech_y2);
+        }
+        else if (boxSizeDist < mouseRange) {
+          pB[i].x = boxMiddlePos[i].x - abs(mouseX - boxMiddlePos[i].x);
+          pB[i].y = boxMiddlePos[i].y - abs(mouseY - boxMiddlePos[i].y);
+          pB[i + 1].x = mouseX;
+          pB[i + 1].y = boxMiddlePos[i].y - abs(mouseY - boxMiddlePos[i].y);
+          pB[i + 2].x = mouseX;
+          pB[i + 2].y = mouseY;
+          pB[i + 3].x = boxMiddlePos[i].x - abs(mouseX - boxMiddlePos[i].x);
+          pB[i + 3].y = mouseY;
+        }
+        else if (strechSizeDist < mouseRange) {
+          pS[i].x = boxMiddlePos[i].x - abs(mouseX - boxMiddlePos[i].x);
+          pS[i].y = boxMiddlePos[i].y - abs(mouseY - boxMiddlePos[i].y);
+          pS[i + 1].x = mouseX;
+          pS[i + 1].y = boxMiddlePos[i].y - abs(mouseY - boxMiddlePos[i].y);
+          pS[i + 2].x = mouseX;
+          pS[i + 2].y = mouseY;
+          pS[i + 3].x = boxMiddlePos[i].x - abs(mouseX - boxMiddlePos[i].x);
+          pS[i + 3].y = mouseY;
+        }
+      }
     }
   }
 }
 
-function markSetPos() {
-  for (let i = 0; i < cols; i++) {
-    for (let j = 0; j < rows; j++) {
-      if (0 < i & i <= 4) {
-        pP[i][1].y = box_eyeL_y1 * 0.9;
-        pP[i][2].y = box_eyeL_y1;
-        pP[i][3].y = box_eyeL_y2;
-        pP[i][4].y = (box_mouth_y1 - box_eyeL_y2) * 0.1 + box_eyeL_y2;
-        pP[i][5].y = (box_mouth_y1 - box_eyeL_y2) * 0.9 + box_eyeL_y2;
-        pP[i][6].y = box_mouth_y1;
-        pP[i][7].y = box_mouth_y2;
-        pP[i][8].y = (w * 9 - box_mouth_y2) * 0.1 + box_mouth_y2;
-      }
-      else if (4 < i & i <= 8) {
-        pP[i][1].y = box_eyeR_y1 * 0.9;
-        pP[i][2].y = box_eyeR_y1;
-        pP[i][3].y = box_eyeR_y2;
-        pP[i][4].y = (box_mouth_y1 - box_eyeR_y2) * 0.1 + box_eyeR_y2;
-        pP[i][5].y = (box_mouth_y1 - box_eyeR_y2) * 0.9 + box_eyeR_y2;
-        pP[i][6].y = box_mouth_y1;
-        pP[i][7].y = box_mouth_y2;
-        pP[i][8].y = (w * 9 - box_mouth_y2) * 0.1 + box_mouth_y2;
-      }
-
-      if (0 < j & j <= 4) {
-        pP[1][j].x = box_eyeL_x1 * 0.9;
-        pP[2][j].x = box_eyeL_x1;
-        pP[3][j].x = box_eyeL_x2;
-        pP[4][j].x = (box_eyeR_x1 - box_eyeL_x2) * 0.1 + box_eyeL_x2;
-        pP[5][j].x = (box_eyeR_x1 - box_eyeL_x2) * 0.9 + box_eyeL_x2;
-        pP[6][j].x = box_eyeR_x1;
-        pP[7][j].x = box_eyeR_x2;
-        pP[8][j].x = (w * 9 - box_eyeR_x2) * 0.1 + box_eyeR_x2;
-      }
-      else if (4 < j & j <= 8) {
-        pP[1][j].x = box_mouth_x1 * 0.9;
-        pP[2][j].x = box_mouth_x1;
-        pP[3][j].x = (box_mouth_x2 - box_mouth_x1) / 5 + box_mouth_x1;
-        pP[4][j].x = (box_mouth_x2 - box_mouth_x1) * 2 / 5 + box_mouth_x1;
-        pP[5][j].x = (box_mouth_x2 - box_mouth_x1) * 3 / 5 + box_mouth_x1;
-        pP[6][j].x = (box_mouth_x2 - box_mouth_x1) * 4 / 5 + box_mouth_x1;
-        pP[7][j].x = box_mouth_x2;
-        pP[8][j].x = (w * 9 - box_mouth_x2) * 0.1 + box_mouth_x2;
-      }
-
-      pP[i][j] = new pointPosition(pP[i][j].x, pP[i][j].y);
-      pT[i][j] = pP[i][j];
-      pT[i][j] = new pointTexture(pT[i][j].x, pT[i][j].y);
-    }
-  }
-}
-
+//顔を動かす
 function animationTexture() {
+  let eyeMax = 0.8;
+  let AmouthMax = 0.8;
+  let UmouthMax = 0.8;
+  let ImouthMax = 0.8;
+
   // eyeBlinkLeftとeyeBlinkRightの値を取得してコンソールログに表示
   if (face_results.faceBlendshapes && face_results.faceBlendshapes.length > 0) {
     const blendShapes = face_results.faceBlendshapes[0].categories;
     for (let i = 0; i < blendShapes.length; i++) {
-      console.log(blendShapes[i].categoryName, blendShapes[i].score.toFixed(4));
+      // console.log(blendShapes[i].categoryName, blendShapes[i].score.toFixed(4));
 
-      pP[2][2].y = map(blendShapes[10].score.toFixed(4), 0, 0.8, pT[2][2].y, (pT[2][2].y + pT[2][3].y) / 2);
-      pP[3][2].y = map(blendShapes[10].score.toFixed(4), 0, 0.8, pT[3][2].y, (pT[3][2].y + pT[3][3].y) / 2);
-      pP[2][3].y = map(blendShapes[10].score.toFixed(4), 0.8, 0, (pT[2][2].y + pT[2][3].y) / 2, pT[2][3].y);
-      pP[3][3].y = map(blendShapes[10].score.toFixed(4), 0.8, 0, (pT[3][2].y + pT[3][3].y) / 2, pT[3][3].y);
+      //左目瞬きのアニメーション
+      pP[0].y = map(blendShapes[9].score.toFixed(3), 0, eyeMax, pF[0].y, (pF[0].y + pF[3].y) / 2);
+      pP[1].y = map(blendShapes[9].score.toFixed(3), 0, eyeMax, pF[1].y, (pF[1].y + pF[2].y) / 2);
+      pP[2].y = map(blendShapes[9].score.toFixed(3), 0, eyeMax, pF[2].y, (pF[1].y + pF[2].y) / 2);
+      pP[3].y = map(blendShapes[9].score.toFixed(3), 0, eyeMax, pF[3].y, (pF[0].y + pF[3].y) / 2);
 
-      pP[6][2].y = map(blendShapes[9].score.toFixed(4), 0, 0.8, pT[6][2].y, (pT[6][2].y + pT[6][3].y) / 2);
-      pP[7][2].y = map(blendShapes[9].score.toFixed(4), 0, 0.8, pT[7][2].y, (pT[7][2].y + pT[7][3].y) / 2);
-      pP[6][3].y = map(blendShapes[9].score.toFixed(4), 0.8, 0, (pT[6][2].y + pT[6][3].y) / 2, pT[6][3].y);
-      pP[7][3].y = map(blendShapes[9].score.toFixed(4), 0.8, 0, (pT[7][2].y + pT[7][3].y) / 2, pT[7][3].y);
+      //左目が鼻側に動いたときのアニメーション
+      if (blendShapes[13].score.toFixed(3) > 0.3) {
+        pP[0].x = map(blendShapes[13].score.toFixed(3), 0, 1, pF[0].x, pF[0].x + 30);
+        pP[1].x = map(blendShapes[13].score.toFixed(3), 0, 1, pF[1].x, pF[1].x + 30);
+        pP[2].x = map(blendShapes[13].score.toFixed(3), 0, 1, pF[2].x, pF[2].x + 30);
+        pP[3].x = map(blendShapes[13].score.toFixed(3), 0, 1, pF[3].x, pF[3].x + 30);
+      }
 
-      pP[2][6].y = map(blendShapes[25].score.toFixed(4), 1, 0, pT[2][6].y, (pT[2][6].y + pT[2][7].y) / 2);
-      pP[3][6].y = map(blendShapes[25].score.toFixed(4), 1, 0, pT[3][6].y, (pT[3][6].y + pT[3][7].y) / 2);
-      pP[4][6].y = map(blendShapes[25].score.toFixed(4), 1, 0, pT[4][6].y, (pT[4][6].y + pT[4][7].y) / 2);
-      pP[5][6].y = map(blendShapes[25].score.toFixed(4), 1, 0, pT[5][6].y, (pT[5][6].y + pT[5][7].y) / 2);
-      pP[6][6].y = map(blendShapes[25].score.toFixed(4), 1, 0, pT[6][6].y, (pT[6][6].y + pT[6][7].y) / 2);
-      pP[7][6].y = map(blendShapes[25].score.toFixed(4), 1, 0, pT[7][6].y, (pT[7][6].y + pT[7][7].y) / 2);
+      //左目が耳側に動いたときのアニメーション
+      if (blendShapes[15].score.toFixed(3) > 0.3) {
+        pP[0].x = map(blendShapes[15].score.toFixed(3), 0, 1, pF[0].x, pF[0].x - 30);
+        pP[1].x = map(blendShapes[15].score.toFixed(3), 0, 1, pF[1].x, pF[1].x - 30);
+        pP[2].x = map(blendShapes[15].score.toFixed(3), 0, 1, pF[2].x, pF[2].x - 30);
+        pP[3].x = map(blendShapes[15].score.toFixed(3), 0, 1, pF[3].x, pF[3].x - 30);
+      }
 
-      pP[2][7].y = map(blendShapes[25].score.toFixed(4), 0, 1, (pT[2][6].y + pT[2][7].y) / 2, pT[2][7].y);
-      pP[3][7].y = map(blendShapes[25].score.toFixed(4), 0, 1, (pT[3][6].y + pT[3][7].y) / 2, pT[3][7].y);
-      pP[4][7].y = map(blendShapes[25].score.toFixed(4), 0, 1, (pT[4][6].y + pT[4][7].y) / 2, pT[4][7].y);
-      pP[5][7].y = map(blendShapes[25].score.toFixed(4), 0, 1, (pT[5][6].y + pT[5][7].y) / 2, pT[5][7].y);
-      pP[6][7].y = map(blendShapes[25].score.toFixed(4), 0, 1, (pT[6][6].y + pT[6][7].y) / 2, pT[6][7].y);
-      pP[7][7].y = map(blendShapes[25].score.toFixed(4), 0, 1, (pT[7][6].y + pT[7][7].y) / 2, pT[7][7].y);
+      //右目瞬きのアニメーション
+      pP[4].y = map(blendShapes[10].score.toFixed(3), 0, eyeMax, pF[4].y, (pF[4].y + pF[7].y) / 2);
+      pP[5].y = map(blendShapes[10].score.toFixed(3), 0, eyeMax, pF[5].y, (pF[5].y + pF[6].y) / 2);
+      pP[6].y = map(blendShapes[10].score.toFixed(3), 0, eyeMax, pF[6].y, (pF[5].y + pF[6].y) / 2);
+      pP[7].y = map(blendShapes[10].score.toFixed(3), 0, eyeMax, pF[7].y, (pF[4].y + pF[7].y) / 2);
 
-      pP[2][6].x = map(blendShapes[38].score.toFixed(4), 0, 1, pT[2][6].x, (pT[2][6].x + pT[3][6].x) / 2);
-      pP[7][6].x = map(blendShapes[38].score.toFixed(4), 0, 1, pT[7][6].x, (pT[6][6].x + pT[7][6].x) / 2);
-      pP[2][7].x = map(blendShapes[38].score.toFixed(4), 0, 1, pT[2][7].x, (pT[2][7].x + pT[3][7].x) / 2);
-      pP[7][7].x = map(blendShapes[38].score.toFixed(4), 0, 1, pT[7][7].x, (pT[6][7].x + pT[7][7].x) / 2);
+      //左目が鼻側に動いたときのアニメーション
+      if (blendShapes[14].score.toFixed(3) > 0.3) {
+        pP[4].x = map(blendShapes[14].score.toFixed(3), 0, 1, pF[4].x, pF[4].x - 30);
+        pP[5].x = map(blendShapes[14].score.toFixed(3), 0, 1, pF[5].x, pF[5].x - 30);
+        pP[6].x = map(blendShapes[14].score.toFixed(3), 0, 1, pF[6].x, pF[6].x - 30);
+        pP[7].x = map(blendShapes[14].score.toFixed(3), 0, 1, pF[7].x, pF[7].x - 30);
+      }
 
+      //左目が耳側に動いたときのアニメーション
+      if (blendShapes[16].score.toFixed(3) > 0.3) {
+        pP[4].x = map(blendShapes[16].score.toFixed(3), 0, 1, pF[4].x, pF[4].x + 30);
+        pP[5].x = map(blendShapes[16].score.toFixed(3), 0, 1, pF[5].x, pF[5].x + 30);
+        pP[6].x = map(blendShapes[16].score.toFixed(3), 0, 1, pF[6].x, pF[6].x + 30);
+        pP[7].x = map(blendShapes[16].score.toFixed(3), 0, 1, pF[7].x, pF[7].x + 30);
+      }
+
+      //口のアニメーション
+      let mouthU_Trisect = (pF[9].x - pF[8].x) / 5;
+      let mouthL_Trisect = (pF[10].x - pF[11].x) / 5;
+      let mouthL_Middle = (pF[8].y + pF[11].y) / 2;
+      let mouthR_Middle = (pF[9].y + pF[10].y) / 2;
+
+
+      if (blendShapes[25].score.toFixed(3) > 0) {
+        if (blendShapes[38].score.toFixed(3) > 0.1) {
+          pP[8] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[8].x + mouthU_Trisect, pF[8].x + mouthU_Trisect * 2),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pF[8].y)
+          );
+          pP[9] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[9].x - mouthU_Trisect, pF[9].x - mouthU_Trisect * 2),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pF[9].y)
+          );
+          pP[10] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[10].x - mouthL_Trisect, pF[10].x - mouthL_Trisect * 2),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pF[10].y)
+          );
+          pP[11] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[11].x + mouthL_Trisect, pF[11].x + mouthL_Trisect * 2),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pF[11].y)
+          );
+        }
+        else if (blendShapes[44].score.toFixed(4) > 0.1 || blendShapes[45].score.toFixed(4) > 0.1) {
+          pP[8] = new pointPosition(
+            map(blendShapes[44].score.toFixed(3), 0, ImouthMax, pF[8].x + mouthU_Trisect, pF[8].x),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pF[8].y)
+          );
+          pP[9] = new pointPosition(
+            map(blendShapes[45].score.toFixed(3), 0, ImouthMax, pF[9].x - mouthU_Trisect, pF[9].x),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pF[9].y)
+          );
+          pP[10] = new pointPosition(
+            map(blendShapes[45].score.toFixed(3), 0, ImouthMax, pF[10].x - mouthL_Trisect, pF[10].x),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pF[10].y)
+          );
+          pP[11] = new pointPosition(
+            map(blendShapes[44].score.toFixed(3), 0, ImouthMax, pF[11].x + mouthL_Trisect, pF[11].x),
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pF[11].y)
+          );
+        }
+        else {
+          pP[8] = new pointPosition(
+            pF[8].x + mouthU_Trisect,
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pF[8].y)
+          );
+          pP[9] = new pointPosition(
+            pF[9].x - mouthU_Trisect,
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pF[9].y)
+          );
+          pP[10] = new pointPosition(
+            pF[10].x - mouthL_Trisect,
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pF[10].y)
+          );
+          pP[11] = new pointPosition(
+            pF[11].x + mouthL_Trisect,
+            map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pF[11].y)
+          );
+        }
+      }
+      else {
+        if (blendShapes[38].score.toFixed(4) > 0.1) {
+          pP[8] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[8].x + mouthU_Trisect, pF[8].x + mouthU_Trisect * 2),
+            mouthL_Middle
+          );
+          pP[9] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[9].x - mouthU_Trisect, pF[9].x - mouthU_Trisect * 2),
+            mouthR_Middle
+          );
+          pP[10] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[10].x - mouthL_Trisect, pF[10].x - mouthL_Trisect * 2),
+            mouthR_Middle
+          );
+          pP[11] = new pointPosition(
+            map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[11].x + mouthL_Trisect, pF[11].x + mouthL_Trisect * 2),
+            mouthL_Middle
+          );
+        } else if (blendShapes[44].score.toFixed(4) > 0.1 || blendShapes[45].score.toFixed(4) > 0.1) {
+          pP[8] = new pointPosition(
+            map(blendShapes[44].score.toFixed(3), 0, ImouthMax, pF[8].x + mouthU_Trisect, pF[8].x),
+            mouthL_Middle
+          );
+          pP[9] = new pointPosition(
+            map(blendShapes[45].score.toFixed(3), 0, ImouthMax, pF[9].x - mouthU_Trisect, pF[9].x),
+            mouthR_Middle
+          );
+          pP[10] = new pointPosition(
+            map(blendShapes[45].score.toFixed(3), 0, ImouthMax, pF[10].x - mouthL_Trisect, pF[10].x),
+            mouthR_Middle
+          );
+          pP[11] = new pointPosition(
+            map(blendShapes[44].score.toFixed(3), 0, ImouthMax, pF[11].x + mouthL_Trisect, pF[11].x),
+            mouthL_Middle
+          );
+        } else {
+          pP[8] = new pointPosition(
+            pF[8].x + mouthU_Trisect,
+            mouthL_Middle
+          );
+          pP[9] = new pointPosition(
+            pF[9].x - mouthU_Trisect,
+            mouthR_Middle
+          );
+          pP[10] = new pointPosition(
+            pF[10].x - mouthL_Trisect,
+            mouthR_Middle
+          );
+          pP[11] = new pointPosition(
+            pF[11].x + mouthL_Trisect,
+            mouthL_Middle
+          );
+        }
+      }
     }
   }
 }
@@ -548,6 +718,54 @@ class pointTexture {
   constructor(x, y) {
     this.x = x;
     this.y = y;
+  }
+}
+
+class pointFix {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+class pointBox {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+class pointStrech {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+class pointBoxMiddle {
+  constructor(posA, posB) {
+    this.posA = posA;
+    this.posB = posB;
+
+    this.x = (pB[posA].x + pB[posB].x) / 2;
+    this.y = (pB[posA].y + pB[posB].y) / 2;
+  }
+}
+
+class pointMiddle {
+  constructor(pos1, pos2) {
+    this.pos1 = pos1;
+    this.pos2 = pos2;
+
+    this.xP = (pP[pos1].x + pP[pos2].x) / 2;
+    this.yP = (pP[pos1].y + pP[pos2].y) / 2;
+    this.xT = (pT[pos1].x + pT[pos2].x) / 2;
+    this.yT = (pT[pos1].y + pT[pos2].y) / 2;
+
+    this.uT = (uT[pos1] + uT[pos2]) / 2;
+    this.vT = (vT[pos1] + vT[pos2]) / 2;
+    this.uF = (uF[pos1] + uF[pos2]) / 2;
+    this.vF = (vF[pos1] + vF[pos2]) / 2;
   }
 }
 
