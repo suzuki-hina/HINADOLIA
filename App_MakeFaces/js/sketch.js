@@ -540,50 +540,67 @@ function animationTexture() {
   if (face_results.faceBlendshapes && face_results.faceBlendshapes.length > 0) {
     const blendShapes = face_results.faceBlendshapes[0].categories;
     for (let i = 0; i < blendShapes.length; i++) {
-      // console.log(blendShapes[i].categoryName, blendShapes[i].score.toFixed(4));
 
-      //左目瞬きのアニメーション
-      pP[0].y = map(blendShapes[9].score.toFixed(3), 0, eyeMax, pF[0].y, (pF[0].y + pF[3].y) / 2);
-      pP[1].y = map(blendShapes[9].score.toFixed(3), 0, eyeMax, pF[1].y, (pF[1].y + pF[2].y) / 2);
-      pP[2].y = map(blendShapes[9].score.toFixed(3), 0, eyeMax, pF[2].y, (pF[1].y + pF[2].y) / 2);
-      pP[3].y = map(blendShapes[9].score.toFixed(3), 0, eyeMax, pF[3].y, (pF[0].y + pF[3].y) / 2);
+      let eyeBlinkLeftScore = blendShapes[9].score.toFixed(3);
+      let eyeBlinkRightScore = blendShapes[10].score.toFixed(3);
+      let eyeLookDownLeftScore = blendShapes[11].score.toFixed(3);
+      let eyeLookDownRightScore = blendShapes[12].score.toFixed(3);
+      let eyeLookInLeftScore = blendShapes[13].score.toFixed(3);
+      let eyeLookInRightScore = blendShapes[15].score.toFixed(3);
+      let eyeLookOutLeftScore = blendShapes[14].score.toFixed(3);
+      let eyeLookOutRightScore = blendShapes[16].score.toFixed(3);
+      let eyeLookUpLeftScore = blendShapes[17].score.toFixed(3);
+      let eyeLookUpRightScore = blendShapes[18].score.toFixed(3);
+      let mouthOpenScore = blendShapes[25].score.toFixed(3);
+      let mouthSmileScore = blendShapes[38].score.toFixed(3);
+      let mouthFrownScore = blendShapes[39].score.toFixed(3);
+      let mouthStretchRightScore = blendShapes[44].score.toFixed(3);
+      let mouthRollLowerScore = blendShapes[45].score.toFixed(3);
 
-      //左目が鼻側に動いたときのアニメーション
-      if (blendShapes[13].score.toFixed(3) > 0.3) {
-        pP[0].x = map(blendShapes[13].score.toFixed(3), 0, 1, pF[0].x, pF[0].x + 30);
-        pP[1].x = map(blendShapes[13].score.toFixed(3), 0, 1, pF[1].x, pF[1].x + 30);
-        pP[2].x = map(blendShapes[13].score.toFixed(3), 0, 1, pF[2].x, pF[2].x + 30);
-        pP[3].x = map(blendShapes[13].score.toFixed(3), 0, 1, pF[3].x, pF[3].x + 30);
+      //左目のアニメーション
+      middlePointParts = new pointMiddle(0, 2);
+      if (0 <= i && i <= 3) {
+        //左目が左右に動いたときのアニメーション
+        if (eyeLookInLeftScore > eyeLookOutLeftScore) {
+          pP[i].x = map(eyeLookInLeftScore, 0, 1, pF[i].x, pF[i].x + 30);
+        }
+        else if (eyeLookOutLeftScore > eyeLookInLeftScore) {
+          pP[i].x = map(eyeLookOutLeftScore, 0, 1, pF[i].x, pF[i].x - 30);
+        }
+
+        //左目が上下に動いたときのアニメーション
+        if (eyeLookUpLeftScore > eyeLookDownLeftScore) {
+          pP[i].y = map(eyeLookUpLeftScore, 0, 1, pF[i].y, pF[i].y - 30);
+        }
+        else if (eyeLookDownLeftScore > eyeLookUpLeftScore) {
+          pP[i].y = map(eyeLookDownLeftScore, 0, 1, pF[i].y, pF[i].y + 30);
+        }
+
+        //左目瞬きのアニメーション
+        pP[i].y = map(eyeBlinkLeftScore, 0, eyeMax, pF[i].y, middlePointParts.yF);
       }
 
-      //左目が耳側に動いたときのアニメーション
-      if (blendShapes[15].score.toFixed(3) > 0.3) {
-        pP[0].x = map(blendShapes[15].score.toFixed(3), 0, 1, pF[0].x, pF[0].x - 30);
-        pP[1].x = map(blendShapes[15].score.toFixed(3), 0, 1, pF[1].x, pF[1].x - 30);
-        pP[2].x = map(blendShapes[15].score.toFixed(3), 0, 1, pF[2].x, pF[2].x - 30);
-        pP[3].x = map(blendShapes[15].score.toFixed(3), 0, 1, pF[3].x, pF[3].x - 30);
-      }
+      //右目のアニメーション
+      middlePointParts = new pointMiddle(4, 6);
+      if (4 <= i && i <= 7) {
+        //右目が左右に動いたときのアニメーション
+        if (eyeLookInRightScore > eyeLookOutRightScore) {
+          pP[i].x = map(eyeLookInRightScore, 0, 1, pF[i].x, pF[i].x - 30);
+        }
+        else if (eyeLookOutRightScore > eyeLookInRightScore) {
+          pP[i].x = map(eyeLookOutRightScore, 0, 1, pF[i].x, pF[i].x + 30);
+        }
 
-      //右目瞬きのアニメーション
-      pP[4].y = map(blendShapes[10].score.toFixed(3), 0, eyeMax, pF[4].y, (pF[4].y + pF[7].y) / 2);
-      pP[5].y = map(blendShapes[10].score.toFixed(3), 0, eyeMax, pF[5].y, (pF[5].y + pF[6].y) / 2);
-      pP[6].y = map(blendShapes[10].score.toFixed(3), 0, eyeMax, pF[6].y, (pF[5].y + pF[6].y) / 2);
-      pP[7].y = map(blendShapes[10].score.toFixed(3), 0, eyeMax, pF[7].y, (pF[4].y + pF[7].y) / 2);
+        //右目が上下に動いたときのアニメーション
+        if (eyeLookUpRightScore > eyeLookDownRightScore) {
+          pP[i].y = map(eyeLookUpRightScore, 0, 1, pF[i].y, pF[i].y - 30);
+        }
+        else if (eyeLookDownRightScore > eyeLookUpRightScore) {
+          pP[i].y = map(eyeLookDownRightScore, 0, 1, pF[i].y, pF[i].y + 30);
+        }
 
-      //左目が鼻側に動いたときのアニメーション
-      if (blendShapes[14].score.toFixed(3) > 0.3) {
-        pP[4].x = map(blendShapes[14].score.toFixed(3), 0, 1, pF[4].x, pF[4].x - 30);
-        pP[5].x = map(blendShapes[14].score.toFixed(3), 0, 1, pF[5].x, pF[5].x - 30);
-        pP[6].x = map(blendShapes[14].score.toFixed(3), 0, 1, pF[6].x, pF[6].x - 30);
-        pP[7].x = map(blendShapes[14].score.toFixed(3), 0, 1, pF[7].x, pF[7].x - 30);
-      }
-
-      //左目が耳側に動いたときのアニメーション
-      if (blendShapes[16].score.toFixed(3) > 0.3) {
-        pP[4].x = map(blendShapes[16].score.toFixed(3), 0, 1, pF[4].x, pF[4].x + 30);
-        pP[5].x = map(blendShapes[16].score.toFixed(3), 0, 1, pF[5].x, pF[5].x + 30);
-        pP[6].x = map(blendShapes[16].score.toFixed(3), 0, 1, pF[6].x, pF[6].x + 30);
-        pP[7].x = map(blendShapes[16].score.toFixed(3), 0, 1, pF[7].x, pF[7].x + 30);
+        //右目瞬きのアニメーション
+        pP[i].y = map(eyeBlinkRightScore, 0, eyeMax, pF[i].y, middlePointParts.yF);
       }
 
       //口のアニメーション
@@ -761,6 +778,8 @@ class pointMiddle {
     this.yP = (pP[pos1].y + pP[pos2].y) / 2;
     this.xT = (pT[pos1].x + pT[pos2].x) / 2;
     this.yT = (pT[pos1].y + pT[pos2].y) / 2;
+    this.xF = (pF[pos1].x + pF[pos2].x) / 2;
+    this.yF = (pF[pos1].y + pF[pos2].y) / 2;
 
     this.uT = (uT[pos1] + uT[pos2]) / 2;
     this.vT = (vT[pos1] + vT[pos2]) / 2;
