@@ -793,17 +793,26 @@ function disable_scroll() {
   // PCでのスクロール禁止
   document.addEventListener("mousewheel", scroll_control, { passive: false });
   // スマホでのタッチ操作でのスクロール禁止
-  document.addEventListener("touchmove", scroll_control, { passive: false });
+  document.addEventListener("touchmove", touch_scroll_control, { passive: false });
 }
 // スクロール禁止解除
 function enable_scroll() {
   // PCでのスクロール禁止解除
   document.removeEventListener("mousewheel", scroll_control, { passive: false });
   // スマホでのタッチ操作でのスクロール禁止解除
-  document.removeEventListener('touchmove', scroll_control, { passive: false });
+  document.removeEventListener('touchmove', touch_scroll_control, { passive: false });
 }
 
 // スクロール関連メソッド
 function scroll_control(event) {
+  event.preventDefault();
+}
+
+// タッチスクロール関連メソッド
+function touch_scroll_control(event) {
+  if (event.touches.length > 1) {
+    // 2本以上の指での操作はピンチズームとして許可
+    return;
+  }
   event.preventDefault();
 }
