@@ -555,10 +555,6 @@ function cmouseDragged() {
 //顔を動かす
 function animationTexture() {
   let eyeMax = 0.8;
-  let AmouthMax = 0.8;
-  let UmouthMax = 0.8;
-  let ImouthMax = 0.8;
-
   let mouthMax = 1;
 
   // eyeBlinkLeftとeyeBlinkRightの値を取得してコンソールログに表示
@@ -625,12 +621,6 @@ function animationTexture() {
       }
 
       //口に使う値
-      // let mouthOpenScore = blendShapes[25].score.toFixed(3);
-      // let mouthSmileScore = blendShapes[38].score.toFixed(3);
-      // let mouthFrownScore = blendShapes[39].score.toFixed(3);
-      // let mouthStretchRightScore = blendShapes[44].score.toFixed(3);
-      // let mouthRollLowerScore = blendShapes[45].score.toFixed(3);
-
       let jawOpenScore = blendShapes[25].score.toFixed(3);
       let mouthFrownLeftScore = blendShapes[30].score.toFixed(3);
       let mouthFrownRightScore = blendShapes[31].score.toFixed(3);
@@ -645,11 +635,6 @@ function animationTexture() {
       let mouthUpperUpRightScore = blendShapes[49].score.toFixed(3);
 
       //口のアニメーション
-      // let mouthU_Trisect = (pF[9].x - pF[8].x) / 5;
-      // let mouthL_Trisect = (pF[10].x - pF[11].x) / 5;
-      // let mouthL_Middle = (pF[8].y + pF[11].y) / 2;
-      // let mouthR_Middle = (pF[9].y + pF[10].y) / 2;
-
       let mouthWidthMovement = (pT[9].x - pT[8].x) / 6;
       let mouthHeightMovement = (pT[11].y - pT[8].y) / 2;
 
@@ -750,117 +735,6 @@ function animationTexture() {
           }
         }
       }
-
-      // if (blendShapes[25].score.toFixed(3) > 0) {
-      //   if (blendShapes[38].score.toFixed(3) > 0.1) {
-      //     pP[8] = new pointPosition(
-      //       map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[8].x + mouthU_Trisect, pF[8].x + mouthU_Trisect * 2),
-      //       map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pF[8].y)
-      //     );
-      //     pP[9] = new pointPosition(
-      //       map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[9].x - mouthU_Trisect, pF[9].x - mouthU_Trisect * 2),
-      //       map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pF[9].y)
-      //     );
-      //     pP[10] = new pointPosition(
-      //       map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[10].x - mouthL_Trisect, pF[10].x - mouthL_Trisect * 2),
-      //       map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pF[10].y)
-      //     );
-      //     pP[11] = new pointPosition(
-      //       map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[11].x + mouthL_Trisect, pF[11].x + mouthL_Trisect * 2),
-      //       map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pF[11].y)
-      //     );
-      //   }
-      //   else if (blendShapes[44].score.toFixed(4) > 0.1 || blendShapes[45].score.toFixed(4) > 0.1) {
-      //     pP[8] = new pointPosition(
-      //       map(blendShapes[44].score.toFixed(3), 0, ImouthMax, pF[8].x + mouthU_Trisect, pF[8].x),
-      //       map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pF[8].y)
-      //     );
-      //     pP[9] = new pointPosition(
-      //       map(blendShapes[45].score.toFixed(3), 0, ImouthMax, pF[9].x - mouthU_Trisect, pF[9].x),
-      //       map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pF[9].y)
-      //     );
-      //     pP[10] = new pointPosition(
-      //       map(blendShapes[45].score.toFixed(3), 0, ImouthMax, pF[10].x - mouthL_Trisect, pF[10].x),
-      //       map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pF[10].y)
-      //     );
-      //     pP[11] = new pointPosition(
-      //       map(blendShapes[44].score.toFixed(3), 0, ImouthMax, pF[11].x + mouthL_Trisect, pF[11].x),
-      //       map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pF[11].y)
-      //     );
-      //   }
-      //   else {
-      //     pP[8] = new pointPosition(
-      //       pF[8].x + mouthU_Trisect,
-      //       map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pF[8].y)
-      //     );
-      //     pP[9] = new pointPosition(
-      //       pF[9].x - mouthU_Trisect,
-      //       map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pF[9].y)
-      //     );
-      //     pP[10] = new pointPosition(
-      //       pF[10].x - mouthL_Trisect,
-      //       map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthR_Middle, pF[10].y)
-      //     );
-      //     pP[11] = new pointPosition(
-      //       pF[11].x + mouthL_Trisect,
-      //       map(blendShapes[25].score.toFixed(3), 0, AmouthMax, mouthL_Middle, pF[11].y)
-      //     );
-      //   }
-      // }
-      // else {
-      //   if (blendShapes[38].score.toFixed(4) > 0.1) {
-      //     pP[8] = new pointPosition(
-      //       map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[8].x + mouthU_Trisect, pF[8].x + mouthU_Trisect * 2),
-      //       mouthL_Middle
-      //     );
-      //     pP[9] = new pointPosition(
-      //       map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[9].x - mouthU_Trisect, pF[9].x - mouthU_Trisect * 2),
-      //       mouthR_Middle
-      //     );
-      //     pP[10] = new pointPosition(
-      //       map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[10].x - mouthL_Trisect, pF[10].x - mouthL_Trisect * 2),
-      //       mouthR_Middle
-      //     );
-      //     pP[11] = new pointPosition(
-      //       map(blendShapes[38].score.toFixed(3), 0, UmouthMax, pF[11].x + mouthL_Trisect, pF[11].x + mouthL_Trisect * 2),
-      //       mouthL_Middle
-      //     );
-      //   } else if (blendShapes[44].score.toFixed(4) > 0.1 || blendShapes[45].score.toFixed(4) > 0.1) {
-      //     pP[8] = new pointPosition(
-      //       map(blendShapes[44].score.toFixed(3), 0, ImouthMax, pF[8].x + mouthU_Trisect, pF[8].x),
-      //       mouthL_Middle
-      //     );
-      //     pP[9] = new pointPosition(
-      //       map(blendShapes[45].score.toFixed(3), 0, ImouthMax, pF[9].x - mouthU_Trisect, pF[9].x),
-      //       mouthR_Middle
-      //     );
-      //     pP[10] = new pointPosition(
-      //       map(blendShapes[45].score.toFixed(3), 0, ImouthMax, pF[10].x - mouthL_Trisect, pF[10].x),
-      //       mouthR_Middle
-      //     );
-      //     pP[11] = new pointPosition(
-      //       map(blendShapes[44].score.toFixed(3), 0, ImouthMax, pF[11].x + mouthL_Trisect, pF[11].x),
-      //       mouthL_Middle
-      //     );
-      //   } else {
-      //     pP[8] = new pointPosition(
-      //       pF[8].x + mouthU_Trisect,
-      //       mouthL_Middle
-      //     );
-      //     pP[9] = new pointPosition(
-      //       pF[9].x - mouthU_Trisect,
-      //       mouthR_Middle
-      //     );
-      //     pP[10] = new pointPosition(
-      //       pF[10].x - mouthL_Trisect,
-      //       mouthR_Middle
-      //     );
-      //     pP[11] = new pointPosition(
-      //       pF[11].x + mouthL_Trisect,
-      //       mouthL_Middle
-      //     );
-      //   }
-      // }
     }
   }
 }
