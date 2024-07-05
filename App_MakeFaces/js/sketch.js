@@ -151,6 +151,17 @@ function adjustCanvas() {
 function windowResized() {
   w = windowWidth;
   h = w * image.height / image.width;
+
+  // デフォルトの視点投影設定
+  let fov = PI / 3; // 視野角 (Field of View)
+  let aspect = w / h; // アスペクト比
+  let near = 0.1; // 近クリッピング面
+  let far = 500; // 遠クリッピング面
+  perspective(fov, aspect, near, far);
+
+  // カメラの設定
+  camera(0, 0, (h / 2) / tan(PI / 6), 0, 0, 0, 0, 1, 0);
+
   // let w = element_canvas.clientWidth;
   resizeCanvas(w, h, WEBGL);
   translate(-width / 2, -height / 2);
@@ -410,36 +421,6 @@ function drawTexture() {
       vertex(pP[i - 3].x, pP[i - 3].y, uF[i - 3], vF[i - 3]);
       endShape(CLOSE);
     }
-
-    if (keyIsPressed) {
-      console.log('intersectionPoint' + 'x' + intersectionPoint.x + 'y' + intersectionPoint.y);
-      console.log('intersectionTexture' + 'x' + intersectionTexture.x + 'y' + intersectionTexture.y);
-    }
-
-
-    // //口
-    // if (7 < i && i < 10) {
-    //   middlePointParts = new pointMiddle(i, i + 2);
-    //   beginShape(TRIANGLE_STRIP);
-    //   vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
-    //   vertex(middlePointParts.xF, middlePointParts.yF, middlePointParts.uF, middlePointParts.vF);
-    //   vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
-    //   endShape(CLOSE);
-    // } else if (i == 10) {
-    //   middlePointParts = new pointMiddle(i, i - 2);
-    //   beginShape(TRIANGLE_STRIP);
-    //   vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
-    //   vertex(middlePointParts.xF, middlePointParts.yF, middlePointParts.uF, middlePointParts.vF);
-    //   vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
-    //   endShape(CLOSE);
-    // } else if (i == 11) {
-    //   middlePointParts = new pointMiddle(i, i - 2);
-    //   beginShape(TRIANGLE_STRIP);
-    //   vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
-    //   vertex(middlePointParts.xF, middlePointParts.yF, middlePointParts.uF, middlePointParts.vF);
-    //   vertex(pP[i - 3].x, pP[i - 3].y, uF[i - 3], vF[i - 3]);
-    //   endShape(CLOSE);
-    // }
   }
 }
 
@@ -494,7 +475,6 @@ function markingTexture() {
         text("RightEye", pB[4].x, pB[4].y);
         text("Mouth", pB[8].x, pB[8].y);
       }
-      console.log(showText);
     }
   }
 }
@@ -647,14 +627,14 @@ function animationTexture() {
         //右目が上下に動いたときのアニメーション
         let eyeRightHeightMovement = abs(pF[i].y - pT[i].y);
         if (eyeLookUpRightScore >= eyeLookDownRightScore) {
-          pP[i].y = map(eyeLookUpRightScore, 0, 1, pF[i].y, pF[i].y - eyeRightHeightMovement);
+          pM[i].y = map(eyeLookUpRightScore, 0, 1, pF[i].y, pF[i].y - eyeRightHeightMovement);
         }
         else if (eyeLookDownRightScore > eyeLookUpRightScore) {
-          pP[i].y = map(eyeLookDownRightScore, 0, 1, pF[i].y, pF[i].y + eyeRightHeightMovement);
+          pM[i].y = map(eyeLookDownRightScore, 0, 1, pF[i].y, pF[i].y + eyeRightHeightMovement);
         }
 
-        // //右目瞬きのアニメーション
-        // pP[i].y = map(eyeBlinkRightScore, 0, eyeMax, pF[i].y, middlePointParts.yF);
+        //右目瞬きのアニメーション
+        pP[i].y = map(eyeBlinkRightScore, 0, eyeMax, pM[i].y, middlePointParts.yM);
       }
 
       //口に使う値
@@ -853,17 +833,23 @@ class intersection {
   constructor(x1, y1, x2, y2, x3, y3, x4, y4) {
     let denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
 
+    let x;
+    let y;
     if (denom === 0) {
-      return null; // 直線が平行な場合、交点なし
+      // 直線が平行な場合、交点なし
+      x = (x1 + x2) / 2;
+      y = (y1 + y2) / 2;
     }
 
-    let x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / denom;
-    let y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / denom;
+    x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / denom;
+    y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / denom;
 
     // 交点が線分上にあるか確認
     if ((x < min(x1, x2) || x > max(x1, x2)) || (x < min(x3, x4) || x > max(x3, x4)) ||
       (y < min(y1, y2) || y > max(y1, y2)) || (y < min(y3, y4) || y > max(y3, y4))) {
-      return null; // 交点が線分上にない場合、交点なし
+      // 交点が線分上にない場合、交点なし
+      x = (x1 + x2) / 2;
+      y = (y1 + y2) / 2;
     }
 
     return { x: x, y: y };
@@ -897,6 +883,7 @@ function scroll_control(event) {
 function touch_scroll_control(event) {
   if (event.touches.length > 1) {
     // 2本以上の指での操作はピンチズームとして許可
+    windowResized(); // ピンチズーム時にキャンバスをリサイズ
     return;
   }
   event.preventDefault();
