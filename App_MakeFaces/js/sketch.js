@@ -15,6 +15,7 @@ let boxPoint = 12;
 let pP = [];
 let pT = [];
 let pF = [];
+let pM = [];
 
 let pB = [];
 let pS = [];
@@ -27,6 +28,8 @@ let vF = [];
 let boxMiddlePos = [];
 let middlePointSide = [];
 let middlePointParts = [];
+let intersectionPoint = [];
+let intersectionTexture = [];
 
 
 //顔の判定
@@ -325,6 +328,7 @@ function textureSetting() {
     pP[i] = new pointPosition(pB[i].x, pB[i].y);
     pT[i] = new pointTexture(pS[i].x, pS[i].y);
     pF[i] = new pointFix(pB[i].x, pB[i].y);
+    pM[i] = new pointMotion(pB[i].x, pB[i].y);
   }
 }
 
@@ -378,36 +382,65 @@ function drawTexture() {
 
   //テクスチャの描画(伸びないところ)
   for (let i = 0; i < boxPoint; i++) {
-    if (i < 2 || (3 < i && i < 6) || (7 < i && i < 10)) {
-      middlePointParts = new pointMiddle(i, i + 2);
+    if (i == 0 || i == 4 || i == 8) {
+      intersectionPoint = new intersection(pP[i].x, pP[i].y, pP[i + 2].x, pP[i + 2].y, pP[i + 1].x, pP[i + 1].y, pP[i + 3].x, pP[i + 3].y);
+      intersectionTexture = new intersection(uF[i], vF[i], uF[i + 2], vF[i + 2], uF[i + 1], vF[i + 1], uF[i + 3], vF[i + 3]);
       beginShape(TRIANGLE_STRIP);
       vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
-      vertex(middlePointParts.xF, middlePointParts.yF, middlePointParts.uF, middlePointParts.vF);
+      vertex(intersectionPoint.x, intersectionPoint.y, intersectionTexture.x, intersectionTexture.y);
+      vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
+      endShape(CLOSE);
+    }
+    if (i == 1 || i == 5 || i == 9) {
+      beginShape(TRIANGLE_STRIP);
+      vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
+      vertex(intersectionPoint.x, intersectionPoint.y, intersectionTexture.x, intersectionTexture.y);
       vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
       endShape(CLOSE);
     } else if (i == 2 || i == 6 || i == 10) {
-      middlePointParts = new pointMiddle(i, i - 2);
       beginShape(TRIANGLE_STRIP);
       vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
-      vertex(middlePointParts.xF, middlePointParts.yF, middlePointParts.uF, middlePointParts.vF);
+      vertex(intersectionPoint.x, intersectionPoint.y, intersectionTexture.x, intersectionTexture.y);
       vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
       endShape(CLOSE);
     } else if (i == 3 || i == 7 || i == 11) {
-      middlePointParts = new pointMiddle(i, i - 2);
       beginShape(TRIANGLE_STRIP);
       vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
-      vertex(middlePointParts.xF, middlePointParts.yF, middlePointParts.uF, middlePointParts.vF);
+      vertex(intersectionPoint.x, intersectionPoint.y, intersectionTexture.x, intersectionTexture.y);
       vertex(pP[i - 3].x, pP[i - 3].y, uF[i - 3], vF[i - 3]);
       endShape(CLOSE);
     }
-  }
 
-  // for (let i = 0; i < boxPoint; i++) {
-  //   stroke(255);
-  //   strokeWeight(10);
-  //   point(pP[i].x, pP[i].y);
-  //   point(pT[i].x, pT[i].y);
-  // }
+    if (keyIsPressed) {
+      console.log('intersectionPoint' + 'x' + intersectionPoint.x + 'y' + intersectionPoint.y);
+      console.log('intersectionTexture' + 'x' + intersectionTexture.x + 'y' + intersectionTexture.y);
+    }
+
+
+    // //口
+    // if (7 < i && i < 10) {
+    //   middlePointParts = new pointMiddle(i, i + 2);
+    //   beginShape(TRIANGLE_STRIP);
+    //   vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
+    //   vertex(middlePointParts.xF, middlePointParts.yF, middlePointParts.uF, middlePointParts.vF);
+    //   vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
+    //   endShape(CLOSE);
+    // } else if (i == 10) {
+    //   middlePointParts = new pointMiddle(i, i - 2);
+    //   beginShape(TRIANGLE_STRIP);
+    //   vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
+    //   vertex(middlePointParts.xF, middlePointParts.yF, middlePointParts.uF, middlePointParts.vF);
+    //   vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
+    //   endShape(CLOSE);
+    // } else if (i == 11) {
+    //   middlePointParts = new pointMiddle(i, i - 2);
+    //   beginShape(TRIANGLE_STRIP);
+    //   vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
+    //   vertex(middlePointParts.xF, middlePointParts.yF, middlePointParts.uF, middlePointParts.vF);
+    //   vertex(pP[i - 3].x, pP[i - 3].y, uF[i - 3], vF[i - 3]);
+    //   endShape(CLOSE);
+    // }
+  }
 }
 
 //ボックスの描画
@@ -568,8 +601,8 @@ function animationTexture() {
       let eyeLookDownLeftScore = blendShapes[11].score.toFixed(3);
       let eyeLookDownRightScore = blendShapes[12].score.toFixed(3);
       let eyeLookInLeftScore = blendShapes[13].score.toFixed(3);
-      let eyeLookInRightScore = blendShapes[15].score.toFixed(3);
-      let eyeLookOutLeftScore = blendShapes[14].score.toFixed(3);
+      let eyeLookInRightScore = blendShapes[14].score.toFixed(3);
+      let eyeLookOutLeftScore = blendShapes[15].score.toFixed(3);
       let eyeLookOutRightScore = blendShapes[16].score.toFixed(3);
       let eyeLookUpLeftScore = blendShapes[17].score.toFixed(3);
       let eyeLookUpRightScore = blendShapes[18].score.toFixed(3);
@@ -578,46 +611,50 @@ function animationTexture() {
       middlePointParts = new pointMiddle(0, 2);
       if (0 <= i && i <= 3) {
         //左目が左右に動いたときのアニメーション
-        if (eyeLookInLeftScore > eyeLookOutLeftScore) {
-          pP[i].x = map(eyeLookInLeftScore, 0, 1, pF[i].x, pF[i].x + 30);
+        let eyeLeftWidthMovement = abs(pF[i].x - pT[i].x);
+        if (eyeLookInLeftScore >= eyeLookOutLeftScore) {
+          pP[i].x = map(eyeLookInLeftScore, 0, 1, pF[i].x, pF[i].x + eyeLeftWidthMovement);
         }
         else if (eyeLookOutLeftScore > eyeLookInLeftScore) {
-          pP[i].x = map(eyeLookOutLeftScore, 0, 1, pF[i].x, pF[i].x - 30);
+          pP[i].x = map(eyeLookOutLeftScore, 0, 1, pF[i].x, pF[i].x - eyeLeftWidthMovement);
         }
 
         //左目が上下に動いたときのアニメーション
-        if (eyeLookUpLeftScore > eyeLookDownLeftScore) {
-          pP[i].y = map(eyeLookUpLeftScore, 0, 1, pF[i].y, pF[i].y - 30);
+        let eyeLeftHeightMovement = abs(pF[i].y - pT[i].y);
+        if (eyeLookUpLeftScore >= eyeLookDownLeftScore) {
+          pM[i].y = map(eyeLookUpLeftScore, 0, 1, pF[i].y, pF[i].y - eyeLeftHeightMovement);
         }
         else if (eyeLookDownLeftScore > eyeLookUpLeftScore) {
-          pP[i].y = map(eyeLookDownLeftScore, 0, 1, pF[i].y, pF[i].y + 30);
+          pM[i].y = map(eyeLookDownLeftScore, 0, 1, pF[i].y, pF[i].y + eyeLeftHeightMovement);
         }
 
-        //左目瞬きのアニメーション
-        pP[i].y = map(eyeBlinkLeftScore, 0, eyeMax, pF[i].y, middlePointParts.yF);
+        // //左目瞬きのアニメーション
+        pP[i].y = map(eyeBlinkLeftScore, 0, eyeMax, pM[i].y, middlePointParts.yM);
       }
 
       //右目のアニメーション
       middlePointParts = new pointMiddle(4, 6);
       if (4 <= i && i <= 7) {
         //右目が左右に動いたときのアニメーション
-        if (eyeLookInRightScore > eyeLookOutRightScore) {
-          pP[i].x = map(eyeLookInRightScore, 0, 1, pF[i].x, pF[i].x - 30);
+        let eyeRightWidthMovement = abs(pF[i].x - pT[i].x);
+        if (eyeLookInRightScore >= eyeLookOutRightScore) {
+          pP[i].x = map(eyeLookInRightScore, 0, 1, pF[i].x, pF[i].x - eyeRightWidthMovement);
         }
         else if (eyeLookOutRightScore > eyeLookInRightScore) {
-          pP[i].x = map(eyeLookOutRightScore, 0, 1, pF[i].x, pF[i].x + 30);
+          pP[i].x = map(eyeLookOutRightScore, 0, 1, pF[i].x, pF[i].x + eyeRightWidthMovement);
         }
 
         //右目が上下に動いたときのアニメーション
-        if (eyeLookUpRightScore > eyeLookDownRightScore) {
-          pP[i].y = map(eyeLookUpRightScore, 0, 1, pF[i].y, pF[i].y - 30);
+        let eyeRightHeightMovement = abs(pF[i].y - pT[i].y);
+        if (eyeLookUpRightScore >= eyeLookDownRightScore) {
+          pP[i].y = map(eyeLookUpRightScore, 0, 1, pF[i].y, pF[i].y - eyeRightHeightMovement);
         }
         else if (eyeLookDownRightScore > eyeLookUpRightScore) {
-          pP[i].y = map(eyeLookDownRightScore, 0, 1, pF[i].y, pF[i].y + 30);
+          pP[i].y = map(eyeLookDownRightScore, 0, 1, pF[i].y, pF[i].y + eyeRightHeightMovement);
         }
 
-        //右目瞬きのアニメーション
-        pP[i].y = map(eyeBlinkRightScore, 0, eyeMax, pF[i].y, middlePointParts.yF);
+        // //右目瞬きのアニメーション
+        // pP[i].y = map(eyeBlinkRightScore, 0, eyeMax, pF[i].y, middlePointParts.yF);
       }
 
       //口に使う値
@@ -760,6 +797,13 @@ class pointFix {
   }
 }
 
+class pointMotion {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
 class pointBox {
   constructor(x, y) {
     this.x = x;
@@ -795,11 +839,37 @@ class pointMiddle {
     this.yT = (pT[pos1].y + pT[pos2].y) / 2;
     this.xF = (pF[pos1].x + pF[pos2].x) / 2;
     this.yF = (pF[pos1].y + pF[pos2].y) / 2;
+    this.xM = (pM[pos1].x + pM[pos2].x) / 2;
+    this.yM = (pM[pos1].y + pM[pos2].y) / 2;
 
     this.uT = (uT[pos1] + uT[pos2]) / 2;
     this.vT = (vT[pos1] + vT[pos2]) / 2;
     this.uF = (uF[pos1] + uF[pos2]) / 2;
     this.vF = (vF[pos1] + vF[pos2]) / 2;
+  }
+}
+
+class intersection {
+  constructor(x1, y1, x2, y2, x3, y3, x4, y4) {
+    let denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+
+    if (denom === 0) {
+      return null; // 直線が平行な場合、交点なし
+    }
+
+    let x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / denom;
+    let y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / denom;
+
+    // 交点が線分上にあるか確認
+    if ((x < min(x1, x2) || x > max(x1, x2)) || (x < min(x3, x4) || x > max(x3, x4)) ||
+      (y < min(y1, y2) || y > max(y1, y2)) || (y < min(y3, y4) || y > max(y3, y4))) {
+      return null; // 交点が線分上にない場合、交点なし
+    }
+
+    return { x: x, y: y };
+
+    this.x = x;
+    this.y = y;
   }
 }
 
