@@ -484,6 +484,7 @@ function cmousePressed() {
     disable_scroll();
   }
   showText = false;
+  console.log(w);
 }
 
 function cmouseReleased() {
@@ -491,6 +492,7 @@ function cmouseReleased() {
     disable_scroll();
   }
   showText = true;
+  console.log(w);
 }
 
 //ボックスの移動
