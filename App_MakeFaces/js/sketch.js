@@ -102,9 +102,6 @@ function draw() {
   // 描画処理
   clear();  // これを入れないと下レイヤーにあるビデオが見えなくなる
 
-  //元々180度回転していた座標系がもとに戻る
-  scale(-1, 1);
-
   console.log("Drawing frame");
   console.log("State:" + state);
 
@@ -121,7 +118,7 @@ function draw() {
         for (let i = 0; i < landmarks.length; i++) {
           fill(255);
           noStroke();
-          circle(landmarks[i].x * width - width / 2, landmarks[i].y * height - height / 2, 2);
+          circle(landmarks[i].x * width - width, landmarks[i].y * height, 2);
         }
       }
     }
@@ -149,14 +146,14 @@ var element_main = document.getElementById('mainButton');
 function adjustCanvas() {
   if (state === STATE_SERECT) {
     // Get an element by its ID
-    resizeCanvas(element_webcam.clientWidth, element_webcam.clientHeight, WEBGL);
-    w = width;
+    w = element_webcam.clientWidth;
+    h = element_webcam.clientHeight;
   } else if (state === STATE_LINE || state === STATE_RECORDING) {
-    w = windowWidth;
+    w = element_webcam.clientWidth;
     h = w * uploadedImage.height / uploadedImage.width;
-    resizeCanvas(w, h, WEBGL);
-    translate(-width / 2, -height / 2);
   }
+  resizeCanvas(w, h, WEBGL);
+  translate(-width / 2, -height / 2);
 }
 
 //画像アップロード
