@@ -10,7 +10,9 @@ let stateMessageEn;
 let fileName;
 
 //テクスチャ
+let uploadedImage;
 let w;
+let h;
 let boxPoint = 12;
 let pP = [];
 let pT = [];
@@ -30,7 +32,6 @@ let middlePointSide = [];
 let middlePointParts = [];
 let intersectionPoint = [];
 let intersectionTexture = [];
-
 
 //顔の判定
 let face_results;
@@ -116,16 +117,13 @@ function draw() {
       }
     }
 
-    if (state === STATE_SERECT) {
-      adjustCanvas();
-    }
-    else if (state === STATE_LINE) {
-      windowResized();
+    adjustCanvas();
+
+    if (state === STATE_LINE) {
       textureSetting();
       drawTexture();
       markingTexture();
     } else if (state === STATE_RECORDING) {
-      windowResized();
       animationTexture();
       drawTexture();
     }
@@ -138,33 +136,18 @@ var fileInput = document.getElementById('inputButton');
 var element_return = document.getElementById('returnButton');
 var element_main = document.getElementById('mainButton');
 
-//キャンパスのサイズ(カメラあり)
+//キャンパスのサイズ調整
 function adjustCanvas() {
-  // Get an element by its ID
-  resizeCanvas(element_webcam.clientWidth, element_webcam.clientHeight);
-  w = width;
-  // console.log(element_webcam.clientWidth);
-  // console.log(windowWidth);
-}
-
-//キャンパスのサイズ(カメラなし)
-function windowResized() {
-  w = windowWidth;
-  h = w * image.height / image.width;
-
-  // デフォルトの視点投影設定
-  let fov = PI / 3; // 視野角 (Field of View)
-  let aspect = w / h; // アスペクト比
-  let near = 0.1; // 近クリッピング面
-  let far = 500; // 遠クリッピング面
-  perspective(fov, aspect, near, far);
-
-  // カメラの設定
-  camera(0, 0, (h / 2) / tan(PI / 6), 0, 0, 0, 0, 1, 0);
-
-  // let w = element_canvas.clientWidth;
-  resizeCanvas(w, h, WEBGL);
-  translate(-width / 2, -height / 2);
+  if (state === STATE_SERECT) {
+    // Get an element by its ID
+    resizeCanvas(element_webcam.clientWidth, element_webcam.clientHeight, WEBGL);
+    w = width;
+  } else if (state === STATE_LINE || state === STATE_RECORDING) {
+    w = windowWidth;
+    h = w * uploadedImage.height / uploadedImage.width;
+    resizeCanvas(w, h, WEBGL);
+    translate(-width / 2, -height / 2);
+  }
 }
 
 //画像アップロード
@@ -175,7 +158,7 @@ function previewFile(file) {
   // ファイルが読み込まれたときに実行する
   reader.onload = function (e) {
     imageUrl = e.target.result; // 画像のURLはevent.target.resultで呼び出せる
-    image = loadImage(imageUrl);
+    uploadedImage = loadImage(imageUrl);
   }
   // いざファイルを読み込む
   reader.readAsDataURL(file);
@@ -200,13 +183,11 @@ function inputButtonPressed() {
 function stateButton() {
   if (state === STATE_SERECT) {
     element_webcam.style.display = 'inline';
-    element_canvas.style.display = 'none';
     fileInput.style.display = 'inline';
     stateMessage = "写真を選択して下さい";
     stateMessageEn = "Please select the photo you would like to use.";
   } else if (state === STATE_LINE) {
     element_webcam.style.display = 'none';
-    element_canvas.style.display = 'inline';
     fileInput.style.display = 'none';
     stateMessage = "目と口に合わせて白枠を動かしてください";
     stateMessageEn = "Move the white frame to match the eyes and mouth.";
@@ -348,7 +329,7 @@ function drawTexture() {
   noFill();
   noStroke();
   textureMode(NORMAL);
-  texture(image);
+  texture(uploadedImage);
 
   //uv座標の設定
   for (let i = 0; i < boxPoint; i++) {
