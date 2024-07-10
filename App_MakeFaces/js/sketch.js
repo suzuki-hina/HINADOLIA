@@ -1,7 +1,8 @@
 // シーンの状態を表す定数
 const STATE_SERECT = 0;
 const STATE_LINE = 1;
-const STATE_RECORDING = 2;
+const STATE_MOVE = 2;
+const STATE_RECORDING = 3;
 
 // シーンの状態
 let state = STATE_SERECT;
@@ -47,6 +48,15 @@ let showText = true;
 function preload() {
   myFont = loadFont('../images/NotoSans.ttf');
 }
+
+//録画
+P5Capture.setDefaultOptions({
+  format: "mp4",
+  framerate: 30,
+  quality: 1.0,
+  width: 640,
+  disableUi: true,
+});
 
 function setup() {
   let p5canvas = createCanvas(400, 400, WEBGL);
@@ -101,15 +111,13 @@ function setup() {
 function draw() {
   // 描画処理
   clear();  // これを入れないと下レイヤーにあるビデオが見えなくなる
-
-  console.log("Drawing frame");
-  console.log("State:" + state);
+  // console.log("State:" + state);
 
   // 各頂点座標を表示する
   // 各頂点座標の位置と番号の対応は以下のURLを確認
   // https://developers.google.com/mediapipe/solutions/vision/pose_landmarker
   if (face_results) {
-    console.log("Face results:", face_results);
+    // console.log("Face results:", face_results);
     adjustCanvas();
 
     if (state === STATE_SERECT) {
@@ -126,14 +134,14 @@ function draw() {
       textureSetting();
       drawTexture();
       markingTexture();
-    } else if (state === STATE_RECORDING) {
+    } else if (state === STATE_MOVE || state === STATE_RECORDING) {
       animationTexture();
       drawTexture();
     }
   }
-  else {
-    console.error("No face results found");
-  }
+  // else {
+  //   console.error("No face results found");
+  // }
 }
 
 var element_webcam = document.getElementById('webcam');
@@ -148,7 +156,7 @@ function adjustCanvas() {
     // Get an element by its ID
     w = element_webcam.clientWidth;
     h = element_webcam.clientHeight;
-  } else if (state === STATE_LINE || state === STATE_RECORDING) {
+  } else if (state === STATE_LINE || state === STATE_MOVE || state === STATE_RECORDING) {
     w = element_webcam.clientWidth;
     h = w * uploadedImage.height / uploadedImage.width;
   }
@@ -188,27 +196,30 @@ function inputButtonPressed() {
 //ボタンの処理
 function stateButton() {
   if (state === STATE_SERECT) {
-    element_webcam.style.display = 'inline';
+    element_webcam.style.opacity = '1';
     fileInput.style.display = 'inline';
-    stateMessage = "写真を選択して下さい";
+    stateMessage = "写真を選択して下さい。";
     stateMessageEn = "Please select the photo you would like to use.";
   } else if (state === STATE_LINE) {
-    element_webcam.style.display = 'inline';
+    element_webcam.style.opacity = '0';
     fileInput.style.display = 'none';
-    stateMessage = "目と口に合わせて白枠を動かしてください";
-    stateMessageEn = "Move the white frame to match the eyes and mouth.";
-  } else if (state === STATE_RECORDING) {
+    stateMessage = "目と口に合わせて白枠を動かしてください。「Range」の中でそれぞれが動きます。";
+    stateMessageEn = "Move the white frame to match the eyes and mouth. Each moves within a 'Range'.";
+  } else if (state === STATE_MOVE) {
     stateMessage = "顔を動かしてみましょう😄";
     stateMessageEn = "Let's move your face😄";
+  } else if (state === STATE_RECORDING) {
+    stateMessage = "録画中です。";
+    stateMessageEn = "Recording...";
   }
   document.getElementById("mainMessage").innerHTML = stateMessage;
   document.getElementById("mainMessageEn").innerHTML = stateMessageEn;
-
-  console.log(`State changed to: ${state}`);
 }
 
 //メインボタンの処理
 function mainButtonPressed() {
+  const capture = P5Capture.getInstance();
+
   if (state == 0) {
     boxSetting();
     if (fileInput.files.length > 0) {
@@ -227,6 +238,16 @@ function mainButtonPressed() {
     state++;
     stateButton();
   } else if (state == 2) {
+    if (capture.state === "idle") {
+      capture.start();
+    }
+    state++;
+    stateButton();
+  } else if (state == 3) {
+    if (capture.state !== "idle") {
+      capture.stop();
+    }
+    state = 2;
     stateButton();
   }
 }
@@ -465,10 +486,14 @@ function markingTexture() {
 
       if (showText) {
         fill(255);
-        textSize(w / 50);
+        textSize(w / 40);
         text("LeftEye", pB[0].x, pB[0].y);
         text("RightEye", pB[4].x, pB[4].y);
         text("Mouth", pB[8].x, pB[8].y);
+
+        text("Range", pS[0].x, pS[0].y);
+        text("Range", pS[4].x, pS[4].y);
+        text("Range", pS[8].x, pS[8].y);
       }
     }
   }
@@ -891,4 +916,15 @@ function touch_scroll_control(event) {
     return;
   }
   event.preventDefault();
+}
+
+function keyPressed() {
+  if (key === "c") {
+    const capture = P5Capture.getInstance();
+    if (capture.state === "idle") {
+      capture.start();
+    } else {
+      capture.stop();
+    }
+  }
 }
