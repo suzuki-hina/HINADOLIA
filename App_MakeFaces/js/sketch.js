@@ -866,7 +866,6 @@ function scroll_control(event) {
 function touch_scroll_control(event) {
   if (event.touches.length > 1) {
     // 2本以上の指での操作はピンチズームとして許可
-    windowResized(); // ピンチズーム時にキャンバスをリサイズ
     return;
   }
   event.preventDefault();
