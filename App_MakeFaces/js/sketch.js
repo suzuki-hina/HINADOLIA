@@ -105,20 +105,26 @@ function draw() {
   //元々180度回転していた座標系がもとに戻る
   scale(-1, 1);
 
+  console.log("Drawing frame");
+  console.log("State:" + state);
+
   // 各頂点座標を表示する
   // 各頂点座標の位置と番号の対応は以下のURLを確認
   // https://developers.google.com/mediapipe/solutions/vision/pose_landmarker
   if (face_results) {
-    for (let landmarks of face_results.faceLandmarks) {
-      for (let i = 0; i < landmarks.length; i++) {
-        fill(255);
-        noStroke();
-        circle(landmarks[i].x * width - width / 2, landmarks[i].y * height - height / 2, 2);
-      }
-    }
-
+    console.log("Face results:", face_results);
     adjustCanvas();
 
+    if (state === STATE_SERECT) {
+      scale(-1, 1);
+      for (let landmarks of face_results.faceLandmarks) {
+        for (let i = 0; i < landmarks.length; i++) {
+          fill(255);
+          noStroke();
+          circle(landmarks[i].x * width - width / 2, landmarks[i].y * height - height / 2, 2);
+        }
+      }
+    }
     if (state === STATE_LINE) {
       textureSetting();
       drawTexture();
@@ -127,6 +133,9 @@ function draw() {
       animationTexture();
       drawTexture();
     }
+  }
+  else {
+    console.error("No face results found");
   }
 }
 
@@ -187,7 +196,7 @@ function stateButton() {
     stateMessage = "写真を選択して下さい";
     stateMessageEn = "Please select the photo you would like to use.";
   } else if (state === STATE_LINE) {
-    element_webcam.style.display = 'none';
+    element_webcam.style.display = 'inline';
     fileInput.style.display = 'none';
     stateMessage = "目と口に合わせて白枠を動かしてください";
     stateMessageEn = "Move the white frame to match the eyes and mouth.";
@@ -197,6 +206,8 @@ function stateButton() {
   }
   document.getElementById("mainMessage").innerHTML = stateMessage;
   document.getElementById("mainMessageEn").innerHTML = stateMessageEn;
+
+  console.log(`State changed to: ${state}`);
 }
 
 //メインボタンの処理
@@ -322,6 +333,8 @@ function textureSetting() {
     pF[i] = new pointFix(pB[i].x, pB[i].y);
     pM[i] = new pointMotion(pB[i].x, pB[i].y);
   }
+
+  console.log("Texture settings initialized");
 }
 
 //テクスチャ平面の描画
@@ -335,10 +348,14 @@ function drawTexture() {
   for (let i = 0; i < boxPoint; i++) {
     uT[i] = map(pT[i].x, 0, width, 0, 1);
     uF[i] = map(pF[i].x, 0, width, 0, 1);
+
+    // console.log(`uT[${i}] = ${uT[i]}, uF[${i}] = ${uF[i]}`);
   }
   for (let i = 0; i < boxPoint; i++) {
     vT[i] = map(pT[i].y, 0, height, 0, 1);
     vF[i] = map(pF[i].y, 0, height, 0, 1);
+
+    // console.log(`vT[${i}] = ${vT[i]}, vF[${i}] = ${vF[i]}`);
   }
 
   //テクスチャの描画(全面)
@@ -458,6 +475,8 @@ function markingTexture() {
       }
     }
   }
+
+  console.log("Marking texture complete");
 }
 
 function cmousePressed() {
@@ -553,11 +572,13 @@ function animationTexture() {
   let eyeMax = 0.8;
   let mouthMax = 1;
 
+  console.log("Starting animationTexture");
+
   // eyeBlinkLeftとeyeBlinkRightの値を取得してコンソールログに表示
   if (face_results.faceBlendshapes && face_results.faceBlendshapes.length > 0) {
     const blendShapes = face_results.faceBlendshapes[0].categories;
-    for (let i = 0; i < blendShapes.length; i++) {
 
+    for (let i = 0; i < blendShapes.length; i++) {
       //目に使う値
       let eyeBlinkLeftScore = blendShapes[9].score.toFixed(3);
       let eyeBlinkRightScore = blendShapes[10].score.toFixed(3);
@@ -633,6 +654,8 @@ function animationTexture() {
       let mouthStretchRightScore = blendShapes[47].score.toFixed(3);
       let mouthUpperUpLeftScore = blendShapes[48].score.toFixed(3);
       let mouthUpperUpRightScore = blendShapes[49].score.toFixed(3);
+
+      // console.log(jawOpenScore);
 
       //口のアニメーション
       let mouthWidthMovement = (pT[9].x - pT[8].x) / 6;
@@ -737,6 +760,8 @@ function animationTexture() {
       }
     }
   }
+
+  console.log("Ending animationTexture");
 }
 
 class pointPosition {
@@ -843,14 +868,14 @@ class intersection {
 }
 
 // スクロール禁止
-function disable_scroll(element) {
+function disable_scroll() {
   // PCでのスクロール禁止
   document.addEventListener("mousewheel", scroll_control, { passive: false });
   // スマホでのタッチ操作でのスクロール禁止
   document.addEventListener("touchmove", touch_scroll_control, { passive: false });
 }
 // スクロール禁止解除
-function enable_scroll(element) {
+function enable_scroll() {
   // PCでのスクロール禁止解除
   document.removeEventListener("mousewheel", scroll_control, { passive: false });
   // スマホでのタッチ操作でのスクロール禁止解除
