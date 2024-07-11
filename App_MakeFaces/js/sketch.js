@@ -8,6 +8,8 @@ const STATE_RECORDING = 3;
 let state = STATE_SERECT;
 let stateMessage;
 let stateMessageEn;
+let stateMainButtonText;
+let buttonIconHTML;
 let fileName;
 
 //テクスチャ
@@ -200,20 +202,30 @@ function stateButton() {
     fileInput.style.display = 'inline';
     stateMessage = "写真を選択して下さい。";
     stateMessageEn = "Please select the photo you would like to use.";
+    stateMainButtonText = "Next";
+    buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="-4 2 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/> </svg>`;
   } else if (state === STATE_LINE) {
     element_webcam.style.opacity = '0';
     fileInput.style.display = 'none';
     stateMessage = "目と口に合わせて白枠を動かしてください。「Range」の中でそれぞれが動きます。";
     stateMessageEn = "Move the white frame to match the eyes and mouth. Each moves within a 'Range'.";
+    stateMainButtonText = "Next";
+    buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="-4 2 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg>`;
   } else if (state === STATE_MOVE) {
     stateMessage = "顔を動かしてみましょう😄";
     stateMessageEn = "Let's move your face😄";
+    stateMainButtonText = "Recording";
+    buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/></svg>`;
   } else if (state === STATE_RECORDING) {
     stateMessage = "録画中です。";
     stateMessageEn = "Recording...";
+    stateMainButtonText = "Stop";
+    buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stop-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5z"/></svg>`;
   }
   document.getElementById("mainMessage").innerHTML = stateMessage;
   document.getElementById("mainMessageEn").innerHTML = stateMessageEn;
+  document.getElementById("mainButtonText").textContent = stateMainButtonText;
+  document.getElementById("buttonIcon").innerHTML = buttonIconHTML;
 }
 
 //メインボタンの処理
@@ -285,6 +297,12 @@ function displayFileNotSelectedAlert() {
 function returnButtonPressed() {
   if (0 < state && state <= 2) {
     state--;
+    stateButton();
+  } else if (state == 3) {
+    if (capture.state !== "idle") {
+      capture.stop();
+    }
+    state = 1;
     stateButton();
   }
 }
@@ -527,7 +545,6 @@ function cmouseDragged() {
     let mouseRange = w / 50;
     for (let i = 0; i < boxPoint; i++) {
       if (i == 0 || i == 4 || i == 8) {
-
         boxMiddlePos[i] = new pointBoxMiddle(i, i + 2);
         let boxPosDist = dist(boxMiddlePos[i].x, boxMiddlePos[i].y, mouseX, mouseY);
         let boxSizeDist = dist(pB[i + 2].x, pB[i + 2].y, mouseX, mouseY);
@@ -563,26 +580,35 @@ function cmouseDragged() {
           pS[i + 1] = new pointBox(strech_x2, strech_y1);
           pS[i + 2] = new pointBox(strech_x2, strech_y2);
           pS[i + 3] = new pointBox(strech_x1, strech_y2);
-        }
-        else if (boxSizeDist < mouseRange) {
-          pB[i].x = boxMiddlePos[i].x - abs(mouseX - boxMiddlePos[i].x);
-          pB[i].y = boxMiddlePos[i].y - abs(mouseY - boxMiddlePos[i].y);
-          pB[i + 1].x = mouseX;
-          pB[i + 1].y = boxMiddlePos[i].y - abs(mouseY - boxMiddlePos[i].y);
-          pB[i + 2].x = mouseX;
-          pB[i + 2].y = mouseY;
-          pB[i + 3].x = boxMiddlePos[i].x - abs(mouseX - boxMiddlePos[i].x);
-          pB[i + 3].y = mouseY;
-        }
-        else if (strechSizeDist < mouseRange) {
-          pS[i].x = boxMiddlePos[i].x - abs(mouseX - boxMiddlePos[i].x);
-          pS[i].y = boxMiddlePos[i].y - abs(mouseY - boxMiddlePos[i].y);
-          pS[i + 1].x = mouseX;
-          pS[i + 1].y = boxMiddlePos[i].y - abs(mouseY - boxMiddlePos[i].y);
-          pS[i + 2].x = mouseX;
-          pS[i + 2].y = mouseY;
-          pS[i + 3].x = boxMiddlePos[i].x - abs(mouseX - boxMiddlePos[i].x);
-          pS[i + 3].y = mouseY;
+
+        } else if (boxSizeDist < mouseRange) {
+          let newPB2_x = mouseX;
+          let newPB2_y = mouseY;
+          if (newPB2_x > pB[i].x && newPB2_x > pB[i + 3].x && newPB2_x < pS[i + 2].x &&
+            newPB2_y > pB[i].y && newPB2_y > pB[i + 1].y && newPB2_y < pS[i + 2].y) {
+            pB[i].x = boxMiddlePos[i].x - abs(mouseX - boxMiddlePos[i].x);
+            pB[i].y = boxMiddlePos[i].y - abs(mouseY - boxMiddlePos[i].y);
+            pB[i + 1].x = newPB2_x;
+            pB[i + 1].y = boxMiddlePos[i].y - abs(mouseY - boxMiddlePos[i].y);
+            pB[i + 2].x = newPB2_x;
+            pB[i + 2].y = newPB2_y;
+            pB[i + 3].x = boxMiddlePos[i].x - abs(mouseX - boxMiddlePos[i].x);
+            pB[i + 3].y = newPB2_y;
+          }
+        } else if (strechSizeDist < mouseRange) {
+          let newPS2_x = mouseX;
+          let newPS2_y = mouseY;
+          if (newPS2_x > pS[i].x && newPS2_x > pS[i + 3].x && newPS2_x > pB[i + 2].x &&
+            newPS2_y > pS[i].y && newPS2_y > pS[i + 1].y && newPS2_y > pB[i + 2].y) {
+            pS[i].x = boxMiddlePos[i].x - abs(mouseX - boxMiddlePos[i].x);
+            pS[i].y = boxMiddlePos[i].y - abs(mouseY - boxMiddlePos[i].y);
+            pS[i + 1].x = newPS2_x;
+            pS[i + 1].y = boxMiddlePos[i].y - abs(mouseY - boxMiddlePos[i].y);
+            pS[i + 2].x = newPS2_x;
+            pS[i + 2].y = newPS2_y;
+            pS[i + 3].x = boxMiddlePos[i].x - abs(mouseX - boxMiddlePos[i].x);
+            pS[i + 3].y = newPS2_y;
+          }
         }
       }
     }
@@ -862,32 +888,34 @@ class pointMiddle {
 class intersection {
   constructor(x1, y1, x2, y2, x3, y3, x4, y4) {
     let denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+    let x, y;
 
-    let x;
-    let y;
     if (denom === 0) {
-      // 直線が平行な場合、交点なし
+      // 直線が平行な場合、x1,x2およびy1,y2の中点を使用
       x = (x1 + x2) / 2;
       y = (y1 + y2) / 2;
+    } else {
+      x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / denom;
+      y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / denom;
+
+      // 交点が線分上にあるか確認
+      if (
+        (x < Math.min(x1, x2) || x > Math.max(x1, x2)) ||
+        (x < Math.min(x3, x4) || x > Math.max(x3, x4)) ||
+        (y < Math.min(y1, y2) || y > Math.max(y1, y2)) ||
+        (y < Math.min(y3, y4) || y > Math.max(y3, y4))
+      ) {
+        // 交点が線分上にない場合、x1,x2およびy1,y2の中点を使用
+        x = (x1 + x2) / 2;
+        y = (y1 + y2) / 2;
+      }
     }
-
-    x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / denom;
-    y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / denom;
-
-    // 交点が線分上にあるか確認
-    if ((x < min(x1, x2) || x > max(x1, x2)) || (x < min(x3, x4) || x > max(x3, x4)) ||
-      (y < min(y1, y2) || y > max(y1, y2)) || (y < min(y3, y4) || y > max(y3, y4))) {
-      // 交点が線分上にない場合、交点なし
-      x = (x1 + x2) / 2;
-      y = (y1 + y2) / 2;
-    }
-
-    return { x: x, y: y };
 
     this.x = x;
     this.y = y;
   }
 }
+
 
 // スクロール禁止
 function disable_scroll() {
@@ -916,15 +944,4 @@ function touch_scroll_control(event) {
     return;
   }
   event.preventDefault();
-}
-
-function keyPressed() {
-  if (key === "c") {
-    const capture = P5Capture.getInstance();
-    if (capture.state === "idle") {
-      capture.start();
-    } else {
-      capture.stop();
-    }
-  }
 }
