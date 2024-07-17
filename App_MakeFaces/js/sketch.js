@@ -252,12 +252,14 @@ function mainButtonPressed() {
   } else if (state == 2) {
     if (capture.state === "idle") {
       capture.start();
+      console.log("Recording started");
     }
     state++;
     stateButton();
   } else if (state == 3) {
     if (capture.state !== "idle") {
       capture.stop();
+      console.log("Recording stopped");
     }
     state = 2;
     stateButton();
@@ -370,7 +372,7 @@ function textureSetting() {
     pM[i] = new pointMotion(pB[i].x, pB[i].y);
   }
 
-  console.log("Texture settings initialized");
+  // console.log("Texture settings initialized");
 }
 
 //テクスチャ平面の描画
@@ -516,7 +518,7 @@ function markingTexture() {
     }
   }
 
-  console.log("Marking texture complete");
+  // console.log("Marking texture complete");
 }
 
 function cmousePressed() {
@@ -620,7 +622,7 @@ function animationTexture() {
   let eyeMax = 0.8;
   let mouthMax = 1;
 
-  console.log("Starting animationTexture");
+  // console.log("Starting animationTexture");
 
   // eyeBlinkLeftとeyeBlinkRightの値を取得してコンソールログに表示
   if (face_results.faceBlendshapes && face_results.faceBlendshapes.length > 0) {
@@ -809,7 +811,7 @@ function animationTexture() {
     }
   }
 
-  console.log("Ending animationTexture");
+  // console.log("Ending animationTexture");
 }
 
 class pointPosition {
