@@ -56,12 +56,19 @@ P5Capture.setDefaultOptions({
   format: "mp4",
   framerate: 30,
   quality: 1.0,
-  width: 640,
+  width: w,
+  height: h,
   disableUi: true,
 });
 
 function setup() {
-  let p5canvas = createCanvas(400, 400, WEBGL);
+  let canvasWidth = 400;
+  let canvasHeight = 400;
+  // 幅と高さが偶数になるように調整
+  canvasWidth = Math.floor(canvasWidth / 2) * 2;
+  canvasHeight = Math.floor(canvasHeight / 2) * 2;
+
+  let p5canvas = createCanvas(canvasWidth, canvasHeight, WEBGL);
   p5canvas.parent('#canvas');
   textFont(myFont);
 
@@ -162,8 +169,22 @@ function adjustCanvas() {
     w = element_webcam.clientWidth;
     h = w * uploadedImage.height / uploadedImage.width;
   }
+  // 幅と高さが偶数になるように調整
+  w = Math.floor(w / 2) * 2;
+  h = Math.floor(h / 2) * 2;
+
   resizeCanvas(w, h, WEBGL);
   translate(-width / 2, -height / 2);
+
+  // P5Captureの設定を更新
+  P5Capture.setDefaultOptions({
+    format: "mp4",
+    framerate: 30,
+    quality: 1.0,
+    width: w,
+    height: h,
+    disableUi: true,
+  });
 }
 
 //画像アップロード
@@ -231,6 +252,7 @@ function stateButton() {
 //メインボタンの処理
 function mainButtonPressed() {
   const capture = P5Capture.getInstance();
+  adjustCanvas();
 
   if (state == 0) {
     boxSetting();
@@ -250,9 +272,11 @@ function mainButtonPressed() {
     state++;
     stateButton();
   } else if (state == 2) {
+    adjustCanvas();
     if (capture.state === "idle") {
       capture.start();
       console.log("Recording started");
+      console.log("width:" + w + "height:" + h);
     }
     state++;
     stateButton();
@@ -311,8 +335,14 @@ function returnButtonPressed() {
 
 //ボックスの初期設定
 function boxSetting() {
-  let boxSize = w / 5;
-  let boxRange = w / 20;
+  w = element_webcam.clientWidth;
+  h = w * uploadedImage.height / uploadedImage.width;
+
+  let boxSize_w = w / 5;
+  let boxSize_h = h / 5;
+  let boxRange_w = w / 20;
+  let boxRange_h = h / 20;
+
   for (let i = 0; i < boxPoint; i++) {
 
     //ボックスの初期設定
@@ -323,35 +353,35 @@ function boxSetting() {
     pS[i] = new pointStrech(pS[i].x, pS[i].y);
 
     if (i == 0 || i == 3 || i == 8 || i == 11) {
-      pB[i].x = boxSize;
+      pB[i].x = boxSize_w;
     } else if (i == 1 || i == 2) {
-      pB[i].x = boxSize * 2;
+      pB[i].x = boxSize_w * 2;
     } else if (i == 4 || i == 7) {
-      pB[i].x = boxSize * 3;
+      pB[i].x = boxSize_w * 3;
     } else if (i == 5 || i == 6 || i == 9 || i == 10) {
-      pB[i].x = boxSize * 4;
+      pB[i].x = boxSize_w * 4;
     }
 
     if (i == 0 || i == 1 || i == 4 || i == 5) {
-      pB[i].y = boxSize;
+      pB[i].y = boxSize_h;
     } else if (i == 2 || i == 3 || i == 6 || i == 7) {
-      pB[i].y = boxSize * 2;
+      pB[i].y = boxSize_h * 2;
     } else if (i == 8 || i == 9) {
-      pB[i].y = boxSize * 3;
+      pB[i].y = boxSize_h * 3;
     } else if (i == 10 || i == 11) {
-      pB[i].y = boxSize * 4;
+      pB[i].y = boxSize_h * 4;
     }
 
     if (i == 0 || i == 3 || i == 4 || i == 7 || i == 8 || i == 11) {
-      pS[i].x = pB[i].x - boxRange;
+      pS[i].x = pB[i].x - boxRange_w;
     } else if (i == 1 || i == 2 || i == 5 || i == 6 || i == 9 || i == 10) {
-      pS[i].x = pB[i].x + boxRange;
+      pS[i].x = pB[i].x + boxRange_w;
     }
 
     if (i == 0 || i == 1 || i == 4 || i == 5 || i == 8 || i == 9) {
-      pS[i].y = pB[i].y - boxRange;
+      pS[i].y = pB[i].y - boxRange_h;
     } else if (i == 2 || i == 3 || i == 6 || i == 7 || i == 10 || i == 11) {
-      pS[i].y = pB[i].y + boxRange;
+      pS[i].y = pB[i].y + boxRange_h;
     }
 
   }
