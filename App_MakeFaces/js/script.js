@@ -1,5 +1,6 @@
 document.querySelector('#returnButton').style.display = 'none';
 document.querySelector('#mainButton').style.display = 'none';
+document.querySelector('#inputButton').style.display = 'none';
 document.querySelector('#uploadImg').style.display = 'none';
 
 // import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0";
@@ -23,6 +24,7 @@ const createFaceLandmarker = async () => {
     document.querySelector('#loading').style.display = 'none';
     document.querySelector('#returnButton').style.display = 'inline';
     document.querySelector('#mainButton').style.display = 'inline';
+    document.querySelector('#inputButton').style.display = 'inline';
     document.querySelector('#uploadImg').style.display = 'inline';
 };
 createFaceLandmarker();

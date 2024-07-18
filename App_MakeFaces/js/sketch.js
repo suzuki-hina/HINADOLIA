@@ -16,6 +16,8 @@ let fileName;
 let uploadedImage;
 let w;
 let h;
+let W;
+let H;
 let boxPoint = 12;
 let pP = [];
 let pT = [];
@@ -51,15 +53,15 @@ function preload() {
   myFont = loadFont('../images/NotoSans.ttf');
 }
 
+//録画
 P5Capture.setDefaultOptions({
-  disableUi: true
+  disableUi: true,
 });
 
 function setup() {
   let p5canvas = createCanvas(400, 400, WEBGL);
   p5canvas.parent('#canvas');
   textFont(myFont);
-  frameRate(30);
 
   //機種による処理
   if (navigator.userAgent.indexOf('iPhone') > 0 ||
@@ -157,6 +159,8 @@ function adjustCanvas() {
   } else if (state === STATE_LINE || state === STATE_MOVE || state === STATE_RECORDING) {
     w = element_webcam.clientWidth;
     h = w * uploadedImage.height / uploadedImage.width;
+    W = width;
+    H = width * uploadedImage.height / uploadedImage.width;
   }
 
   resizeCanvas(w, h, WEBGL);
@@ -171,6 +175,7 @@ function adjustCanvas() {
     height: Math.floor(h / 2) * 2,
     disableUi: true
   });
+
 }
 
 //画像アップロード
@@ -241,8 +246,8 @@ function mainButtonPressed() {
   adjustCanvas();
 
   if (state == 0) {
+    boxSetting();
     if (fileInput.files.length > 0) {
-      boxSetting();
       state++;
       stateButton();
       // 既存のアラートメッセージがあれば削除
@@ -307,9 +312,7 @@ function displayFileNotSelectedAlert() {
 
 //リターンボタンの処理
 function returnButtonPressed() {
-  if (state == 0) {
-    window.location.href = '../index.html';
-  } else if (0 < state && state <= 2) {
+  if (0 < state && state <= 2) {
     state--;
     stateButton();
   } else if (state == 3) {
@@ -637,6 +640,10 @@ function cmouseDragged() {
 
 //顔を動かす
 function animationTexture() {
+  for (let i = 0; i < boxPoint; i++) {
+    pB[i] = new pointBox(pB[i].x, pB[i].y);
+    pS[i] = new pointStrech(pS[i].x, pS[i].y);
+  }
   let eyeMax = 0.8;
   let mouthMax = 1;
 
@@ -862,15 +869,21 @@ class pointMotion {
 
 class pointBox {
   constructor(x, y) {
-    this.x = x;
-    this.y = y;
+    // this.x = x;
+    // this.y = y;
+
+    this.x = x * (w / W);
+    this.y = y * (h / H);
   }
 }
 
 class pointStrech {
   constructor(x, y) {
-    this.x = x;
-    this.y = y;
+    // this.x = x;
+    // this.y = y;
+
+    this.x = x * (w / W);
+    this.y = y * (h / H);
   }
 }
 
