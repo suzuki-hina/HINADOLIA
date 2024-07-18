@@ -56,14 +56,7 @@ P5Capture.setDefaultOptions({
 });
 
 function setup() {
-  let canvasWidth = 400;
-  let canvasHeight = 400;
-
-  // 幅と高さが偶数になるように調整
-  canvasWidth = Math.floor(canvasWidth / 2) * 2;
-  canvasHeight = Math.floor(canvasHeight / 2) * 2;
-
-  let p5canvas = createCanvas(canvasWidth, canvasHeight, WEBGL);
+  let p5canvas = createCanvas(400, 400, WEBGL);
   p5canvas.parent('#canvas');
   textFont(myFont);
   frameRate(30);
@@ -173,31 +166,11 @@ function adjustCanvas() {
   P5Capture.setDefaultOptions({
     format: "mp4",
     framerate: 30,
-    quality: 0.5,
-    width: w,
-    height: h,
-    disableUi: true,
-    beforeDownload(blob, context, next) {
-      // Check if the user is on iOS Safari
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-      if (isIOS) {
-        // On iOS Safari, handle the download directly without showing options
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = `${context.baseFilename}.${context.format}`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-      } else {
-        // For other browsers, use the default behavior (show options)
-        next();
-      }
-    }
+    quality: 0.8,
+    width: Math.floor(w / 2) * 2,
+    height: Math.floor(h / 2) * 2,
+    disableUi: true
   });
-
 }
 
 //画像アップロード
