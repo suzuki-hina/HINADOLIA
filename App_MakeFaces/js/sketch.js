@@ -58,7 +58,7 @@ P5Capture.setDefaultOptions({
   quality: 0.5,
   width: w,
   height: h,
-  // disableUi: true,
+  disableUi: true,
 });
 
 function setup() {
