@@ -280,12 +280,10 @@ function mainButtonPressed() {
     state++;
     stateButton();
   } else if (state == 3) {
-    if (capture.state !== "idle") {
-      capture.stop();
-      console.log("Recording stopped");
-    }
     state = 2;
     stateButton();
+    stopRecording();  // ここで録画停止処理を呼び出す
+
   }
 }
 
@@ -977,4 +975,47 @@ function touch_scroll_control(event) {
     return;
   }
   event.preventDefault();
+}
+
+// Safariを判別する関数
+function isSafari() {
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+}
+
+// 録画停止時の処理
+function stopRecording() {
+  const capture = P5Capture.getInstance();
+  if (capture.state !== "idle") {
+    capture.stop();
+    console.log("Recording stopped");
+
+    // 動画ファイルが生成されるのを待つ
+    capture.on('dataavailable', function (event) {
+      const videoBlob = event.data;
+      share(videoBlob);
+    });
+
+    // Safariの場合にシェア機能を実行
+    if (isSafari()) {
+      capture.save(); // 動画ファイルを保存してイベントを発火させる
+    }
+  }
+}
+
+// シェア機能
+function share(videoBlob) {
+  let file = new File([videoBlob], "video.mp4", {
+    type: "video/mp4",
+  });
+  const filesArray = [file];
+
+  if (navigator.share) {
+    navigator.share({
+      files: filesArray
+    })
+      .then(() => console.log('Share was successful.'))
+      .catch((error) => console.log('Sharing failed', error));
+  } else {
+    alert(`Your system doesn't support sharing files.`);
+  }
 }
