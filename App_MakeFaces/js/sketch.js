@@ -55,15 +55,16 @@ function preload() {
 P5Capture.setDefaultOptions({
   format: "mp4",
   framerate: 30,
-  quality: 1.0,
+  quality: 0.5,
   width: w,
   height: h,
-  disableUi: true,
+  // disableUi: true,
 });
 
 function setup() {
   let canvasWidth = 400;
   let canvasHeight = 400;
+
   // 幅と高さが偶数になるように調整
   canvasWidth = Math.floor(canvasWidth / 2) * 2;
   canvasHeight = Math.floor(canvasHeight / 2) * 2;
@@ -71,6 +72,7 @@ function setup() {
   let p5canvas = createCanvas(canvasWidth, canvasHeight, WEBGL);
   p5canvas.parent('#canvas');
   textFont(myFont);
+  frameRate(30);
 
   //機種による処理
   if (navigator.userAgent.indexOf('iPhone') > 0 ||
@@ -169,9 +171,6 @@ function adjustCanvas() {
     w = element_webcam.clientWidth;
     h = w * uploadedImage.height / uploadedImage.width;
   }
-  // 幅と高さが偶数になるように調整
-  w = Math.floor(w / 2) * 2;
-  h = Math.floor(h / 2) * 2;
 
   resizeCanvas(w, h, WEBGL);
   translate(-width / 2, -height / 2);
@@ -180,9 +179,9 @@ function adjustCanvas() {
   P5Capture.setDefaultOptions({
     format: "mp4",
     framerate: 30,
-    quality: 1.0,
-    width: w,
-    height: h,
+    quality: 0.5,
+    width: Math.floor(w / 2) * 2,
+    height: Math.floor(h / 2) * 2,
     disableUi: true,
   });
 }
@@ -255,8 +254,8 @@ function mainButtonPressed() {
   adjustCanvas();
 
   if (state == 0) {
-    boxSetting();
     if (fileInput.files.length > 0) {
+      boxSetting();
       state++;
       stateButton();
       // 既存のアラートメッセージがあれば削除
@@ -321,7 +320,9 @@ function displayFileNotSelectedAlert() {
 
 //リターンボタンの処理
 function returnButtonPressed() {
-  if (0 < state && state <= 2) {
+  if (state == 0) {
+    window.location.href = '../index.html';
+  } else if (0 < state && state <= 2) {
     state--;
     stateButton();
   } else if (state == 3) {
