@@ -51,14 +51,8 @@ function preload() {
   myFont = loadFont('../images/NotoSans.ttf');
 }
 
-//録画
 P5Capture.setDefaultOptions({
-  format: "mp4",
-  framerate: 30,
-  quality: 0.5,
-  width: w,
-  height: h,
-  disableUi: true,
+  disableUi: true
 });
 
 function setup() {
@@ -180,10 +174,30 @@ function adjustCanvas() {
     format: "mp4",
     framerate: 30,
     quality: 0.5,
-    width: Math.floor(w / 2) * 2,
-    height: Math.floor(h / 2) * 2,
+    width: w,
+    height: h,
     disableUi: true,
+    beforeDownload(blob, context, next) {
+      // Check if the user is on iOS Safari
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+      if (isIOS) {
+        // On iOS Safari, handle the download directly without showing options
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `${context.baseFilename}.${context.format}`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } else {
+        // For other browsers, use the default behavior (show options)
+        next();
+      }
+    }
   });
+
 }
 
 //画像アップロード
@@ -280,10 +294,12 @@ function mainButtonPressed() {
     state++;
     stateButton();
   } else if (state == 3) {
+    if (capture.state !== "idle") {
+      capture.stop();
+      console.log("Recording stopped");
+    }
     state = 2;
     stateButton();
-    stopRecording();  // ここで録画停止処理を呼び出す
-
   }
 }
 
@@ -975,47 +991,4 @@ function touch_scroll_control(event) {
     return;
   }
   event.preventDefault();
-}
-
-// Safariを判別する関数
-function isSafari() {
-  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-}
-
-// 録画停止時の処理
-function stopRecording() {
-  const capture = P5Capture.getInstance();
-  if (capture.state !== "idle") {
-    capture.stop();
-    console.log("Recording stopped");
-
-    // 動画ファイルが生成されるのを待つ
-    capture.on('dataavailable', function (event) {
-      const videoBlob = event.data;
-      share(videoBlob);
-    });
-
-    // Safariの場合にシェア機能を実行
-    if (isSafari()) {
-      capture.save(); // 動画ファイルを保存してイベントを発火させる
-    }
-  }
-}
-
-// シェア機能
-function share(videoBlob) {
-  let file = new File([videoBlob], "video.mp4", {
-    type: "video/mp4",
-  });
-  const filesArray = [file];
-
-  if (navigator.share) {
-    navigator.share({
-      files: filesArray
-    })
-      .then(() => console.log('Share was successful.'))
-      .catch((error) => console.log('Sharing failed', error));
-  } else {
-    alert(`Your system doesn't support sharing files.`);
-  }
 }
