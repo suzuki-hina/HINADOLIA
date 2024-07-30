@@ -525,6 +525,12 @@ function markingTexture() {
       vertex(pS[i + 3].x, pS[i + 3].y);
       endShape(CLOSE);
 
+      //伸びの線の移動用の点の描画
+      noStroke();
+      fill(255);
+      ellipse(pS[i + 2].x, pS[i + 2].y, boxPointSize, boxPointSize);
+
+
       if (showText) {
         fill(255);
         textSize(w / 40);
