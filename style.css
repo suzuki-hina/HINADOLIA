@@ -16,6 +16,11 @@
     color: #F25C05;
 }
 
+/* 太め文字の色 */
+.href-orange {
+    color: #F25C05;
+}
+
 /* 通常のボタン色 */
 .btn-orange,
 .btn-orange.disabled,
