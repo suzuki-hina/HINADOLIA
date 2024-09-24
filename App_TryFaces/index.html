@@ -37,6 +37,16 @@
   <link rel="manifest" href="../manifest.json">
   <link rel="icon" sizes="192x192" href="../images/favicon-192.png">
 
+  <style>
+    video {
+      clear: both;
+      display: block;
+      transform: rotateY(180deg);
+      -webkit-transform: rotateY(180deg);
+      -moz-transform: rotateY(180deg);
+    }
+  </style>
+
 </head>
 
 <body>
@@ -45,7 +55,7 @@
       <div class="container">
         <nav class="nav nav-underline justify-content-between p-3">
           <a class="nav-item nav-link link-body-emphasis" href="../index.html">Home</a>
-          <a class="nav-item nav-link link-body-emphasis" href="#">Try Faces</a>
+          <a class="nav-item nav-link link-body-emphasis active" href="#">Try HINADOLIA</a>
           <a class="nav-item nav-link link-body-emphasis" href="../App_AnimatingFaces/index.html">Animating Faces</a>
           <a class="nav-item nav-link link-body-emphasis" href="../App_FindFaces/index.html">Find Faces</a>
           <a class="nav-item nav-link link-body-emphasis" href="../AboutMe.html">About Me</a>
@@ -69,12 +79,9 @@
   <main>
     <section class="container-fluid">
       <section class="container mt-3 mb-3">
-        <h1 class="fs-orange">Try Faces</h1>
-        <p class="text-secondary m-0" id="mainMessage">使用する写真を選んでください</p>
-        <p class="text-secondary small m-0" id="mainMessageEn">Please select the photo you would like to use.</p>
-        <input id="inputButton" class="form-control mt-2" type="file" aria-describedby="inputGroupFileAddon04"
-          aria-label="Upload" accept=".png, .jpeg, .jpg" onclick="inputButtonPressed();">
-        <div id="liveAlertPlaceholder"></div>
+        <h1 class="fs-orange">Try HINADOLIA</h1>
+        <p class="text-secondary m-0" id="mainMessage">カメラの認識ができました。</p>
+        <p class="text-secondary small m-0" id="mainMessageEn">Camera recognition succeeded.</p>
       </section>
 
       <div class="row mt-3 mb-3">
@@ -89,12 +96,15 @@
         </div>
 
         <div class="col text-end">
-          <button id="mainButton" class="btn btn-orange" onclick="mainButtonPressed();">Next<svg
-              xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right"
-              viewBox="-4 2 16 16">
-              <path fill-rule="evenodd"
-                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
-            </svg>
+          <button id="mainButton" class="btn btn-orange" onclick="mainButtonPressed();">
+            <span id="mainButtonText">Try HINADOLIA</span>
+            <span id="buttonIcon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-chevron-right" viewBox="-4 2 16 16">
+                <path fill-rule="evenodd"
+                  d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+              </svg>
+            </span>
           </button>
           <input id="uploadImg" type="file" accept=".png, .jpeg, .jpg" hidden></input>
         </div>
@@ -120,10 +130,16 @@
 
   </main>
 
+
+
   <!-- include js libraries -->
-  <script src="./js/p5.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5/lib/p5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5.capture@1.4.1/dist/p5.capture.umd.min.js"></script>
+  <!-- <script src="./js/p5.js"></script> -->
   <script src="./js/sketch.js"></script>
   <script type="module" src="./js/script.js"></script>
+
+
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
