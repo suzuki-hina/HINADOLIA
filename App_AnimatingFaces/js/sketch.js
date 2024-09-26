@@ -134,6 +134,7 @@ function draw() {
       textureSetting();
       drawTexture();
       markingTexture();
+      enable_scroll();
     } else if (state === STATE_MOVE || state === STATE_RECORDING) {
       animationTexture();
       drawTexture();
