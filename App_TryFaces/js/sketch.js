@@ -62,6 +62,7 @@ function setup() {
   let p5canvas = createCanvas(400, 400, WEBGL);
   p5canvas.parent('#canvas');
   textFont(myFont);
+  frameRate(60);
 
   //機種による処理
   if (navigator.userAgent.indexOf('iPhone') > 0 ||
@@ -72,7 +73,6 @@ function setup() {
     p5canvas.touchStarted(cmousePressed);
     p5canvas.touchEnded(cmouseReleased);
     p5canvas.touchMoved(cmouseDragged);
-    disable_scroll();
     is_pc = false;
   } else if (navigator.userAgent.indexOf('iPad') > 0 ||
     navigator.userAgent.indexOf('Android') > 0) {
@@ -80,7 +80,6 @@ function setup() {
     p5canvas.touchStarted(cmousePressed);
     p5canvas.touchEnded(cmouseReleased);
     p5canvas.touchMoved(cmouseDragged);
-    disable_scroll();
     is_pc = false;
   } else if (navigator.userAgent.indexOf('Safari') > 0 &&
     navigator.userAgent.indexOf('Chrome') == -1 &&
@@ -89,7 +88,6 @@ function setup() {
     p5canvas.touchStarted(cmousePressed);
     p5canvas.touchEnded(cmouseReleased);
     p5canvas.touchMoved(cmouseDragged);
-    disable_scroll();
     is_pc = false;
   } else {
     p5canvas.mousePressed(cmousePressed);
@@ -131,7 +129,6 @@ function draw() {
       }
     }
     else if (state === STATE_MOVE || state === STATE_RECORDING) {
-      textureSetting();
       animationTexture();
       drawTexture();
     }
@@ -204,6 +201,7 @@ function mainButtonPressed() {
 
   if (state == 0) {
     boxSetting();
+    textureSetting();
     state++;
     stateButton();
   } else if (state == 1) {
@@ -382,6 +380,7 @@ function drawTexture() {
   vertex(0, h, 0, 1);
   endShape(CLOSE);
 
+  // テクスチャの線の描画
   // strokeWeight(2);
   // stroke(255);
 
@@ -442,22 +441,12 @@ function drawTexture() {
 }
 
 function cmousePressed() {
-  if (!is_pc) {
-    disable_scroll();
-  }
 }
 
 function cmouseReleased() {
-  if (!is_pc) {
-    disable_scroll();
-  }
 }
 
-//ボックスの移動
 function cmouseDragged() {
-  if (!is_pc) {
-    disable_scroll();
-  }
 }
 
 //顔を動かす
@@ -487,8 +476,8 @@ function animationTexture() {
       let eyeLookOutRightScore = blendShapes[16].score.toFixed(3);
       let eyeLookUpLeftScore = blendShapes[17].score.toFixed(3);
       let eyeLookUpRightScore = blendShapes[18].score.toFixed(3);
-      // let eyeSquintLeftScore = blendShapes[19].score.toFixed(3);
-      // let eyeSquintRightScore = blendShapes[20].score.toFixed(3);
+      let eyeSquintLeftScore = blendShapes[19].score.toFixed(3);
+      let eyeSquintRightScore = blendShapes[20].score.toFixed(3);
 
       //左目のアニメーション
       middlePointParts = new pointMiddle(0, 2);
@@ -512,7 +501,12 @@ function animationTexture() {
         }
 
         // //左目瞬きのアニメーション
-        pP[i].y = map(eyeBlinkLeftScore, 0, eyeMax, pM[i].y, middlePointParts.yM);
+        if (eyeBlinkLeftScore >= eyeSquintLeftScore) {
+          pP[i].y = map(eyeBlinkLeftScore, 0, eyeMax, pM[i].y, middlePointParts.yM);
+        }
+        else if (eyeSquintLeftScore > eyeBlinkLeftScore) {
+          pP[i].y = map(eyeSquintLeftScore, 0, eyeMax, pM[i].y, middlePointParts.yM);
+        }
       }
 
       //右目のアニメーション
@@ -537,7 +531,12 @@ function animationTexture() {
         }
 
         //右目瞬きのアニメーション
-        pP[i].y = map(eyeBlinkRightScore, 0, eyeMax, pM[i].y, middlePointParts.yM);
+        if (eyeBlinkRightScore >= eyeSquintRightScore) {
+          pP[i].y = map(eyeBlinkRightScore, 0, eyeMax, pM[i].y, middlePointParts.yM);
+        }
+        else if (eyeSquintRightScore > eyeBlinkRightScore) {
+          pP[i].y = map(eyeSquintRightScore, 0, eyeMax, pM[i].y, middlePointParts.yM);
+        }
       }
 
       //口に使う値

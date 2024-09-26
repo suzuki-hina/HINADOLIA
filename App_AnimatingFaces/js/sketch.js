@@ -62,6 +62,7 @@ function setup() {
   let p5canvas = createCanvas(400, 400, WEBGL);
   p5canvas.parent('#canvas');
   textFont(myFont);
+  frameRate(60);
 
   //機種による処理
   if (navigator.userAgent.indexOf('iPhone') > 0 ||
@@ -430,8 +431,8 @@ function drawTexture() {
   vertex(0, h, 0, 1);
   endShape(CLOSE);
 
-  // strokeWeight(2);
-  // stroke(255);
+  strokeWeight(2);
+  stroke(255);
 
   //テクスチャの描画(伸びるところ)
   for (let i = 0; i < boxPoint; i++) {
@@ -688,6 +689,8 @@ function animationTexture() {
       let eyeLookOutRightScore = blendShapes[16].score.toFixed(3);
       let eyeLookUpLeftScore = blendShapes[17].score.toFixed(3);
       let eyeLookUpRightScore = blendShapes[18].score.toFixed(3);
+      let eyeSquintLeftScore = blendShapes[19].score.toFixed(3);
+      let eyeSquintRightScore = blendShapes[20].score.toFixed(3);
 
       //左目のアニメーション
       middlePointParts = new pointMiddle(0, 2);
@@ -711,7 +714,12 @@ function animationTexture() {
         }
 
         // //左目瞬きのアニメーション
-        pP[i].y = map(eyeBlinkLeftScore, 0, eyeMax, pM[i].y, middlePointParts.yM);
+        if (eyeBlinkLeftScore >= eyeSquintLeftScore) {
+          pP[i].y = map(eyeBlinkLeftScore, 0, eyeMax, pM[i].y, middlePointParts.yM);
+        }
+        else if (eyeSquintLeftScore > eyeBlinkLeftScore) {
+          pP[i].y = map(eyeSquintLeftScore, 0, eyeMax, pM[i].y, middlePointParts.yM);
+        }
       }
 
       //右目のアニメーション
@@ -736,7 +744,12 @@ function animationTexture() {
         }
 
         //右目瞬きのアニメーション
-        pP[i].y = map(eyeBlinkRightScore, 0, eyeMax, pM[i].y, middlePointParts.yM);
+        if (eyeBlinkRightScore >= eyeSquintRightScore) {
+          pP[i].y = map(eyeBlinkRightScore, 0, eyeMax, pM[i].y, middlePointParts.yM);
+        }
+        else if (eyeSquintRightScore > eyeBlinkRightScore) {
+          pP[i].y = map(eyeSquintRightScore, 0, eyeMax, pM[i].y, middlePointParts.yM);
+        }
       }
 
       //口に使う値
