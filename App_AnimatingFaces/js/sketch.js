@@ -72,7 +72,7 @@ function setup() {
     p5canvas.touchStarted(cmousePressed);
     p5canvas.touchEnded(cmouseReleased);
     p5canvas.touchMoved(cmouseDragged);
-    disable_scroll();
+    // disable_scroll();
     is_pc = false;
   } else if (navigator.userAgent.indexOf('iPad') > 0 ||
     navigator.userAgent.indexOf('Android') > 0) {
@@ -80,7 +80,7 @@ function setup() {
     p5canvas.touchStarted(cmousePressed);
     p5canvas.touchEnded(cmouseReleased);
     p5canvas.touchMoved(cmouseDragged);
-    disable_scroll();
+    // disable_scroll();
     is_pc = false;
   } else if (navigator.userAgent.indexOf('Safari') > 0 &&
     navigator.userAgent.indexOf('Chrome') == -1 &&
@@ -89,7 +89,7 @@ function setup() {
     p5canvas.touchStarted(cmousePressed);
     p5canvas.touchEnded(cmouseReleased);
     p5canvas.touchMoved(cmouseDragged);
-    disable_scroll();
+    // disable_scroll();
     is_pc = false;
   } else {
     p5canvas.mousePressed(cmousePressed);
@@ -556,30 +556,31 @@ function markingTexture() {
 }
 
 function cmousePressed() {
-  if (!is_pc) {
-    disable_scroll();
-  }
+  // if (!is_pc) {
+  //   disable_scroll();
+  // }
   showText = false;
   console.log(w);
 }
 
 function cmouseReleased() {
-  if (!is_pc) {
-    disable_scroll();
-  }
+  // if (!is_pc) {
+  //   disable_scroll();
+  // }
   showText = true;
   console.log(w);
 }
 
 //ボックスの移動
 function cmouseDragged() {
-  if (!is_pc) {
-    disable_scroll();
-  }
+  // if (!is_pc) {
+  //   disable_scroll();
+  // }
 
   if (mouseIsPressed) {
     let mouseRange = w / 50;
     for (let i = 0; i < boxPoint; i++) {
+      disable_scroll();
       if (i == 0 || i == 4 || i == 8) {
         boxMiddlePos[i] = new pointBoxMiddle(i, i + 2);
         let boxPosDist = dist(boxMiddlePos[i].x, boxMiddlePos[i].y, mouseX, mouseY);
@@ -985,9 +986,9 @@ function scroll_control(event) {
 
 // タッチスクロール関連メソッド
 function touch_scroll_control(event) {
-  if (event.touches.length > 1) {
-    // 2本以上の指での操作はピンチズームとして許可
-    return;
-  }
+  // if (event.touches.length > 1) {
+  //   // 2本以上の指での操作はピンチズームとして許可
+  //   return;
+  // }
   event.preventDefault();
 }
