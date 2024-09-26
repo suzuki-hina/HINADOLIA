@@ -581,7 +581,7 @@ function cmouseDragged() {
     let mouseRange = w / 50;
     for (let i = 0; i < boxPoint; i++) {
       disable_scroll();
-      console.log("disable_scroll");
+      console.log("disable_scrolllllll");
       if (i == 0 || i == 4 || i == 8) {
         boxMiddlePos[i] = new pointBoxMiddle(i, i + 2);
         let boxPosDist = dist(boxMiddlePos[i].x, boxMiddlePos[i].y, mouseX, mouseY);
