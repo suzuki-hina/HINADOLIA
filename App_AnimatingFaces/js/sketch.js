@@ -431,8 +431,8 @@ function drawTexture() {
   vertex(0, h, 0, 1);
   endShape(CLOSE);
 
-  strokeWeight(2);
-  stroke(255);
+  // strokeWeight(2);
+  // stroke(255);
 
   //テクスチャの描画(伸びるところ)
   for (let i = 0; i < boxPoint; i++) {
