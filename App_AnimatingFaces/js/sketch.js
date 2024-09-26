@@ -147,6 +147,7 @@ function draw() {
 var element_webcam = document.getElementById('webcam');
 var element_canvas = document.getElementById('canvas');
 var fileInput = document.getElementById('inputButton');
+var howToUse = document.getElementById('howToUseButton');
 var element_return = document.getElementById('returnButton');
 var element_main = document.getElementById('mainButton');
 
@@ -212,6 +213,7 @@ function stateButton() {
   if (state === STATE_SERECT) {
     element_webcam.style.opacity = '1';
     fileInput.style.display = 'inline';
+    howToUse.style.display = 'none';
     stateMessage = "写真を選択して下さい。";
     stateMessageEn = "Please select the photo you would like to use.";
     stateMainButtonText = "Next";
@@ -219,11 +221,13 @@ function stateButton() {
   } else if (state === STATE_LINE) {
     element_webcam.style.opacity = '0';
     fileInput.style.display = 'none';
-    stateMessage = "目と口に合わせて白枠を動かしてください。";
-    stateMessageEn = "Move the white frame to match the eyes and mouth.";
+    howToUse.style.display = 'inline';
+    stateMessage = "目と口の設定をしてください。";
+    stateMessageEn = "Please set the eyes and mouth.";
     stateMainButtonText = "Next";
     buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="-4 2 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg>`;
   } else if (state === STATE_MOVE) {
+    howToUse.style.display = 'none';
     stateMessage = "顔を動かしてみましょう😄";
     stateMessageEn = "Let's move your face😄";
     stateMainButtonText = "Recording";
@@ -246,7 +250,6 @@ function mainButtonPressed() {
   adjustCanvas();
 
   if (state == 0) {
-    boxSetting();
     if (fileInput.files.length > 0) {
       state++;
       stateButton();
@@ -256,9 +259,10 @@ function mainButtonPressed() {
       for (const alert of existingAlerts) {
         alert.remove();
       }
-    } else if (fileInput.files.length == 0) {
+    } else if (fileInput.files.length <= 0) {
       displayFileNotSelectedAlert();
     }
+    boxSetting();
   } else if (state == 1) {
     state++;
     stateButton();
