@@ -580,8 +580,6 @@ function cmouseDragged() {
   if (mouseIsPressed) {
     let mouseRange = w / 50;
     for (let i = 0; i < boxPoint; i++) {
-      disable_scroll();
-      console.log("disable_scrolllllll");
       if (i == 0 || i == 4 || i == 8) {
         boxMiddlePos[i] = new pointBoxMiddle(i, i + 2);
         let boxPosDist = dist(boxMiddlePos[i].x, boxMiddlePos[i].y, mouseX, mouseY);
@@ -599,6 +597,9 @@ function cmouseDragged() {
         let strech_y2;
 
         if (boxPosDist < mouseRange) {
+          disable_scroll();
+          console.log("disable_scroll_1");
+
           box_x1 = mouseX - (boxMiddlePos[i].x - pB[i].x);
           box_x2 = mouseX + (pB[i + 2].x - boxMiddlePos[i].x);
           box_y1 = mouseY - (boxMiddlePos[i].y - pB[i].y);
@@ -620,6 +621,9 @@ function cmouseDragged() {
           pS[i + 3] = new pointBox(strech_x1, strech_y2);
 
         } else if (boxSizeDist < mouseRange) {
+          disable_scroll();
+          console.log("disable_scroll_2");
+
           let newPB2_x = mouseX;
           let newPB2_y = mouseY;
           if (newPB2_x > pB[i].x && newPB2_x > pB[i + 3].x && newPB2_x < pS[i + 2].x &&
@@ -634,6 +638,9 @@ function cmouseDragged() {
             pB[i + 3].y = newPB2_y;
           }
         } else if (strechSizeDist < mouseRange) {
+          disable_scroll();
+          console.log("disable_scroll_3");
+
           let newPS2_x = mouseX;
           let newPS2_y = mouseY;
           if (newPS2_x > pS[i].x && newPS2_x > pS[i + 3].x && newPS2_x > pB[i + 2].x &&
