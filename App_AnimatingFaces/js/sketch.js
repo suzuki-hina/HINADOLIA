@@ -185,10 +185,10 @@ function adjustCanvas() {
       console.log("Recording size:", blob.size, "Context:", context);
       recordingBlob = blob; // 録画データを保存
 
-      // PCの場合は録画データをダウンロード
-      if (is_pc) {
-        next();
-      }
+      // // PCの場合は録画データをダウンロード
+      // if (is_pc) {
+      //   next();
+      // }
     },
   });
 
@@ -1032,7 +1032,6 @@ function enable_scroll() {
   // スマホでのタッチ操作でのスクロール禁止解除
   document.removeEventListener('touchmove', scroll_control, { passive: false });
 }
-
 // スクロール関連メソッド
 function scroll_control(event) {
   event.preventDefault();
