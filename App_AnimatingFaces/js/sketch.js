@@ -48,6 +48,10 @@ let is_pc;
 let myFont;
 let showText = true;
 
+//録画データ
+let recordingBlob;
+let recordingPC;
+
 //フォントの読み込み
 function preload() {
   myFont = loadFont('../images/NotoSans.ttf');
@@ -176,7 +180,16 @@ function adjustCanvas() {
     quality: 0.8,
     width: Math.floor(w / 2) * 2,
     height: Math.floor(h / 2) * 2,
-    disableUi: true
+    disableUi: true,
+    beforeDownload(blob, context, next) {
+      console.log("Recording size:", blob.size, "Context:", context);
+      recordingBlob = blob; // 録画データを保存
+
+      // PCの場合は録画データをダウンロード
+      if (is_pc) {
+        next();
+      }
+    },
   });
 
 }
@@ -281,6 +294,7 @@ function mainButtonPressed() {
     if (capture.state !== "idle") {
       capture.stop();
       console.log("Recording stopped");
+      shareRecording(recordingBlob);
     }
     state = 2;
     stateButton();
@@ -580,7 +594,7 @@ function cmouseDragged() {
   // }
 
   if (mouseIsPressed) {
-    let mouseRange = w / 50;
+    let mouseRange = w / 40;
     for (let i = 0; i < boxPoint; i++) {
       if (i == 0 || i == 4 || i == 8) {
         boxMiddlePos[i] = new pointBoxMiddle(i, i + 2);
@@ -985,32 +999,41 @@ class intersection {
   }
 }
 
+// PC以外の場合のシェアボタン
+function shareRecording(blob) {
+  const file = new File([blob], "hinadolia.mp4", {
+    type: "video/mp4",
+  });
+  const filesArray = [file];
+
+  if (navigator.share) {
+    navigator.share({
+      title: 'p5.js Recording',
+      files: filesArray
+    })
+      .then(() => console.log('Share was successful.'))
+      .catch((error) => console.log('Sharing failed', error));
+  } else {
+    alert(`Your system doesn't support sharing files.`);
+  }
+}
 
 // スクロール禁止
 function disable_scroll() {
   // PCでのスクロール禁止
   document.addEventListener("mousewheel", scroll_control, { passive: false });
   // スマホでのタッチ操作でのスクロール禁止
-  document.addEventListener("touchmove", touch_scroll_control, { passive: false });
+  document.addEventListener("touchmove", scroll_control, { passive: false });
 }
 // スクロール禁止解除
 function enable_scroll() {
   // PCでのスクロール禁止解除
   document.removeEventListener("mousewheel", scroll_control, { passive: false });
   // スマホでのタッチ操作でのスクロール禁止解除
-  document.removeEventListener('touchmove', touch_scroll_control, { passive: false });
+  document.removeEventListener('touchmove', scroll_control, { passive: false });
 }
 
 // スクロール関連メソッド
 function scroll_control(event) {
-  event.preventDefault();
-}
-
-// タッチスクロール関連メソッド
-function touch_scroll_control(event) {
-  // if (event.touches.length > 1) {
-  //   // 2本以上の指での操作はピンチズームとして許可
-  //   return;
-  // }
   event.preventDefault();
 }
