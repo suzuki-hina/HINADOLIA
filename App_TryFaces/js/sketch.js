@@ -155,17 +155,6 @@ function adjustCanvas() {
 
   resizeCanvas(w, h, WEBGL);
   translate(-width / 2, -height / 2);
-
-  // P5Captureの設定を更新
-  P5Capture.setDefaultOptions({
-    format: "mp4",
-    framerate: 30,
-    quality: 0.8,
-    width: Math.floor(w / 2) * 2,
-    height: Math.floor(h / 2) * 2,
-    disableUi: true
-  });
-
 }
 
 //ボタンの処理
