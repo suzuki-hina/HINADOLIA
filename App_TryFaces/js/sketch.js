@@ -205,7 +205,7 @@ function mainButtonPressed() {
     state++;
     stateButton();
   } else if (state == 1) {
-    adjustCanvas();
+    recording();
     if (capture.state === "idle") {
       capture.start();
       console.log("Recording started");
@@ -772,6 +772,43 @@ class intersection {
   }
 }
 
+// 録画の設定
+function recording() {
+  // P5Captureの設定を更新
+  P5Capture.setDefaultOptions({
+    format: "mp4",
+    framerate: 30,
+    quality: 0.8,
+    width: Math.floor(w / 2) * 2,
+    height: Math.floor(h / 2) * 2,
+    disableUi: true,
+    beforeDownload(blob, context, next) {
+      console.log("Recording size:", blob.size, "Context:", context);
+      recordingBlob = blob; // 録画データを保存
+      const file = new File([blob], "hinadolia.mp4", {
+        type: "video/mp4",
+      });
+      const filesArray = [file];
+
+      if (is_pc) {
+        // PCの場合は録画データをダウンロード
+        next();
+      } else {
+        // スマホの場合は録画データを共有
+        if (navigator.share) {
+          navigator.share({
+            title: 'p5.js Recording',
+            files: filesArray
+          })
+            .then(() => console.log('Share was successful.'))
+            .catch((error) => console.log('Sharing failed', error));
+        } else {
+          alert(`Your system doesn't support sharing files.`);
+        }
+      }
+    },
+  });
+}
 
 // スクロール禁止
 function disable_scroll() {
