@@ -214,7 +214,10 @@ function mainButtonPressed() {
 
 //リターンボタンの処理
 function returnButtonPressed() {
-  if (0 < state && state <= 1) {
+  if (state == 0) {
+    window.location.href = "../index.html";
+  }
+  else if (0 < state && state <= 1) {
     state--;
     stateButton();
   } else if (state == 2) {

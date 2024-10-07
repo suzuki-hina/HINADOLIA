@@ -311,7 +311,9 @@ function displayFileNotSelectedAlert() {
 
 //リターンボタンの処理
 function returnButtonPressed() {
-  if (0 < state && state <= 2) {
+  if (state == 0) {
+    window.location.href = "../index.html";
+  } else if (0 < state && state <= 2) {
     state--;
     stateButton();
   } else if (state == 3) {
