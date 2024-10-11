@@ -985,8 +985,8 @@ function recording() {
   // P5Captureの設定を更新
   P5Capture.setDefaultOptions({
     format: "mp4",
-    framerate: 30,
-    quality: 0.8,
+    framerate: 60,
+    quality: 1.0,
     width: Math.floor(w / 2) * 2,
     height: Math.floor(h / 2) * 2,
     disableUi: true,
