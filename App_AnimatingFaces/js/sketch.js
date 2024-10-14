@@ -987,8 +987,10 @@ function recording() {
     format: "mp4",
     framerate: 60,
     quality: 1.0,
-    width: Math.floor(w / 2) * 2,
-    height: Math.floor(h / 2) * 2,
+    // width: Math.floor(w / 2) * 2,
+    // height: Math.floor(h / 2) * 2,
+    width: 720,
+    height: Math.floor(720 * h / w),
     disableUi: true,
     beforeDownload(blob, context, next) {
       console.log("Recording size:", blob.size, "Context:", context);
