@@ -985,12 +985,11 @@ function recording() {
   // P5Captureの設定を更新
   P5Capture.setDefaultOptions({
     format: "mp4",
-    framerate: 60,
-    quality: 1.0,
+    framerate: 30,
     // width: Math.floor(w / 2) * 2,
     // height: Math.floor(h / 2) * 2,
-    width: 720,
-    height: Math.floor(720 * h / w),
+    width: 480,
+    height: Math.floor(480 * h / w),
     disableUi: true,
     beforeDownload(blob, context, next) {
       console.log("Recording size:", blob.size, "Context:", context);
