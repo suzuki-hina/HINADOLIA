@@ -989,7 +989,7 @@ function recording() {
     // width: Math.floor(w / 2) * 2,
     // height: Math.floor(h / 2) * 2,
     width: 480,
-    height: Math.floor(480 * h / w),
+    height: Math.floor(480 * h / w / 2) * 2,
     disableUi: true,
     beforeDownload(blob, context, next) {
       console.log("Recording size:", blob.size, "Context:", context);
