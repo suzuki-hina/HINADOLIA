@@ -1006,7 +1006,7 @@ function recording() {
         // スマホの場合は録画データを共有
         if (navigator.share) {
           navigator.share({
-            title: '#hinadolia',
+            title: '',
             files: filesArray
           })
             .then(() => console.log('Share was successful.'))
