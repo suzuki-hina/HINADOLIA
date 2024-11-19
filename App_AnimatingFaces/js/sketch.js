@@ -7,7 +7,6 @@ const STATE_RECORDING = 3;
 // シーンの状態
 let state = STATE_SERECT;
 let stateMessage;
-let stateMessageEn;
 let stateMainButtonText;
 let buttonIconHTML;
 let fileName;
@@ -209,32 +208,27 @@ function stateButton() {
     element_webcam.style.opacity = '1';
     fileInput.style.display = 'inline';
     howToUse.style.display = 'none';
-    stateMessage = "写真を選択して下さい。選択したら、Nextを押してください。";
-    stateMessageEn = "Please select the photo you would like to use. After selecting, press the Next.";
+    stateMessage = "Please select the photo you would like to use. After selecting, press the Next.";
     stateMainButtonText = "Next";
     buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="-4 2 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/> </svg>`;
   } else if (state === STATE_LINE) {
     element_webcam.style.opacity = '0';
     fileInput.style.display = 'none';
     howToUse.style.display = 'inline';
-    stateMessage = "目と口の設定をし、Nextボタンを押してください。";
-    stateMessageEn = "Please set the eyes and mouth, and press the Next button.";
+    stateMessage = "Please set the eyes and mouth, and press the Next button.";
     stateMainButtonText = "Next";
     buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="-4 2 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg>`;
   } else if (state === STATE_MOVE) {
     howToUse.style.display = 'none';
-    stateMessage = "顔を動かしてみましょう😄";
-    stateMessageEn = "Let's move your face😄";
+    stateMessage = "Let's move your face😄";
     stateMainButtonText = "Recording";
     buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/></svg>`;
   } else if (state === STATE_RECORDING) {
-    stateMessage = "録画中です。";
-    stateMessageEn = "Recording...";
+    stateMessage = "Recording...";
     stateMainButtonText = "Stop";
     buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stop-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5z"/></svg>`;
   }
   document.getElementById("mainMessage").innerHTML = stateMessage;
-  document.getElementById("mainMessageEn").innerHTML = stateMessageEn;
   document.getElementById("mainButtonText").textContent = stateMainButtonText;
   document.getElementById("buttonIcon").innerHTML = buttonIconHTML;
 }
@@ -306,7 +300,7 @@ function displayFileNotSelectedAlert() {
     alert.remove();
   }
   // アラートメッセージを表示する関数を呼び出し
-  appendAlert('ファイルを選択して下さい。 Please select a file.', 'warning');
+  appendAlert('Please select a file.', 'warning');
 }
 
 //リターンボタンの処理
