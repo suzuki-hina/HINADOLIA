@@ -66,6 +66,7 @@ function setup() {
   p5canvas.parent('#canvas');
   textFont(myFont);
   frameRate(60);
+  pixelDensity(1);
 
   //機種による処理
   if (navigator.userAgent.indexOf('iPhone') > 0 ||
@@ -496,13 +497,6 @@ function markingTexture() {
       vertex(pB[i + 1].x, pB[i + 1].y);
       vertex(pB[i + 2].x, pB[i + 2].y);
       vertex(pB[i + 3].x, pB[i + 3].y);
-      endShape(CLOSE);
-
-      beginShape();
-      vertex(10, 10);
-      vertex(50, 10);
-      vertex(50, 50);
-      vertex(10, 50);
       endShape(CLOSE);
 
       //ボックスの点の描画の設定
