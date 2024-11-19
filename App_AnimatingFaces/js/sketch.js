@@ -167,7 +167,6 @@ function adjustCanvas() {
     h = w * uploadedImage.height / uploadedImage.width;
     W = width;
     H = width * uploadedImage.height / uploadedImage.width;
-    console.log("w:" + w + "h:" + h);
   }
 
   resizeCanvas(w, h, WEBGL);
@@ -499,17 +498,24 @@ function markingTexture() {
       vertex(pB[i + 3].x, pB[i + 3].y);
       endShape(CLOSE);
 
+      beginShape();
+      vertex(10, 10);
+      vertex(50, 10);
+      vertex(50, 50);
+      vertex(10, 50);
+      endShape(CLOSE);
+
       //ボックスの点の描画の設定
       noStroke();
       fill(255);
       let boxPointSize = w / 50;
 
-      // //ボックスの移動用の点の描画
-      // ellipse(pB[i + 2].x, pB[i + 2].y, boxPointSize, boxPointSize);
+      //ボックスの移動用の点の描画
+      ellipse(pB[i + 2].x, pB[i + 2].y, boxPointSize, boxPointSize);
 
-      // //ボックスの中心点の描画
-      // let leftEyeBoxMiddlePos = new pointBoxMiddle(i, i + 2);
-      // ellipse(leftEyeBoxMiddlePos.x, leftEyeBoxMiddlePos.y, boxPointSize, boxPointSize);
+      //ボックスの中心点の描画
+      let leftEyeBoxMiddlePos = new pointBoxMiddle(i, i + 2);
+      ellipse(leftEyeBoxMiddlePos.x, leftEyeBoxMiddlePos.y, boxPointSize, boxPointSize);
 
       //伸びの線の描画の設定
       strokeWeight(2);
@@ -524,10 +530,10 @@ function markingTexture() {
       vertex(pS[i + 3].x, pS[i + 3].y);
       endShape(CLOSE);
 
-      // //伸びの線の移動用の点の描画
-      // noStroke();
-      // fill(255);
-      // ellipse(pS[i + 2].x, pS[i + 2].y, boxPointSize, boxPointSize);
+      //伸びの線の移動用の点の描画
+      noStroke();
+      fill(255);
+      ellipse(pS[i + 2].x, pS[i + 2].y, boxPointSize, boxPointSize);
 
 
       if (showText) {
