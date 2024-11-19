@@ -66,7 +66,6 @@ function setup() {
   p5canvas.parent('#canvas');
   textFont(myFont);
   frameRate(60);
-  pixelDensity(1);
 
   //機種による処理
   if (navigator.userAgent.indexOf('iPhone') > 0 ||
@@ -489,7 +488,8 @@ function markingTexture() {
       //ボックスの線の描画の設定
       strokeWeight(3);
       stroke(255);
-      noFill();
+      // noFill();
+      fill(255);
 
       //ボックスの線の描画
       beginShape();
