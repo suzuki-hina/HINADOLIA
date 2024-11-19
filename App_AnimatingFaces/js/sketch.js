@@ -488,8 +488,7 @@ function markingTexture() {
       //ボックスの線の描画の設定
       strokeWeight(3);
       stroke(255);
-      // noFill();
-      fill(255);
+      noFill();
 
       //ボックスの線の描画
       beginShape();
