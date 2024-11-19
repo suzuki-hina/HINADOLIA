@@ -167,6 +167,7 @@ function adjustCanvas() {
     h = w * uploadedImage.height / uploadedImage.width;
     W = width;
     H = width * uploadedImage.height / uploadedImage.width;
+    console.log("w:" + w + "h:" + h);
   }
 
   resizeCanvas(w, h, WEBGL);
@@ -540,13 +541,6 @@ function markingTexture() {
         text("Range", pS[4].x, pS[4].y);
         text("Range", pS[8].x, pS[8].y);
       }
-
-      fill(255);
-      textSize(20);
-      text("Debug", 10, 30);
-
-      console.log(pB[0], pB[4], pB[8]);
-      console.log(pS[0], pS[4], pS[8]);
     }
   }
 
