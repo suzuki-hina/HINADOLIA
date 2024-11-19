@@ -187,6 +187,20 @@ function previewFile(file) {
     uploadedImage = loadImage(imageUrl, () => {
       isImageLoaded = true;
       console.log("Image loaded successfully.");
+
+      // リサイズ処理: 画像の最大幅・最大高さを設定
+      let maxWidth = 3000; // 最大幅を設定
+      let maxHeight = 3000; // 最大高さを設定
+
+      let imgWidth = uploadedImage.width;
+      let imgHeight = uploadedImage.height;
+
+      // 画像の比率を保ちながら最大サイズに収める
+      let ratio = Math.min(maxWidth / imgWidth, maxHeight / imgHeight);
+      let newWidth = imgWidth * ratio;
+      let newHeight = imgHeight * ratio;
+
+      uploadedImage.resize(newWidth, newHeight);  // 画像をリサイズ
     });
   };
   // いざファイルを読み込む
