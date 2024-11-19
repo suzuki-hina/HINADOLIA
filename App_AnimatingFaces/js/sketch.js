@@ -440,8 +440,8 @@ function drawTexture() {
   vertex(0, h, 0, 1);
   endShape(CLOSE);
 
-  // strokeWeight(2);
-  // stroke(255);
+  strokeWeight(2);
+  stroke(255);
 
   //テクスチャの描画(伸びるところ)
   for (let i = 0; i < boxPoint; i++) {
@@ -468,34 +468,65 @@ function drawTexture() {
 
   //テクスチャの描画(伸びないところ)
   for (let i = 0; i < boxPoint; i++) {
-    if (i == 0 || i == 4 || i == 8) {
-      intersectionPoint = new intersection(pP[i].x, pP[i].y, pP[i + 2].x, pP[i + 2].y, pP[i + 1].x, pP[i + 1].y, pP[i + 3].x, pP[i + 3].y);
+
+    //目の部分
+    if (i == 0 || i == 4) {
+      intersectionPointEye = new intersection(pP[i].x, pP[i].y, pP[i + 2].x, pP[i + 2].y, pP[i + 1].x, pP[i + 1].y, pP[i + 3].x, pP[i + 3].y);
       intersectionTexture = new intersection(uF[i], vF[i], uF[i + 2], vF[i + 2], uF[i + 1], vF[i + 1], uF[i + 3], vF[i + 3]);
       beginShape(TRIANGLE_STRIP);
       vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
-      vertex(intersectionPoint.x, intersectionPoint.y, intersectionTexture.x, intersectionTexture.y);
+      vertex(intersectionPointEye.x, intersectionPointEye.y, intersectionTexture.x, intersectionTexture.y);
       vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
       endShape(CLOSE);
-    }
-    if (i == 1 || i == 5 || i == 9) {
+    } else if (i == 1 || i == 5) {
       beginShape(TRIANGLE_STRIP);
       vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
-      vertex(intersectionPoint.x, intersectionPoint.y, intersectionTexture.x, intersectionTexture.y);
+      vertex(intersectionPointEye.x, intersectionPointEye.y, intersectionTexture.x, intersectionTexture.y);
       vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
       endShape(CLOSE);
-    } else if (i == 2 || i == 6 || i == 10) {
+    } else if (i == 2 || i == 6) {
       beginShape(TRIANGLE_STRIP);
       vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
-      vertex(intersectionPoint.x, intersectionPoint.y, intersectionTexture.x, intersectionTexture.y);
+      vertex(intersectionPointEye.x, intersectionPointEye.y, intersectionTexture.x, intersectionTexture.y);
       vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
       endShape(CLOSE);
-    } else if (i == 3 || i == 7 || i == 11) {
+    } else if (i == 3 || i == 7) {
       beginShape(TRIANGLE_STRIP);
       vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
-      vertex(intersectionPoint.x, intersectionPoint.y, intersectionTexture.x, intersectionTexture.y);
+      vertex(intersectionPointEye.x, intersectionPointEye.y, intersectionTexture.x, intersectionTexture.y);
       vertex(pP[i - 3].x, pP[i - 3].y, uF[i - 3], vF[i - 3]);
       endShape(CLOSE);
     }
+
+    //口の部分
+    if (i == 8) {
+      intersectionPointMouth = new intersection(pF[i].x, pF[i].y, pF[i + 2].x, pF[i + 2].y, pF[i + 1].x, pF[i + 1].y, pF[i + 3].x, pF[i + 3].y);
+      intersectionTexture = new intersection(uF[i], vF[i], uF[i + 2], vF[i + 2], uF[i + 1], vF[i + 1], uF[i + 3], vF[i + 3]);
+      beginShape(TRIANGLE_STRIP);
+      vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
+      vertex(intersectionPointMouth.x, intersectionPointMouth.y, intersectionTexture.x, intersectionTexture.y);
+      vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
+      endShape(CLOSE);
+    } else if (i == 9) {
+      beginShape(TRIANGLE_STRIP);
+      vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
+      vertex(intersectionPointMouth.x, intersectionPointMouth.y, intersectionTexture.x, intersectionTexture.y);
+      vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
+      endShape(CLOSE);
+    } else if (i == 10) {
+      beginShape(TRIANGLE_STRIP);
+      vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
+      vertex(intersectionPointMouth.x, intersectionPointMouth.y, intersectionTexture.x, intersectionTexture.y);
+      vertex(pP[i + 1].x, pP[i + 1].y, uF[i + 1], vF[i + 1]);
+      endShape(CLOSE);
+    } else if (i == 11) {
+      beginShape(TRIANGLE_STRIP);
+      vertex(pP[i].x, pP[i].y, uF[i], vF[i]);
+      vertex(intersectionPointMouth.x, intersectionPointMouth.y, intersectionTexture.x, intersectionTexture.y);
+      vertex(pP[i - 3].x, pP[i - 3].y, uF[i - 3], vF[i - 3]);
+      endShape(CLOSE);
+    }
+
   }
 }
 
