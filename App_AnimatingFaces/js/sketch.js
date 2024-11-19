@@ -503,12 +503,12 @@ function markingTexture() {
       fill(255);
       let boxPointSize = w / 50;
 
-      //ボックスの移動用の点の描画
-      ellipse(pB[i + 2].x, pB[i + 2].y, boxPointSize, boxPointSize);
+      // //ボックスの移動用の点の描画
+      // ellipse(pB[i + 2].x, pB[i + 2].y, boxPointSize, boxPointSize);
 
-      //ボックスの中心点の描画
-      let leftEyeBoxMiddlePos = new pointBoxMiddle(i, i + 2);
-      ellipse(leftEyeBoxMiddlePos.x, leftEyeBoxMiddlePos.y, boxPointSize, boxPointSize);
+      // //ボックスの中心点の描画
+      // let leftEyeBoxMiddlePos = new pointBoxMiddle(i, i + 2);
+      // ellipse(leftEyeBoxMiddlePos.x, leftEyeBoxMiddlePos.y, boxPointSize, boxPointSize);
 
       //伸びの線の描画の設定
       strokeWeight(2);
@@ -523,10 +523,10 @@ function markingTexture() {
       vertex(pS[i + 3].x, pS[i + 3].y);
       endShape(CLOSE);
 
-      //伸びの線の移動用の点の描画
-      noStroke();
-      fill(255);
-      ellipse(pS[i + 2].x, pS[i + 2].y, boxPointSize, boxPointSize);
+      // //伸びの線の移動用の点の描画
+      // noStroke();
+      // fill(255);
+      // ellipse(pS[i + 2].x, pS[i + 2].y, boxPointSize, boxPointSize);
 
 
       if (showText) {
@@ -540,6 +540,13 @@ function markingTexture() {
         text("Range", pS[4].x, pS[4].y);
         text("Range", pS[8].x, pS[8].y);
       }
+
+      fill(255);
+      textSize(20);
+      text("Debug", 10, 30);
+
+      console.log(pB[0], pB[4], pB[8]);
+      console.log(pS[0], pS[4], pS[8]);
     }
   }
 
