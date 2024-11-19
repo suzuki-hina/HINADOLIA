@@ -13,6 +13,7 @@ let fileName;
 
 //テクスチャ
 let uploadedImage;
+let isImageLoaded = false;
 let w;
 let h;
 let W;
@@ -181,8 +182,13 @@ function previewFile(file) {
   // ファイルが読み込まれたときに実行する
   reader.onload = function (e) {
     imageUrl = e.target.result; // 画像のURLはevent.target.resultで呼び出せる
-    uploadedImage = loadImage(imageUrl);
-  }
+
+    // 画像をロードし、完了時にフラグをtrueにする
+    uploadedImage = loadImage(imageUrl, () => {
+      isImageLoaded = true;
+      console.log("Image loaded successfully.");
+    });
+  };
   // いざファイルを読み込む
   reader.readAsDataURL(file);
 }
