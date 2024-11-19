@@ -440,8 +440,8 @@ function drawTexture() {
   vertex(0, h, 0, 1);
   endShape(CLOSE);
 
-  strokeWeight(2);
-  stroke(255);
+  // strokeWeight(2);
+  // stroke(255);
 
   //テクスチャの描画(伸びるところ)
   for (let i = 0; i < boxPoint; i++) {
@@ -536,7 +536,7 @@ function markingTexture() {
     pB[i] = new pointBox(pB[i].x, pB[i].y);
     pS[i] = new pointStrech(pS[i].x, pS[i].y);
     if (i == 0 || i == 4 || i == 8) {
-      //ボックスの線の描画の設定
+      //線の描画の設定
       strokeWeight(3);
       stroke(255);
       noFill();
@@ -549,9 +549,20 @@ function markingTexture() {
       vertex(pB[i + 3].x, pB[i + 3].y);
       endShape(CLOSE);
 
-      //ボックスの点の描画の設定
+      //伸びの線の描画
+      beginShape();
+      vertex(pS[i].x, pS[i].y);
+      vertex(pS[i + 1].x, pS[i + 1].y);
+      vertex(pS[i + 2].x, pS[i + 2].y);
+      vertex(pS[i + 3].x, pS[i + 3].y);
+      endShape(CLOSE);
+
+
+      //点と文字の描画の設定
       noStroke();
       fill(255);
+
+      //ボックスの点のサイズ
       let boxPointSize = w / 50;
 
       //ボックスの移動用の点の描画
@@ -561,24 +572,8 @@ function markingTexture() {
       let leftEyeBoxMiddlePos = new pointBoxMiddle(i, i + 2);
       ellipse(leftEyeBoxMiddlePos.x, leftEyeBoxMiddlePos.y, boxPointSize, boxPointSize);
 
-      //伸びの線の描画の設定
-      strokeWeight(2);
-      stroke(255);
-      noFill();
-
-      //伸びの線の描画
-      beginShape();
-      vertex(pS[i].x, pS[i].y);
-      vertex(pS[i + 1].x, pS[i + 1].y);
-      vertex(pS[i + 2].x, pS[i + 2].y);
-      vertex(pS[i + 3].x, pS[i + 3].y);
-      endShape(CLOSE);
-
       //伸びの線の移動用の点の描画
-      noStroke();
-      fill(255);
       ellipse(pS[i + 2].x, pS[i + 2].y, boxPointSize, boxPointSize);
-
 
       if (showText) {
         fill(255);
