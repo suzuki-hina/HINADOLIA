@@ -537,7 +537,7 @@ function markingTexture() {
     pS[i] = new pointStrech(pS[i].x, pS[i].y);
     if (i == 0 || i == 4 || i == 8) {
       //線の描画の設定
-      strokeWeight(10);
+      strokeWeight(3);
       stroke(255);
       noFill();
 
