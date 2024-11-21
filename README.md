@@ -1,2 +1,25 @@
-# HINADOLIA_MobileWebApp
+<p align="center">
+  <img src="./icon/favicon-192.png" width="25%"/>
+</p>
+
+# HINADOLIA
+HINADOLIA is an application that allows you to animate pictures of faces visible through the pareidolia phenomenon to match your own facial expressions.
+
+# Compatibility
+* [x] macOS:Chrome,Safari
+* [x] iOS:Chrome,Safari
+* [x] Android:Chrome
+This app may not work due to heavy processing🙇‍♂️
+
+# Desktop Application
+When using HINADOLIA, please allow the camera to be used.
+ * https://suzuki-hina.github.io/HINADOLIA/public/app/animating/index.html
+
+1. Please select the photo you would like to use. After selecting, press the Next.
+2. Please set the eyes and mouth, and press the Next button.
+3. Let's move your face😄
+
+# Author
+  * Hina Suzuki
+    * Tokyo Metropolitan University
  
