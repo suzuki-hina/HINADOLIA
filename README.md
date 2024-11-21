@@ -22,4 +22,3 @@ When using HINADOLIA, please allow the camera to be used.
 # Author
   * Hina Suzuki
     * Tokyo Metropolitan University
- 
