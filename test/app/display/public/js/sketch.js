@@ -1,5 +1,5 @@
 let videoGrid = []; // 動画を管理する配列
-let rows = 1; // 縦に並べる動画の数
+let rows = 3; // 縦に並べる動画の数
 let cols = 3; // 横に並べる動画の数
 let videoSize = 200; // 動画のサイズ（500x500）
 let maxVideos = rows * cols; // 表示できる最大の動画数
