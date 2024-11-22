@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>HINADOLIA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="../vi/style.css">
+
+    <!-- For old IEs -->
+    <link rel="shortcut icon" href="../icon/favicon.ico" />
+    <!-- For new browsers - multisize ico  -->
+    <link rel="icon" type="image/x-icon" sizes="16x16 32x32" href="../icon/favicon.ico">
+    <!-- For iPad with high-resolution Retina display running iOS ≥ 7: -->
+    <link rel="apple-touch-icon" sizes="152x152" href="../icon/favicon-152-precomposed.png">
+    <!-- For iPad with high-resolution Retina display running iOS ≤ 6: -->
+    <link rel="apple-touch-icon" sizes="144x144" href="../icon/favicon-144-precomposed.png">
+    <!-- For iPhone with high-resolution Retina display running iOS ≥ 7: -->
+    <link rel="apple-touch-icon" sizes="120x120" href="../icon/favicon-120-precomposed.png">
+    <!-- For iPhone with high-resolution Retina display running iOS ≤ 6: -->
+    <link rel="apple-touch-icon" sizes="114x114" href="../icon/favicon-114-precomposed.png">
+    <!-- For iPhone 6+ -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../icon/favicon-180-precomposed.png">
+    <!-- For first- and second-generation iPad: -->
+    <link rel="apple-touch-icon" sizes="72x72" href="../icon/favicon-72-precomposed.png">
+    <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+    <link rel="apple-touch-icon" sizes="57x57" href="../icon/favicon-57.png">
+    <!-- For Old Chrome -->
+    <link rel="icon" sizes="32x32" href="../icon/favicon-32.png">
+    <!-- For IE10 Metro -->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="../icon/favicon-144.png">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Chrome for Android -->
+    <link rel="manifest" href="../icon/manifest.json">
+    <link rel="icon" sizes="192x192" href="../icon/favicon-192.png">
+
+    <style>
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            z-index: 9999;
+        }
+
+        #content {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ローディング画面 -->
+    <div id="loading">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- コンテンツ -->
+    <div id="content">
+
+        <!-- ヘッダー -->
+        <header data-bs-theme="dark">
+            <div class="navbar fixed-top bg-orange">
+                <div class="container">
+                    <a href="#" class="navbar-brand d-flex align-items-center">
+                        <img src="../vi/img/original.png" width="30" height="30" fill="none" aria-hidden="true"
+                            class="me-2">
+                        <strong>HINADOLIA</strong>
+                    </a>
+                    <a href="./app/animating/index.html"
+                        class="btn btn-sm btn-outline-light justify-content-md-end">Animating
+                        New Faces</a>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- 概要説明 -->
+            <section class="py-5 container">
+
+                <!-- HINADOLIAとは -->
+                <div class="row py-lg-3 text-center">
+                    <div class="col-lg-8 col-md-8 mx-auto">
+                        <img src="../vi/img/original.png" class="rounded mx-auto d-block mt-5 mb-4"
+                            alt="Responsive image" width="100rem" height="width">
+                        <h1 class="fs-orange m-4">HINADOLIA</h1>
+                        <p class="text-body-secondary">
+                            HINADOLIA is an application that allows you to animate pictures of faces visible through
+                            the
+                            pareidolia phenomenon to match your own facial expressions.
+                        </p>
+                    </div>
+                </div>
+
+
+                <!-- 使い方 -->
+                <div class="row py-lg-3 mt-5">
+                    <div class="col-lg-8 col-md-8 mx-auto">
+                        <div class="card">
+                            <img src="../vi/img/TryHINADOLIA.gif" class="card-img">
+                        </div>
+                        <p class="text-body-secondary mt-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-check-square" viewBox="0 0 20 20">
+                                <path
+                                    d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                <path
+                                    d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
+                            </svg>
+                            Please read the <a href="./policies_and_guidelines.html" class="href-orange">Policies
+                                and
+                                Guidelines</a> when using HINADOLIA.
+                            <br>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-check-square" viewBox="0 0 20 20">
+                                <path
+                                    d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                <path
+                                    d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
+                            </svg>
+                            Please allow the camera when using HINADOLIA.
+                            <br>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-check-square" viewBox="0 0 20 20">
+                                <path
+                                    d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                                <path
+                                    d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
+                            </svg>
+                            Please launch in Google Chrome or Safari.
+                        </p>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- コンテンツ -->
+            <div class="album py-5 bg-body-tertiary">
+                <div class="container">
+                    <h1 class="fs-orange mb-3">Contents</h1>
+
+                    <!-- アプリ -->
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <img src="../vi/img/AnimatingFaces.gif" class="bd-placeholder-img card-img-top">
+                            <div class="card-body">
+                                <p class="card-text">
+                                    You can animate the faces in your photos using HINADOLIA.
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-body-secondary">last modified : 2024/11/19</small>
+                                    <a href="./app/animating/index.html" class="btn btn-sm btn-orange m-2">START
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                            fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 18 18">
+                                            <path
+                                                d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
+                                        </svg></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col mt-4">
+                        <h5 class="fs-orange">SNS</h5>
+                        <p>
+                            As long as you follow the <a href="./policies_and_guidelines.html"
+                                class="href-orange">Policies and Guidelines</a>, you’re free to post videos made with
+                            HINADOLIA
+                            on social media. I’d be happy if you could use the hashtag <span
+                                style="color: #F25C05;">#hinadolia</span> when posting!
+                        </p>
+                    </div>
+
+                    <!-- フィードバック -->
+                    <div class="col mt-4 mb-5">
+                        <h5 class="fs-orange">Feedback</h5>
+                        <p>
+                            If you have any complaints, requests for improvement, or other
+                            opinions, encouragement, etc. about HINADOLIA, I would be happy if you could
+                            answer
+                            the questionnaire from the form below.
+                        </p>
+                        <a href="https://forms.gle/7g5HRmiqznMiy83i7" target="_blank" rel="noopener noreferrer"
+                            class="btn btn-sm btn-secondary m-2 float-end">Google Form
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-box-arrow-up-right" viewBox="0 0 21 21">
+                                <path fill-rule="evenodd"
+                                    d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
+                                <path fill-rule="evenodd"
+                                    d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
+                            </svg>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- 作者 -->
+            <div class="container py-5">
+                <div class="row align-items-center mb-3">
+
+                    <!-- Instagramのサムネ -->
+                    <div class="col">
+                        <div id="carouselExampleSlidesOnly" class="carousel slide carousel-fade"
+                            data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="../vi/img/original.png" class="rounded d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="../vi/img/original.png" class="rounded d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="../vi/img/original.png" class="rounded d-block w-100" alt="...">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- 作者の紹介 -->
+                    <div class="col">
+                        <h2 class="fs-orange mb-3">About Me</h2>
+                        <p class="text-body-secondary">
+                            Hina Suzuki created HINADOLIA. <br>
+                            I post videos made with HINADOLIA on Instagram!<br>
+                            Hope you’ll take a look and enjoy them 😊
+                        </p>
+                        <a href="https://www.instagram.com/hinadolia" class="btn btn-sm btn-orange float-end"
+                            target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                height="20" fill="currentColor" class="bi bi-instagram me-1" viewBox="0 0 20 20">
+                                <path
+                                    d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z" />
+                            </svg>Instagram
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- トップに戻るボタン -->
+            <div class="container py-5">
+                <a href="#" class="btn btn-sm btn-orange float-end">Back to top <svg xmlns="http://www.w3.org/2000/svg"
+                        width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle" viewBox="0 0 16 16">
+                        <path
+                            d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
+                    </svg></a>
+            </div>
+
+        </main>
+
+        <!-- フッター -->
+        <footer class="text-body-secondary py-5">
+            <section class="text-center container">
+                <p class="pt-3">
+                    <a href="https://www.instagram.com/hinadolia" class="btn btn-orange rounded-circle p-0 mx-2"
+                        target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg"
+                            style="width:3rem;height:3rem;" fill="currentColor" class="bi bi-instagram"
+                            viewBox="-5 -5 26 26">
+                            <path
+                                d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.x.com/hinadolia" class="btn btn-orange rounded-circle p-0 mx-2" target="_blank"
+                        rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg"
+                            style="width:3rem;height:3rem;" fill="currentColor" class="bi bi-twitter-x"
+                            viewBox="-6 -6 28 28">
+                            <path
+                                d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z" />
+                        </svg>
+                    </a>
+                    <a href="https://github.com/suzuki-hina/HINADOLIA" class="btn btn-orange rounded-circle p-0 mx-2"
+                        target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg"
+                            style="width:3rem;height:3rem;" fill="currentColor" class="bi bi-github"
+                            viewBox="-5 -5 26 26">
+                            <path
+                                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8" />
+                        </svg>
+                        </svg>
+                    </a>
+                </p>
+                <p class="pt-5 small">2024 © Hina Suzuki. All rights reserved.
+                    <a href="./policies_and_guidelines.html" class="href-orange">Policies and Guidelines</a>
+                </p>
+            </section>
+        </footer>
+    </div>
+
+    <!-- ローディング画面を非表示にするスクリプト -->
+    <script>
+        // すべての画像がロードされるまで待つ
+        window.addEventListener('load', () => {
+            const loadingScreen = document.getElementById('loading');
+            const content = document.getElementById('content');
+
+            // ローディング画面を非表示にして、コンテンツを表示
+            loadingScreen.style.display = 'none';
+            content.style.display = 'block';
+        });
+    </script>
+
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
+        </script>
+
+</body>
+
+</html>

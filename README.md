@@ -1,4 +1,4 @@
-<p align="center">
+<p align = "center">
   <img src="./icon/favicon-192.png" width="25%"/>
 </p>
 
