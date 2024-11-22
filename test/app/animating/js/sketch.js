@@ -10,6 +10,7 @@ let stateMessage;
 let stateMainButtonText;
 let buttonIconHTML;
 let fileName;
+let isLightMode = false;
 
 //テクスチャ
 let uploadedImage;
@@ -156,6 +157,7 @@ var fileInput = document.getElementById('inputButton');
 var howToUse = document.getElementById('howToUseButton');
 var element_return = document.getElementById('returnButton');
 var element_main = document.getElementById('mainButton');
+var element_mode = document.getElementById('modeButton');
 
 //キャンパスのサイズ調整
 function adjustCanvas() {
@@ -229,6 +231,7 @@ function stateButton() {
     element_return.style.display = 'none';
     fileInput.style.display = 'inline';
     howToUse.style.display = 'none';
+    element_mode.style.display = 'none';
     stateMessage = "Please select the photo you would like to use. After selecting, press the Next.";
     stateMainButtonText = "Next";
     buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="-4 2 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/> </svg>`;
@@ -237,11 +240,13 @@ function stateButton() {
     element_return.style.display = 'inline';
     fileInput.style.display = 'none';
     howToUse.style.display = 'inline';
+    element_mode.style.display = 'inline';
     stateMessage = "Please set the eyes and mouth, and press the Next button.";
     stateMainButtonText = "Next";
     buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="-4 2 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg>`;
   } else if (state === STATE_MOVE) {
     howToUse.style.display = 'none';
+    element_mode.style.display = 'none';
     stateMessage = "Let's move your face😄 Record it and post it with #hinadolia!";
     stateMainButtonText = "Recording";
     buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/></svg>`;
@@ -294,6 +299,11 @@ function mainButtonPressed() {
     state = 2;
     stateButton();
   }
+}
+
+function modeButtonPressed() {
+  // チェックボックスの状態によってモードを切り替え
+  isLightMode = !isLightMode;
 }
 
 //ファイルが選択されていないときのアラートメッセージ
@@ -537,9 +547,15 @@ function markingTexture() {
     pS[i] = new pointStrech(pS[i].x, pS[i].y);
     if (i == 0 || i == 4 || i == 8) {
       //線の描画の設定
-      strokeWeight(3);
-      stroke(255);
-      noFill();
+      if (isLightMode) {
+        strokeWeight(3);
+        stroke(50);
+        noFill();
+      } else {
+        strokeWeight(3);
+        stroke(255);
+        noFill();
+      }
 
       //ボックスの線の描画
       beginShape();
@@ -558,9 +574,14 @@ function markingTexture() {
       endShape(CLOSE);
 
 
-      //点と文字の描画の設定
-      noStroke();
-      fill(255);
+      //点と文字の設定
+      if (isLightMode) {
+        noStroke();
+        fill(50);
+      } else {
+        noStroke();
+        fill(255);
+      }
 
       //ボックスの点のサイズ
       let boxPointSize = w / 50;
@@ -576,7 +597,6 @@ function markingTexture() {
       ellipse(pS[i + 2].x, pS[i + 2].y, boxPointSize, boxPointSize);
 
       if (showText) {
-        fill(255);
         textSize(w / 40);
         text("LeftEye", pB[0].x, pB[0].y);
         text("RightEye", pB[4].x, pB[4].y);
