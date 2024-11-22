@@ -88,3 +88,16 @@
     background-color: #fff;
     border-color: #fff;
 }
+
+/* New Faces ボタンの色 */
+.btn-outline-light:active {
+    color: #F25C05 !important;
+    /* デフォルトを上書き */
+}
+
+/* hover時（マウスカーソルを重ねた時）の色（通常より濃いor暗めの色を指定） */
+.btn-outline-light:hover,
+.btn-outline-light:active,
+.btn-outline-light:focus {
+    color: #F25C05;
+}

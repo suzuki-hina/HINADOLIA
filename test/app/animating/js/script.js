@@ -22,7 +22,6 @@ const createFaceLandmarker = async () => {
     });
     enableCam();
     document.querySelector('#loading').style.display = 'none';
-    document.querySelector('#returnButton').style.display = 'inline';
     document.querySelector('#mainButton').style.display = 'inline';
     document.querySelector('#inputButton').style.display = 'inline';
     document.querySelector('#uploadImg').style.display = 'inline';

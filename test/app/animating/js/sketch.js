@@ -226,6 +226,7 @@ function inputButtonPressed() {
 function stateButton() {
   if (state === STATE_SERECT) {
     element_webcam.style.opacity = '1';
+    element_return.style.display = 'none';
     fileInput.style.display = 'inline';
     howToUse.style.display = 'none';
     stateMessage = "Please select the photo you would like to use. After selecting, press the Next.";
@@ -233,6 +234,7 @@ function stateButton() {
     buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="-4 2 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/> </svg>`;
   } else if (state === STATE_LINE) {
     element_webcam.style.opacity = '0';
+    element_return.style.display = 'inline';
     fileInput.style.display = 'none';
     howToUse.style.display = 'inline';
     stateMessage = "Please set the eyes and mouth, and press the Next button.";
@@ -240,7 +242,7 @@ function stateButton() {
     buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="-4 2 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg>`;
   } else if (state === STATE_MOVE) {
     howToUse.style.display = 'none';
-    stateMessage = "Let's move your face😄";
+    stateMessage = "Let's move your face😄 Record it and post it with #hinadolia!";
     stateMainButtonText = "Recording";
     buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/></svg>`;
   } else if (state === STATE_RECORDING) {
@@ -325,9 +327,7 @@ function displayFileNotSelectedAlert() {
 
 //リターンボタンの処理
 function returnButtonPressed() {
-  if (state == 0) {
-    window.location.href = "../index.html";
-  } else if (0 < state && state <= 2) {
+  if (0 < state && state <= 2) {
     state--;
     stateButton();
   } else if (state == 3) {
