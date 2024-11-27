@@ -9,7 +9,6 @@ HINADOLIA is an application that allows you to animate pictures of faces visible
 This app may not work due to heavy processing🙇‍♂️
 * [x] macOS:Chrome,Safari
 * [x] iOS:Chrome,Safari
-* [x] Android:Chrome
 
 # Desktop Application
 When using HINADOLIA, please allow the camera to be used.
