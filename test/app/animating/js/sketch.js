@@ -232,7 +232,8 @@ function stateButton() {
     fileInput.style.display = 'inline';
     howToUse.style.display = 'none';
     element_mode.style.display = 'none';
-    stateMessage = "Please select the photo you would like to use. After selecting, press the Next.";
+    // stateMessage = "Please select the photo you would like to use. After selecting, press the Next.";
+    stateMessage = "写真を選択してください。選択後、Nextボタンを押してください。";
     stateMainButtonText = "Next";
     buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="-4 2 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/> </svg>`;
   } else if (state === STATE_LINE) {
@@ -241,13 +242,15 @@ function stateButton() {
     fileInput.style.display = 'none';
     howToUse.style.display = 'inline';
     element_mode.style.display = 'inline';
-    stateMessage = "Please set the eyes and mouth, and press the Next button.";
+    // stateMessage = "Please set the eyes and mouth, and press the Next button.";
+    stateMessage = "目と口を設定してください。Nextボタンを押してください。";
     stateMainButtonText = "Next";
     buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="-4 2 16 16"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg>`;
   } else if (state === STATE_MOVE) {
     howToUse.style.display = 'none';
     element_mode.style.display = 'none';
-    stateMessage = "Let's move your face😄 Record it and post it with #hinadolia!";
+    // stateMessage = "Let's move your face😄 Record it and post it with #hinadolia!";
+    stateMessage = "顔を動かしてみましょう😄 録画して、#hinadolia と一緒に投稿しよう！";
     stateMainButtonText = "Rec";
     buttonIconHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle" viewBox="0 0 18 18"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/></svg>`;
   } else if (state === STATE_RECORDING) {
@@ -368,13 +371,13 @@ function boxSetting() {
     pS[i] = [];
     pS[i] = new pointStrech(pS[i].x, pS[i].y);
 
-    if (i == 0 || i == 3 || i == 8 || i == 11) {
+    if (i == 0 || i == 3) {
       pB[i].x = boxSize_w;
-    } else if (i == 1 || i == 2) {
+    } else if (i == 1 || i == 2 || i == 8 || i == 11) {
       pB[i].x = boxSize_w * 2;
-    } else if (i == 4 || i == 7) {
+    } else if (i == 4 || i == 7 || i == 9 || i == 10) {
       pB[i].x = boxSize_w * 3;
-    } else if (i == 5 || i == 6 || i == 9 || i == 10) {
+    } else if (i == 5 || i == 6) {
       pB[i].x = boxSize_w * 4;
     }
 
@@ -449,6 +452,16 @@ function drawTexture() {
   vertex(w, h, 1, 1);
   vertex(0, h, 0, 1);
   endShape(CLOSE);
+
+  // // スペースキーが押されている間だけ描画
+  // if (keyIsPressed && key === 'k') {
+  //   beginShape();
+  //   vertex(0, 0, 0, 0);
+  //   vertex(w, 0, 1, 0);
+  //   vertex(w, h, 1, 1);
+  //   vertex(0, h, 0, 1);
+  //   endShape(CLOSE);
+  // }
 
   // strokeWeight(2);
   // stroke(255);
@@ -587,14 +600,14 @@ function markingTexture() {
       let boxPointSize = w / 50;
 
       //ボックスの移動用の点の描画
-      ellipse(pB[i + 2].x, pB[i + 2].y, boxPointSize, boxPointSize);
+      circle(pB[i + 2].x, pB[i + 2].y, boxPointSize);
 
       //ボックスの中心点の描画
       let leftEyeBoxMiddlePos = new pointBoxMiddle(i, i + 2);
-      ellipse(leftEyeBoxMiddlePos.x, leftEyeBoxMiddlePos.y, boxPointSize, boxPointSize);
+      circle(leftEyeBoxMiddlePos.x, leftEyeBoxMiddlePos.y, boxPointSize);
 
       //伸びの線の移動用の点の描画
-      ellipse(pS[i + 2].x, pS[i + 2].y, boxPointSize, boxPointSize);
+      circle(pS[i + 2].x, pS[i + 2].y, boxPointSize);
 
       if (showText) {
         textSize(w / 40);
